@@ -613,7 +613,15 @@ export function PreviewPanel() {
                       <CollectionItemContent>
                         <CollectionItemTitle>{item.title}</CollectionItemTitle>
                         {item.subtitle && <CollectionItemSubtitle>{item.subtitle}</CollectionItemSubtitle>}
-                        <CollectionItemCTA href={item.ctaUrl}>{item.ctaText}</CollectionItemCTA>
+                        <CollectionItemCTA 
+                          href={item.ctaUrl}
+                          style={{
+                            backgroundColor: item.ctaBgColor || collectionData.itemCtaBgColor,
+                            color: (item.ctaBgColor || collectionData.itemCtaBgColor) ? 'white' : undefined
+                          }}
+                        >
+                          {item.ctaText || collectionData.itemCtaText || 'Shop'}
+                        </CollectionItemCTA>
                       </CollectionItemContent>
                     </CollectionItem>
                   ))}
@@ -1560,6 +1568,32 @@ export function PreviewPanel() {
                                 }}
                               />
                             </div>
+                            <div className="flex items-center gap-2">
+                              <Label className="text-[10px] uppercase tracking-wider text-muted-foreground shrink-0">Button Color:</Label>
+                              <Input
+                                type="color"
+                                className="h-7 w-9 p-0.5"
+                                value={item.ctaBgColor || '#ff4d5f'}
+                                onChange={(e) => {
+                                  const newItems = [...(editingCollectionData?.items || [])]
+                                  newItems[index] = { ...newItems[index], ctaBgColor: e.target.value }
+                                  setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                                }}
+                              />
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-7 px-2 text-[10px]"
+                                onClick={() => {
+                                  const newItems = [...(editingCollectionData?.items || [])]
+                                  const { ctaBgColor, ...rest } = newItems[index]
+                                  newItems[index] = rest
+                                  setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                                }}
+                              >
+                                Clear
+                              </Button>
+                            </div>
                           </div>
                           <Button
                             variant="ghost"
@@ -1660,6 +1694,38 @@ export function PreviewPanel() {
                       />
                     </div>
                   )}
+                </div>
+
+                <div className="space-y-2 pt-2 border-t border-border">
+                  <Label>Global Item CTA Settings</Label>
+                  <p className="text-[10px] text-muted-foreground">Applies to all items unless manually overridden.</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-[10px]">Item CTA Text</Label>
+                      <Input
+                        placeholder="e.g. Shop, Buy Now"
+                        value={editingCollectionData?.itemCtaText || ''}
+                        onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, itemCtaText: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-[10px]">Item CTA Color</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          type="color"
+                          className="h-9 w-12 p-1"
+                          value={editingCollectionData?.itemCtaBgColor || '#ff4d5f'}
+                          onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, itemCtaBgColor: e.target.value })}
+                        />
+                        <Input
+                          placeholder="#hex"
+                          className="flex-1"
+                          value={editingCollectionData?.itemCtaBgColor || ''}
+                          onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, itemCtaBgColor: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

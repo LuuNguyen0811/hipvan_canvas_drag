@@ -5,6 +5,7 @@ export interface CollectionItemData {
   image?: string
   ctaText: string
   ctaUrl: string
+  ctaBgColor?: string
   badge?: string
 }
 
@@ -21,6 +22,8 @@ export interface CollectionComponentData {
   headerTitle?: string
   headerCtaText?: string
   headerCtaUrl?: string
+  itemCtaText?: string
+  itemCtaBgColor?: string
 }
 
 export interface Component {

@@ -208,17 +208,18 @@ interface CollectionItemCTAProps extends React.ComponentProps<"a"> {
   variant?: "default" | "outline" | "ghost";
 }
 
-function CollectionItemCTA({ className, variant = 'default', ...props }: CollectionItemCTAProps) {
+function CollectionItemCTA({ className, variant = 'default', style, ...props }: CollectionItemCTAProps) {
   return (
     <a
       data-slot="collection-item-cta"
       className={cn(
         'inline-flex h-[34px] items-center justify-center rounded-[8px] px-[12px] text-[15px] font-semibold transition-all duration-300',
-        variant === 'default' && 'bg-[#ff4d5f] text-white hover:bg-[#ff334a] hover:shadow-md',
+        variant === 'default' && !style?.backgroundColor && 'bg-[#ff4d5f] text-white hover:bg-[#ff334a] hover:shadow-md',
         variant === 'outline' && 'border border-[#ff4d5f] bg-transparent text-[#ff4d5f] hover:bg-[#ff4d5f]/5',
         variant === 'ghost' && 'text-[#ff4d5f] hover:bg-[#ff4d5f]/5',
         className,
       )}
+      style={style}
       {...props}
     >
       {props.children || 'Shop'}
