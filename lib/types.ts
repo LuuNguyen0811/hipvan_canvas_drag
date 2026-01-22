@@ -4,9 +4,16 @@ export interface Component {
   content: string
   styles: Record<string, string>
   props?: Record<string, unknown>
-  imageUrl?: string // For uploaded images
+  imageId?: string // Reference to image in IndexedDB
   width?: string // Component width (e.g., '100%', '50%', '300px')
   height?: string // Component height
+  formatting?: {
+    bold?: boolean
+    italic?: boolean
+    underline?: boolean
+    align?: 'left' | 'center' | 'right'
+    fontSize?: string
+  }
 }
 
 export type SectionLayoutType = 

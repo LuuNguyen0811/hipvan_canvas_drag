@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { useProjectStore } from '@/lib/store'
 import type { Component, LayoutSection } from '@/lib/types'
+import { saveImage, loadImage, deleteImage } from '@/lib/image-storage'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -20,7 +21,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Trash2, GripVertical, Pencil, Monitor, Tablet, Smartphone, Plus, GripHorizontal, Upload, Image as ImageIcon, MoveVertical, MoveHorizontal, Info } from 'lucide-react'
+import { Trash2, GripVertical, Pencil, Monitor, Tablet, Smartphone, Plus, GripHorizontal, Upload, Image as ImageIcon, MoveVertical, MoveHorizontal, Info, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, List, ListOrdered } from 'lucide-react'
 
 const generateId = () => Math.random().toString(36).substring(2, 9)
 
@@ -41,6 +42,8 @@ export function PreviewPanel() {
   const [imageUploadTarget, setImageUploadTarget] = useState<{ sectionId: string; componentId: string } | null>(null)
   const [isDraggingFile, setIsDraggingFile] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(true)
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({})
+  const [uploadingImage, setUploadingImage] = useState(false)
   
   // Resizing state
   const [resizingSection, setResizingSection] = useState<string | null>(null)
@@ -49,24 +52,75 @@ export function PreviewPanel() {
   const [resizingSectionHeight, setResizingSectionHeight] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const resizeAnimationFrameRef = useRef<number | null>(null)
+  const pendingResizeRef = useRef<{x: number; y: number} | null>(null)
+
+  // Load image URLs from IndexedDB on mount
+  useEffect(() => {
+    const loadAllImages = async () => {
+      if (!currentProject) return
+      
+      const imageComponents = currentProject.layout.flatMap(section => 
+        section.components.filter(c => c.type === 'image' && c.imageId)
+      )
+      
+      const urls: Record<string, string> = {}
+      await Promise.all(
+        imageComponents.map(async (comp) => {
+          if (comp.imageId) {
+            const url = await loadImage(comp.imageId)
+            if (url) urls[comp.imageId] = url
+          }
+        })
+      )
+      
+      setImageUrls(urls)
+    }
+    
+    loadAllImages()
+  }, [currentProject?.id])
 
   // File upload handlers
-  const handleFileUpload = (file: File, sectionId: string, componentId: string) => {
+  const handleFileUpload = async (file: File, sectionId: string, componentId: string) => {
     if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file')
+      alert('Please upload an image file (JPG, PNG, GIF, WebP)')
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const imageUrl = e.target?.result as string
+    // Check file size (warn if over 5MB)
+    const maxSize = 5 * 1024 * 1024 // 5MB
+    if (file.size > maxSize) {
+      const shouldContinue = confirm(
+        `This image is ${(file.size / 1024 / 1024).toFixed(1)}MB. It will be compressed to reduce storage usage. Continue?`
+      )
+      if (!shouldContinue) return
+    }
+
+    setUploadingImage(true)
+    
+    try {
+      // Generate unique image ID
+      const imageId = `img_${Date.now()}_${Math.random().toString(36).substring(7)}`
+      
+      // Save to IndexedDB with compression
+      const objectUrl = await saveImage(imageId, file)
+      
+      // Update component with image reference
       updateComponent(sectionId, componentId, { 
-        imageUrl,
+        imageId,
         content: file.name
       })
+      
+      // Store object URL for display
+      setImageUrls(prev => ({ ...prev, [imageId]: objectUrl }))
+      
       setImageUploadTarget(null)
+    } catch (error) {
+      console.error('Failed to upload image:', error)
+      alert('Failed to upload image. Please try a smaller file.')
+    } finally {
+      setUploadingImage(false)
     }
-    reader.readAsDataURL(file)
   }
 
   const handleImageDrop = (e: React.DragEvent, sectionId: string, componentId: string) => {
@@ -172,47 +226,81 @@ export function PreviewPanel() {
   const handleResizeMove = useCallback((e: React.MouseEvent) => {
     if (!resizingSection || resizingDivider === null || !containerRef.current) return
     
-    const section = currentProject?.layout.find(s => s.id === resizingSection)
-    if (!section || !section.columnWidths) return
+    // Store position for RAF processing
+    pendingResizeRef.current = { x: e.clientX, y: e.clientY }
+    
+    // Use requestAnimationFrame for smooth, optimized updates
+    if (resizeAnimationFrameRef.current === null) {
+      resizeAnimationFrameRef.current = requestAnimationFrame(() => {
+        if (!pendingResizeRef.current || !containerRef.current) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
+        
+        const { x } = pendingResizeRef.current
+        const section = currentProject?.layout.find(s => s.id === resizingSection)
+        if (!section || !section.columnWidths) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
 
-    const sectionElement = containerRef.current.querySelector(`[data-section-id="${resizingSection}"]`)
-    if (!sectionElement) return
-    
-    const sectionRect = sectionElement.getBoundingClientRect()
-    const relativeX = e.clientX - sectionRect.left
-    const sectionWidth = sectionRect.width
-    
-    // Calculate new widths as percentages
-    const totalColumns = section.columns
-    const percentage = Math.max(15, Math.min(85, (relativeX / sectionWidth) * 100))
-    
-    // For 2 columns, split at the divider position
-    if (totalColumns === 2 && resizingDivider === 0) {
-      const newWidths = [`${percentage}%`, `${100 - percentage}%`]
-      updateSection(resizingSection, { columnWidths: newWidths }, true) // Skip history during resize
-    }
-    // For 3+ columns, adjust adjacent columns
-    else if (totalColumns > 2) {
-      const colWidth = sectionWidth / totalColumns
-      const targetPercentage = ((resizingDivider + 1) * colWidth / sectionWidth) * 100
-      const diff = percentage - targetPercentage
-      
-      const newWidths = section.columnWidths.map((w, i) => {
-        const currentVal = parseFloat(w) || (100 / totalColumns)
-        if (i === resizingDivider) return `${currentVal + diff}%`
-        if (i === resizingDivider + 1) return `${Math.max(15, currentVal - diff)}%`
-        return w
+        const sectionElement = containerRef.current.querySelector(`[data-section-id="${resizingSection}"]`)
+        if (!sectionElement) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
+        
+        const sectionRect = sectionElement.getBoundingClientRect()
+        const relativeX = x - sectionRect.left
+        const sectionWidth = sectionRect.width
+        
+        // Calculate new widths as percentages
+        const totalColumns = section.columns
+        const percentage = Math.max(15, Math.min(85, (relativeX / sectionWidth) * 100))
+        
+        // For 2 columns, split at the divider position
+        if (totalColumns === 2 && resizingDivider === 0) {
+          const newWidths = [`${percentage}%`, `${100 - percentage}%`]
+          updateSection(resizingSection, { columnWidths: newWidths }, true)
+        }
+        // For 3+ columns, adjust adjacent columns
+        else if (totalColumns > 2) {
+          const colWidth = sectionWidth / totalColumns
+          const targetPercentage = ((resizingDivider + 1) * colWidth / sectionWidth) * 100
+          const diff = percentage - targetPercentage
+          
+          const newWidths = section.columnWidths.map((w, i) => {
+            const currentVal = parseFloat(w) || (100 / totalColumns)
+            if (i === resizingDivider) return `${currentVal + diff}%`
+            if (i === resizingDivider + 1) return `${Math.max(15, currentVal - diff)}%`
+            return w
+          })
+          updateSection(resizingSection, { columnWidths: newWidths }, true)
+        }
+        
+        resizeAnimationFrameRef.current = null
       })
-      updateSection(resizingSection, { columnWidths: newWidths }, true) // Skip history during resize
     }
   }, [resizingSection, resizingDivider, currentProject, updateSection])
 
   const handleResizeEnd = useCallback(() => {
+    // Cancel any pending animation frame
+    if (resizeAnimationFrameRef.current !== null) {
+      cancelAnimationFrame(resizeAnimationFrameRef.current)
+      resizeAnimationFrameRef.current = null
+    }
+    pendingResizeRef.current = null
+    
+    // Save to history when resize operation completes
+    if (resizingSection || resizingComponent || resizingSectionHeight) {
+      saveToHistory('Resized element')
+    }
+    
     setResizingSection(null)
     setResizingDivider(null)
     setResizingComponent(null)
     setResizingSectionHeight(null)
-  }, [])
+  }, [resizingSection, resizingComponent, resizingSectionHeight, saveToHistory])
 
   // Component resize handlers
   const handleComponentResizeStart = useCallback((e: React.MouseEvent, sectionId: string, componentId: string, direction: 'width' | 'height') => {
@@ -224,24 +312,46 @@ export function PreviewPanel() {
   const handleComponentResizeMove = useCallback((e: React.MouseEvent) => {
     if (!resizingComponent || !containerRef.current) return
     
-    const section = currentProject?.layout.find(s => s.id === resizingComponent.sectionId)
-    const component = section?.components.find(c => c.id === resizingComponent.componentId)
-    if (!component) return
+    // Store position for RAF processing
+    pendingResizeRef.current = { x: e.clientX, y: e.clientY }
+    
+    // Use requestAnimationFrame for smooth updates
+    if (resizeAnimationFrameRef.current === null) {
+      resizeAnimationFrameRef.current = requestAnimationFrame(() => {
+        if (!pendingResizeRef.current) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
+        
+        const { x, y } = pendingResizeRef.current
+        const section = currentProject?.layout.find(s => s.id === resizingComponent.sectionId)
+        const component = section?.components.find(c => c.id === resizingComponent.componentId)
+        if (!component) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
 
-    const componentElement = document.querySelector(`[data-component-id="${resizingComponent.componentId}"]`)
-    if (!componentElement) return
+        const componentElement = document.querySelector(`[data-component-id="${resizingComponent.componentId}"]`)
+        if (!componentElement) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
 
-    const rect = componentElement.getBoundingClientRect()
+        const rect = componentElement.getBoundingClientRect()
 
-    if (resizingComponent.direction === 'width') {
-      const newWidth = Math.max(100, e.clientX - rect.left)
-      updateComponent(resizingComponent.sectionId, resizingComponent.componentId, {
-        width: `${newWidth}px`
-      })
-    } else {
-      const newHeight = Math.max(50, e.clientY - rect.top)
-      updateComponent(resizingComponent.sectionId, resizingComponent.componentId, {
-        height: `${newHeight}px`
+        if (resizingComponent.direction === 'width') {
+          const newWidth = Math.max(100, x - rect.left)
+          updateComponent(resizingComponent.sectionId, resizingComponent.componentId, {
+            width: `${newWidth}px`
+          }, true)
+        } else {
+          const newHeight = Math.max(50, y - rect.top)
+          updateComponent(resizingComponent.sectionId, resizingComponent.componentId, {
+            height: `${newHeight}px`
+          }, true)
+        }
+        
+        resizeAnimationFrameRef.current = null
       })
     }
   }, [resizingComponent, currentProject, updateComponent])
@@ -256,12 +366,31 @@ export function PreviewPanel() {
   const handleSectionHeightResizeMove = useCallback((e: React.MouseEvent) => {
     if (!resizingSectionHeight || !containerRef.current) return
     
-    const sectionElement = containerRef.current.querySelector(`[data-section-id="${resizingSectionHeight}"]`)
-    if (!sectionElement) return
+    // Store position for RAF processing
+    pendingResizeRef.current = { x: e.clientX, y: e.clientY }
+    
+    // Use requestAnimationFrame for smooth updates
+    if (resizeAnimationFrameRef.current === null) {
+      resizeAnimationFrameRef.current = requestAnimationFrame(() => {
+        if (!pendingResizeRef.current || !containerRef.current) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
+        
+        const { y } = pendingResizeRef.current
+        const sectionElement = containerRef.current.querySelector(`[data-section-id="${resizingSectionHeight}"]`)
+        if (!sectionElement) {
+          resizeAnimationFrameRef.current = null
+          return
+        }
 
-    const rect = sectionElement.getBoundingClientRect()
-    const newHeight = Math.max(100, e.clientY - rect.top)
-    updateSection(resizingSectionHeight, { minHeight: `${newHeight}px` })
+        const rect = sectionElement.getBoundingClientRect()
+        const newHeight = Math.max(100, y - rect.top)
+        updateSection(resizingSectionHeight, { minHeight: `${newHeight}px` }, true)
+        
+        resizeAnimationFrameRef.current = null
+      })
+    }
   }, [resizingSectionHeight, updateSection])
 
   const renderComponent = (component: Component, sectionId: string) => {
@@ -272,17 +401,36 @@ export function PreviewPanel() {
       switch (component.type) {
         case 'heading':
           return (
-            <h2 className="text-2xl font-bold text-foreground">
+            <h2 
+              className="text-2xl font-bold text-foreground"
+              style={{
+                fontWeight: component.formatting?.bold !== false ? 'bold' : 'normal',
+                fontStyle: component.formatting?.italic ? 'italic' : 'normal',
+                textDecoration: component.formatting?.underline ? 'underline' : 'none',
+                textAlign: component.formatting?.align || 'left',
+                fontSize: component.formatting?.fontSize || '1.5rem',
+              }}
+            >
               {component.content}
             </h2>
           )
         case 'paragraph':
           return (
-            <p className="leading-relaxed text-muted-foreground">
+            <p 
+              className="leading-relaxed text-muted-foreground"
+              style={{
+                fontWeight: component.formatting?.bold ? 'bold' : 'normal',
+                fontStyle: component.formatting?.italic ? 'italic' : 'normal',
+                textDecoration: component.formatting?.underline ? 'underline' : 'none',
+                textAlign: component.formatting?.align || 'left',
+                fontSize: component.formatting?.fontSize || '1rem',
+              }}
+            >
               {component.content}
             </p>
           )
         case 'image':
+          const imageUrl = component.imageId ? imageUrls[component.imageId] : null
           return (
             <div
               data-component-id={component.id}
@@ -291,31 +439,42 @@ export function PreviewPanel() {
               }`}
               style={{
                 width: component.width || '100%',
-                height: component.height || 'auto',
-                minHeight: component.imageUrl ? 'auto' : '200px'
+                height: component.height || (imageUrl ? 'auto' : '200px'),
+                maxWidth: '100%',
+                minHeight: imageUrl ? '200px' : '200px'
               }}
               onDrop={(e) => handleImageDrop(e, sectionId, component.id)}
               onDragOver={handleImageDragOver}
               onDragLeave={handleImageDragLeave}
             >
-              {component.imageUrl ? (
+              {imageUrl ? (
                 <>
                   <img
-                    src={component.imageUrl}
+                    src={imageUrl}
                     alt={component.content}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
+                    style={{
+                      maxHeight: component.height || '500px',
+                      objectFit: 'contain'
+                    }}
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
                     <Button
                       variant="secondary"
                       size="sm"
                       onClick={() => setImageUploadTarget({ sectionId, componentId: component.id })}
+                      disabled={uploadingImage}
                     >
                       <Upload className="mr-2 h-4 w-4" />
                       Change Image
                     </Button>
                   </div>
                 </>
+              ) : uploadingImage && imageUploadTarget?.componentId === component.id ? (
+                <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50">
+                  <div className="mb-3 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+                  <p className="text-sm font-medium text-foreground">Uploading & Compressing...</p>
+                </div>
               ) : (
                 <div 
                   className="flex h-full cursor-pointer flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50 text-muted-foreground transition-colors hover:from-muted/80 hover:to-muted/30"
@@ -324,20 +483,25 @@ export function PreviewPanel() {
                   <ImageIcon className="mb-2 h-12 w-12 opacity-50" />
                   <p className="text-sm font-medium">Click or drag image here</p>
                   <p className="mt-1 text-xs opacity-70">Supports JPG, PNG, GIF, WebP</p>
+                  <p className="mt-1 text-xs opacity-50">Images are auto-compressed</p>
                 </div>
               )}
               {/* Resize handles for images */}
-              {component.imageUrl && (
+              {imageUrl && (
                 <>
+                  {/* Corner resize handle */}
                   <div
-                    className="absolute bottom-0 right-0 z-20 h-3 w-3 cursor-se-resize rounded-tl-sm bg-primary opacity-0 transition-opacity group-hover:opacity-100"
-                    onMouseDown={(e) => handleComponentResizeStart(e, sectionId, component.id, 'width')}
-                  />
-                  <div
-                    className="absolute bottom-1/2 right-0 z-20 h-6 w-2 -translate-y-1/2 cursor-ew-resize rounded-l-sm bg-primary/70 opacity-0 transition-opacity group-hover:opacity-100"
+                    className="absolute bottom-1 right-1 z-20 flex h-6 w-6 cursor-se-resize items-center justify-center rounded-sm bg-primary shadow-md opacity-0 transition-opacity hover:scale-110 group-hover:opacity-100"
                     onMouseDown={(e) => handleComponentResizeStart(e, sectionId, component.id, 'width')}
                   >
-                    <MoveHorizontal className="h-full w-full text-white p-0.5" />
+                    <MoveHorizontal className="h-4 w-4 rotate-45 text-white" />
+                  </div>
+                  {/* Side resize handle */}
+                  <div
+                    className="absolute bottom-1/2 right-0 z-20 flex h-12 w-3 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-l-md bg-primary/90 shadow-sm opacity-0 transition-all hover:w-4 group-hover:opacity-100"
+                    onMouseDown={(e) => handleComponentResizeStart(e, sectionId, component.id, 'width')}
+                  >
+                    <MoveHorizontal className="h-4 w-4 text-white" />
                   </div>
                 </>
               )}
@@ -363,10 +527,10 @@ export function PreviewPanel() {
               </span>
               {/* Height resize handle */}
               <div
-                className="absolute bottom-0 left-1/2 z-20 h-2 w-12 -translate-x-1/2 cursor-ns-resize rounded-t-sm bg-primary/70 opacity-0 transition-opacity group-hover:opacity-100"
+                className="absolute bottom-0 left-1/2 z-20 flex h-3 w-16 -translate-x-1/2 cursor-ns-resize items-center justify-center rounded-t-md bg-primary/90 shadow-sm opacity-0 transition-all hover:h-4 group-hover:opacity-100"
                 onMouseDown={(e) => handleComponentResizeStart(e, sectionId, component.id, 'height')}
               >
-                <MoveVertical className="h-full w-full text-white" />
+                <MoveVertical className="h-4 w-4 text-white" />
               </div>
             </div>
           )
@@ -400,9 +564,10 @@ export function PreviewPanel() {
         className={`${baseStyles} cursor-move rounded-lg border border-transparent p-3 transition-all hover:border-border hover:bg-accent/50 ${
           isResizing ? 'ring-2 ring-primary' : ''
         }`}
+        style={{ minWidth: 0, maxWidth: '100%' }}
       >
         {componentContent()}
-        <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+        <div className="absolute right-2 top-2 z-10 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
           <Button
             variant="secondary"
             size="icon"
@@ -441,6 +606,7 @@ export function PreviewPanel() {
         display: 'grid',
         gridTemplateColumns: section.columnWidths.join(' '),
         gap: '0',
+        minWidth: 0, // Prevents grid overflow
       }
     }
     
@@ -449,6 +615,7 @@ export function PreviewPanel() {
       display: 'grid',
       gridTemplateColumns: `repeat(${cols}, 1fr)`,
       gap: '0',
+      minWidth: 0, // Prevents grid overflow
     }
   }
 
@@ -536,6 +703,7 @@ export function PreviewPanel() {
               className={`min-h-20 rounded-md border border-dashed p-2 transition-all ${
                 isDragOver ? 'border-primary bg-primary/5' : 'border-transparent hover:border-border'
               }`}
+              style={{ minWidth: 0, overflow: 'hidden' }}
             >
               {section.components.length === 0 ? (
                 <div className="flex h-16 flex-col items-center justify-center text-xs text-muted-foreground">
@@ -563,6 +731,7 @@ export function PreviewPanel() {
                         ? 'border-primary bg-primary/5'
                         : 'border-border/40 hover:border-border'
                     }`}
+                    style={{ minWidth: 0, overflow: 'hidden' }}
                   >
                     {componentsByColumn[colIndex]?.length === 0 ? (
                       <div className="flex h-16 flex-col items-center justify-center text-xs text-muted-foreground">
@@ -582,8 +751,8 @@ export function PreviewPanel() {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <div
-                            className={`group/divider absolute top-8 bottom-0 z-10 flex w-4 -translate-x-1/2 cursor-col-resize items-center justify-center transition-colors ${
-                              isResizing && resizingDivider === colIndex ? 'bg-primary/10' : 'hover:bg-muted/30'
+                            className={`group/divider absolute top-8 bottom-0 z-10 flex w-6 -translate-x-1/2 cursor-col-resize items-center justify-center transition-colors ${
+                              isResizing && resizingDivider === colIndex ? 'bg-primary/10' : 'hover:bg-primary/5'
                             }`}
                             style={{
                               left: section.columnWidths 
@@ -595,12 +764,12 @@ export function PreviewPanel() {
                             }}
                             onMouseDown={(e) => handleResizeStart(section.id, colIndex, e)}
                           >
-                            <div className={`h-8 w-1 rounded-full transition-all ${
+                            <div className={`flex h-12 w-1.5 items-center justify-center rounded-full transition-all ${
                               isResizing && resizingDivider === colIndex 
-                                ? 'bg-primary' 
-                                : 'bg-border group-hover/divider:bg-primary/60'
+                                ? 'bg-primary w-2' 
+                                : 'bg-border group-hover/divider:bg-primary/70 group-hover/divider:w-2'
                             }`}>
-                              <GripHorizontal className={`absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-90 transition-opacity ${
+                              <GripHorizontal className={`absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-90 transition-opacity ${
                                 isResizing && resizingDivider === colIndex 
                                   ? 'text-primary opacity-100' 
                                   : 'text-muted-foreground opacity-0 group-hover/divider:opacity-100'
@@ -625,10 +794,10 @@ export function PreviewPanel() {
           <Tooltip>
             <TooltipTrigger asChild>
               <div
-                className="absolute bottom-0 left-1/2 z-10 h-3 w-16 -translate-x-1/2 cursor-ns-resize rounded-t-md bg-primary/0 opacity-0 transition-all hover:bg-primary/10 group-hover/section:opacity-100"
+                className="absolute bottom-0 left-1/2 z-10 flex h-4 w-20 -translate-x-1/2 cursor-ns-resize items-center justify-center rounded-t-md bg-primary/10 opacity-0 transition-all hover:h-5 hover:bg-primary/20 group-hover/section:opacity-100"
                 onMouseDown={(e) => handleSectionHeightResizeStart(e, section.id)}
               >
-                <MoveVertical className={`absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 transition-colors ${
+                <MoveVertical className={`h-4 w-4 transition-colors ${
                   isResizingHeight ? 'text-primary' : 'text-muted-foreground'
                 }`} />
               </div>
@@ -698,128 +867,381 @@ export function PreviewPanel() {
           )}
         </div>
 
-        {/* Preview Area */}
-        <ScrollArea className="flex-1 p-4">
-          <div
-            ref={containerRef}
-            className={`mx-auto rounded-lg border border-border bg-background shadow-sm transition-all duration-300 ${
-              resizingSection || resizingComponent || resizingSectionHeight ? 'select-none' : ''
-            }`}
-            style={{ maxWidth: viewportWidths[viewport] }}
-          >
-            <div className="p-4">
-              {!currentProject || currentProject.layout.length === 0 ? (
-                <div className="flex h-48 flex-col items-center justify-center text-center">
-                  <div className="mb-3 rounded-full bg-muted p-3">
-                    <Plus className="h-6 w-6 text-muted-foreground" />
+      {/* Preview Area */}
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="p-4">
+            <div
+              ref={containerRef}
+              className={`mx-auto rounded-lg border border-border bg-background shadow-sm transition-all duration-300 ${
+                resizingSection || resizingComponent || resizingSectionHeight ? 'select-none' : ''
+              }`}
+              style={{ 
+                maxWidth: viewportWidths[viewport],
+                width: '100%'
+              }}
+            >
+              <div className="p-4">
+                {!currentProject || currentProject.layout.length === 0 ? (
+                  <div className="flex h-48 flex-col items-center justify-center text-center">
+                    <div className="mb-3 rounded-full bg-muted p-3">
+                      <Plus className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <p className="font-medium text-foreground">Start Building</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Add sections from the <strong>Sections</strong> tab on the left
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground/70">
+                      💡 Tip: Click any section template to add it
+                    </p>
                   </div>
-                  <p className="font-medium text-foreground">Start Building</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Add sections from the <strong>Sections</strong> tab on the left
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground/70">
-                    💡 Tip: Click any section template to add it
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {currentProject.layout.map((section, index) =>
-                    renderSection(section, index)
-                  )}
-                </div>
-              )}
+                ) : (
+                  <div className="space-y-4">
+                    {currentProject.layout.map((section, index) =>
+                      renderSection(section, index)
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </ScrollArea>
+      </div>
 
         {/* Edit Component Dialog */}
         <Dialog open={!!editingComponent} onOpenChange={() => setEditingComponent(null)}>
           <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                Edit {editingComponent?.component.type}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-4">
-              {editingComponent?.component.type !== 'divider' &&
-                editingComponent?.component.type !== 'spacer' && (
-                  <>
-                    {editingComponent?.component.type === 'paragraph' ? (
-                      <Textarea
-                        value={editingComponent.component.content}
-                        onChange={(e) =>
-                          setEditingComponent({
-                            ...editingComponent,
-                            component: { ...editingComponent.component, content: e.target.value },
-                          })
-                        }
-                        placeholder="Enter content..."
-                        rows={4}
-                      />
-                    ) : (
-                      <Input
-                        value={editingComponent?.component.content || ''}
+          <DialogHeader>
+            <DialogTitle>
+              Edit {editingComponent?.component.type}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-4">
+            {/* Rich Text Formatting Toolbar for text components */}
+            {editingComponent?.component.type !== 'divider' &&
+              editingComponent?.component.type !== 'spacer' &&
+              editingComponent?.component.type !== 'image' &&
+              editingComponent?.component.type !== 'button' && (
+                <div className="flex flex-wrap gap-1 rounded-lg border border-border bg-muted/30 p-2">
+                  <TooltipProvider>
+                    <div className="flex gap-1">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={editingComponent?.component.formatting?.bold ? 'secondary' : 'ghost'}
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            onClick={() =>
+                              editingComponent &&
+                              setEditingComponent({
+                                ...editingComponent,
+                                component: {
+                                  ...editingComponent.component,
+                                  formatting: {
+                                    ...editingComponent.component.formatting,
+                                    bold: !editingComponent.component.formatting?.bold,
+                                  },
+                                },
+                              })
+                            }
+                          >
+                            <Bold className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Bold</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={editingComponent?.component.formatting?.italic ? 'secondary' : 'ghost'}
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            onClick={() =>
+                              editingComponent &&
+                              setEditingComponent({
+                                ...editingComponent,
+                                component: {
+                                  ...editingComponent.component,
+                                  formatting: {
+                                    ...editingComponent.component.formatting,
+                                    italic: !editingComponent.component.formatting?.italic,
+                                  },
+                                },
+                              })
+                            }
+                          >
+                            <Italic className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Italic</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={editingComponent?.component.formatting?.underline ? 'secondary' : 'ghost'}
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            onClick={() =>
+                              editingComponent &&
+                              setEditingComponent({
+                                ...editingComponent,
+                                component: {
+                                  ...editingComponent.component,
+                                  formatting: {
+                                    ...editingComponent.component.formatting,
+                                    underline: !editingComponent.component.formatting?.underline,
+                                  },
+                                },
+                              })
+                            }
+                          >
+                            <Underline className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Underline</TooltipContent>
+                      </Tooltip>
+                    </div>
+
+                    <div className="mx-1 h-8 w-px bg-border" />
+
+                    <div className="flex gap-1">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={editingComponent?.component.formatting?.align === 'left' ? 'secondary' : 'ghost'}
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            onClick={() =>
+                              editingComponent &&
+                              setEditingComponent({
+                                ...editingComponent,
+                                component: {
+                                  ...editingComponent.component,
+                                  formatting: {
+                                    ...editingComponent.component.formatting,
+                                    align: 'left',
+                                  },
+                                },
+                              })
+                            }
+                          >
+                            <AlignLeft className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Align Left</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={editingComponent?.component.formatting?.align === 'center' ? 'secondary' : 'ghost'}
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            onClick={() =>
+                              editingComponent &&
+                              setEditingComponent({
+                                ...editingComponent,
+                                component: {
+                                  ...editingComponent.component,
+                                  formatting: {
+                                    ...editingComponent.component.formatting,
+                                    align: 'center',
+                                  },
+                                },
+                              })
+                            }
+                          >
+                            <AlignCenter className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Align Center</TooltipContent>
+                      </Tooltip>
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant={editingComponent?.component.formatting?.align === 'right' ? 'secondary' : 'ghost'}
+                            size="sm"
+                            className="h-8 w-8 p-0"
+                            onClick={() =>
+                              editingComponent &&
+                              setEditingComponent({
+                                ...editingComponent,
+                                component: {
+                                  ...editingComponent.component,
+                                  formatting: {
+                                    ...editingComponent.component.formatting,
+                                    align: 'right',
+                                  },
+                                },
+                              })
+                            }
+                          >
+                            <AlignRight className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Align Right</TooltipContent>
+                      </Tooltip>
+                    </div>
+
+                    <div className="mx-1 h-8 w-px bg-border" />
+
+                    <div className="flex items-center gap-2">
+                      <Label className="text-xs">Size:</Label>
+                      <select
+                        value={editingComponent?.component.formatting?.fontSize || (editingComponent?.component.type === 'heading' ? '1.5rem' : '1rem')}
                         onChange={(e) =>
                           editingComponent &&
                           setEditingComponent({
                             ...editingComponent,
-                            component: { ...editingComponent.component, content: e.target.value },
+                            component: {
+                              ...editingComponent.component,
+                              formatting: {
+                                ...editingComponent.component.formatting,
+                                fontSize: e.target.value,
+                              },
+                            },
                           })
                         }
-                        placeholder="Enter content..."
-                      />
-                    )}
-                  </>
-                )}
-              {editingComponent?.component.type === 'spacer' && (
-                <div className="space-y-2">
-                  <Label>Height</Label>
-                  <Input
-                    value={editingComponent.component.height || '4rem'}
-                    onChange={(e) =>
-                      setEditingComponent({
-                        ...editingComponent,
-                        component: { ...editingComponent.component, height: e.target.value },
-                      })
-                    }
-                    placeholder="e.g., 4rem, 100px"
-                  />
-                  <p className="text-xs text-muted-foreground">Use units like rem, px, vh</p>
+                        className="h-8 rounded-md border border-border bg-background px-2 text-xs"
+                      >
+                        <option value="0.75rem">Small</option>
+                        <option value="1rem">Normal</option>
+                        <option value="1.25rem">Large</option>
+                        <option value="1.5rem">X-Large</option>
+                        <option value="2rem">2X-Large</option>
+                        <option value="2.5rem">3X-Large</option>
+                      </select>
+                    </div>
+                  </TooltipProvider>
                 </div>
               )}
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setEditingComponent(null)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleSaveEdit}>Save</Button>
+
+            {/* Content Input */}
+            {editingComponent?.component.type !== 'divider' &&
+              editingComponent?.component.type !== 'spacer' && (
+                <>
+                  {editingComponent?.component.type === 'paragraph' ? (
+                    <Textarea
+                      value={editingComponent.component.content}
+                      onChange={(e) =>
+                        setEditingComponent({
+                          ...editingComponent,
+                          component: { ...editingComponent.component, content: e.target.value },
+                        })
+                      }
+                      placeholder="Enter content..."
+                      rows={6}
+                      className="font-inherit"
+                      style={{
+                        fontWeight: editingComponent.component.formatting?.bold ? 'bold' : 'normal',
+                        fontStyle: editingComponent.component.formatting?.italic ? 'italic' : 'normal',
+                        textDecoration: editingComponent.component.formatting?.underline ? 'underline' : 'none',
+                        textAlign: editingComponent.component.formatting?.align || 'left',
+                        fontSize: editingComponent.component.formatting?.fontSize || '1rem',
+                      }}
+                    />
+                  ) : editingComponent?.component.type === 'heading' ? (
+                    <Input
+                      value={editingComponent?.component.content || ''}
+                      onChange={(e) =>
+                        editingComponent &&
+                        setEditingComponent({
+                          ...editingComponent,
+                          component: { ...editingComponent.component, content: e.target.value },
+                        })
+                      }
+                      placeholder="Enter heading..."
+                      className="text-lg font-inherit"
+                      style={{
+                        fontWeight: editingComponent.component.formatting?.bold !== false ? 'bold' : 'normal',
+                        fontStyle: editingComponent.component.formatting?.italic ? 'italic' : 'normal',
+                        textDecoration: editingComponent.component.formatting?.underline ? 'underline' : 'none',
+                        textAlign: editingComponent.component.formatting?.align || 'left',
+                        fontSize: editingComponent.component.formatting?.fontSize || '1.5rem',
+                      }}
+                    />
+                  ) : (
+                    <Input
+                      value={editingComponent?.component.content || ''}
+                      onChange={(e) =>
+                        editingComponent &&
+                        setEditingComponent({
+                          ...editingComponent,
+                          component: { ...editingComponent.component, content: e.target.value },
+                        })
+                      }
+                      placeholder="Enter content..."
+                    />
+                  )}
+                </>
+              )}
+            {editingComponent?.component.type === 'spacer' && (
+              <div className="space-y-2">
+                <Label>Height</Label>
+                <Input
+                  value={editingComponent.component.height || '4rem'}
+                  onChange={(e) =>
+                    setEditingComponent({
+                      ...editingComponent,
+                      component: { ...editingComponent.component, height: e.target.value },
+                    })
+                  }
+                  placeholder="e.g., 4rem, 100px"
+                />
+                <p className="text-xs text-muted-foreground">Use units like rem, px, vh</p>
               </div>
+            )}
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setEditingComponent(null)}>
+                Cancel
+              </Button>
+              <Button onClick={handleSaveEdit}>Save Changes</Button>
             </div>
+          </div>
           </DialogContent>
         </Dialog>
 
         {/* Image Upload Dialog */}
-        <Dialog open={!!imageUploadTarget} onOpenChange={() => setImageUploadTarget(null)}>
+        <Dialog open={!!imageUploadTarget} onOpenChange={() => !uploadingImage && setImageUploadTarget(null)}>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Upload Image</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-4">
-              <div
-                className="flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30 transition-colors hover:border-primary hover:bg-muted/50"
-                onClick={() => fileInputRef.current?.click()}
-                onDrop={(e) => {
-                  e.preventDefault()
-                  const file = e.dataTransfer.files[0]
-                  if (file && imageUploadTarget) {
-                    handleFileUpload(file, imageUploadTarget.sectionId, imageUploadTarget.componentId)
-                  }
-                }}
-                onDragOver={(e) => e.preventDefault()}
-              >
-                <Upload className="mb-2 h-12 w-12 text-muted-foreground" />
-                <p className="text-sm font-medium text-foreground">Drop image here or click to browse</p>
-                <p className="mt-1 text-xs text-muted-foreground">Supports JPG, PNG, GIF, WebP</p>
-              </div>
+              {uploadingImage ? (
+                <div className="flex h-48 flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30">
+                  <div className="mb-3 h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+                  <p className="text-sm font-medium text-foreground">Compressing image...</p>
+                  <p className="mt-1 text-xs text-muted-foreground">This may take a moment for large files</p>
+                </div>
+              ) : (
+                <>
+                  <div
+                    className="flex h-48 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30 transition-colors hover:border-primary hover:bg-muted/50"
+                    onClick={() => fileInputRef.current?.click()}
+                    onDrop={(e) => {
+                      e.preventDefault()
+                      const file = e.dataTransfer.files[0]
+                      if (file && imageUploadTarget) {
+                        handleFileUpload(file, imageUploadTarget.sectionId, imageUploadTarget.componentId)
+                      }
+                    }}
+                    onDragOver={(e) => e.preventDefault()}
+                  >
+                    <Upload className="mb-2 h-12 w-12 text-muted-foreground" />
+                    <p className="text-sm font-medium text-foreground">Drop image here or click to browse</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Supports JPG, PNG, GIF, WebP</p>
+                    <p className="mt-1 text-xs text-muted-foreground/70">Images will be automatically compressed</p>
+                  </div>
+                  <div className="rounded-lg bg-blue-500/10 p-3 text-xs text-muted-foreground">
+                    <p className="font-medium text-foreground">💡 Tip:</p>
+                    <p className="mt-1">Images are automatically resized to max 1920x1080 and compressed to save storage space.</p>
+                  </div>
+                </>
+              )}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -833,7 +1255,11 @@ export function PreviewPanel() {
                 }}
               />
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setImageUploadTarget(null)}>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setImageUploadTarget(null)}
+                  disabled={uploadingImage}
+                >
                   Cancel
                 </Button>
               </div>

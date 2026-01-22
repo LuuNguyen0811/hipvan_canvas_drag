@@ -3,6 +3,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Project, LayoutSection, Component, HistoryEntry, SectionLayoutType, SectionTemplate } from './types'
+import { deleteImage } from './image-storage'
 
 interface ProjectStore {
   projects: Project[]
@@ -36,10 +37,15 @@ interface ProjectStore {
   // History actions
   saveToHistory: (action: string) => void
   restoreFromHistory: (historyId: string) => void
+  clearHistory: () => void
   
   // Save project
   saveProject: () => void
 }
+
+// Throttle helper to prevent too many saves
+let lastHistorySave = 0
+const HISTORY_THROTTLE_MS = 1000 // Only save history once per second max
 
 const generateId = () => Math.random().toString(36).substring(2, 9)
 
@@ -324,6 +330,15 @@ export const useProjectStore = create<ProjectStore>()(
       },
       
       removeComponent: (sectionId: string, componentId: string) => {
+        // Get component to check for image
+        const section = get().currentProject?.layout.find(s => s.id === sectionId)
+        const component = section?.components.find(c => c.id === componentId)
+        
+        // Delete associated image if exists
+        if (component?.imageId) {
+          deleteImage(component.imageId).catch(console.error)
+        }
+        
         set((state) => {
           if (!state.currentProject) return state
           const updatedLayout = state.currentProject.layout.map((section) =>
@@ -393,17 +408,81 @@ export const useProjectStore = create<ProjectStore>()(
       },
       
       saveToHistory: (action: string) => {
+        // Throttle history saves to prevent overwhelming storage
+        const now = Date.now()
+        if (now - lastHistorySave < HISTORY_THROTTLE_MS) {
+          return // Skip this save, too soon since last one
+        }
+        lastHistorySave = now
+        
+        try {
+          set((state) => {
+            if (!state.currentProject) return state
+            
+            // Limit history entries to prevent storage overflow
+            const maxHistoryEntries = 5 // Very conservative limit
+            
+            const historyEntry: HistoryEntry = {
+              id: generateId(),
+              timestamp: new Date(),
+              action,
+              snapshot: JSON.parse(JSON.stringify(state.currentProject.layout))
+            }
+            const updatedProject = {
+              ...state.currentProject,
+              history: [historyEntry, ...state.currentProject.history].slice(0, maxHistoryEntries)
+            }
+            return {
+              currentProject: updatedProject,
+              projects: state.projects.map((p) =>
+                p.id === updatedProject.id ? updatedProject : p
+              )
+            }
+          })
+        } catch (error) {
+          // If quota exceeded, clear all history and try again
+          if (error instanceof Error && error.name === 'QuotaExceededError') {
+            console.warn('Storage quota exceeded, clearing history to free space...')
+            get().clearHistory()
+            
+            // Try one more time with empty history
+            try {
+              set((state) => {
+                if (!state.currentProject) return state
+                
+                const historyEntry: HistoryEntry = {
+                  id: generateId(),
+                  timestamp: new Date(),
+                  action,
+                  snapshot: JSON.parse(JSON.stringify(state.currentProject.layout))
+                }
+                const updatedProject = {
+                  ...state.currentProject,
+                  history: [historyEntry]
+                }
+                return {
+                  currentProject: updatedProject,
+                  projects: state.projects.map((p) =>
+                    p.id === updatedProject.id ? updatedProject : p
+                  )
+                }
+              })
+            } catch (retryError) {
+              console.error('Still unable to save after clearing history. Storage may be critically full.')
+            }
+          } else {
+            console.error('Error saving to history:', error)
+          }
+        }
+      },
+      
+      clearHistory: () => {
         set((state) => {
           if (!state.currentProject) return state
-          const historyEntry: HistoryEntry = {
-            id: generateId(),
-            timestamp: new Date(),
-            action,
-            snapshot: JSON.parse(JSON.stringify(state.currentProject.layout))
-          }
+          
           const updatedProject = {
             ...state.currentProject,
-            history: [historyEntry, ...state.currentProject.history].slice(0, 50)
+            history: []
           }
           return {
             currentProject: updatedProject,
