@@ -1427,6 +1427,58 @@ export function PreviewPanel() {
                 </TabsList>
                 
                 <TabsContent value="search" className="space-y-4 mt-4">
+                  {/* Selected Collections List */}
+                  {(editingCollectionData?.collectionIds?.length ?? 0) > 0 && (
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">Selected Collections</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {editingCollectionData?.collectionIds?.map((id) => {
+                          const col = getCollectionById(id);
+                          if (!col) return null;
+                          return (
+                            <div 
+                              key={id} 
+                              className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 py-1 pl-1 pr-2"
+                            >
+                              <div className="h-6 w-6 flex-shrink-0 overflow-hidden rounded-full bg-muted">
+                                {col.image && (
+                                  <img src={col.image} alt={col.name} className="h-full w-full object-cover" />
+                                )}
+                              </div>
+                              <span className="text-xs font-medium">{col.name}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (!editingCollectionData) return;
+                                  const nextIds = editingCollectionData.collectionIds?.filter(i => i !== id) || [];
+                                  const selectedCollections = nextIds.map(i => getCollectionById(i)).filter(Boolean) as Collection[];
+                                  const items: CollectionItemData[] = selectedCollections.map(c => ({
+                                    id: c.id,
+                                    title: c.name,
+                                    image: c.image,
+                                    ctaText: c.ctaText,
+                                    ctaUrl: c.ctaUrl,
+                                  }));
+                                  setEditingCollectionData({
+                                    ...editingCollectionData,
+                                    collectionIds: nextIds,
+                                    collectionId: nextIds[0],
+                                    collectionName: selectedCollections.map(c => c.name).join(', '),
+                                    items,
+                                  });
+                                }}
+                                className="ml-1 rounded-full p-0.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Search Input */}
                   <div className="space-y-2">
                     <Label>Search Collections</Label>
                     <div className="relative">
@@ -1443,60 +1495,61 @@ export function PreviewPanel() {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto">
-                    {collectionSearchResults.map((collection) => (
-                      <button
-                        key={collection.id}
-                        onClick={() => {
-                          if (!editingCollectionData) return;
-                          
-                          const currentIds = editingCollectionData.collectionIds || (editingCollectionData.collectionId ? [editingCollectionData.collectionId] : []);
-                          const isSelected = currentIds.includes(collection.id);
-                          
-                          let nextIds: string[];
-                          if (isSelected) {
-                            nextIds = currentIds.filter(id => id !== collection.id);
-                          } else {
-                            nextIds = [...currentIds, collection.id];
-                          }
-                          
-                          // Fetch all selected collections to merge them
-                          const selectedCollections = nextIds.map(id => getCollectionById(id)).filter(Boolean) as Collection[];
-                          
-                          // Map selected collections directly to items
-                          const items: CollectionItemData[] = selectedCollections.map(col => ({
-                            id: col.id,
-                            title: col.name,
-                            image: col.image,
-                            ctaText: col.ctaText,
-                            ctaUrl: col.ctaUrl,
-                          }));
-                          
-                          setEditingCollectionData({
-                            ...editingCollectionData,
-                            sourceType: 'api',
-                            collectionIds: nextIds,
-                            collectionId: nextIds[0], // For backward compatibility
-                            collectionName: selectedCollections.map(c => c.name).join(', '),
-                            items,
-                            headerTitle: 'Shop Our Bestselling Collections',
-                          });
-                        }}
-                        className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all hover:border-primary hover:bg-accent ${
-                          (editingCollectionData?.collectionIds?.includes(collection.id) || editingCollectionData?.collectionId === collection.id) ? 'border-primary bg-primary/5' : 'border-border'
-                        }`}
-                      >
-                        <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted">
-                          {collection.image && (
-                            <img src={collection.image} alt={collection.name} className="h-full w-full object-cover" />
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate text-sm font-medium">{collection.name}</div>
-                          <div className="truncate text-xs text-muted-foreground">Category</div>
-                        </div>
-                      </button>
-                    ))}
+                  {/* Autocomplete Dropdown */}
+                  <div className="max-h-48 overflow-y-auto rounded-lg border border-border bg-card">
+                    {collectionSearchResults.length === 0 ? (
+                      <div className="p-4 text-center text-sm text-muted-foreground">No collections found</div>
+                    ) : (
+                      collectionSearchResults.map((collection) => {
+                        const isSelected = editingCollectionData?.collectionIds?.includes(collection.id);
+                        return (
+                          <button
+                            key={collection.id}
+                            onClick={() => {
+                              if (!editingCollectionData || isSelected) return;
+                              
+                              const currentIds = editingCollectionData.collectionIds || [];
+                              const nextIds = [...currentIds, collection.id];
+                              
+                              const selectedCollections = nextIds.map(id => getCollectionById(id)).filter(Boolean) as Collection[];
+                              const items: CollectionItemData[] = selectedCollections.map(col => ({
+                                id: col.id,
+                                title: col.name,
+                                image: col.image,
+                                ctaText: col.ctaText,
+                                ctaUrl: col.ctaUrl,
+                              }));
+                              
+                              setEditingCollectionData({
+                                ...editingCollectionData,
+                                sourceType: 'api',
+                                collectionIds: nextIds,
+                                collectionId: nextIds[0],
+                                collectionName: selectedCollections.map(c => c.name).join(', '),
+                                items,
+                                headerTitle: editingCollectionData.headerTitle || 'Shop Our Bestselling Collections',
+                              });
+                            }}
+                            disabled={isSelected}
+                            className={`flex w-full items-center gap-3 border-b border-border px-3 py-2 text-left transition-colors last:border-b-0 ${
+                              isSelected 
+                                ? 'cursor-not-allowed bg-muted/50 opacity-50' 
+                                : 'hover:bg-accent'
+                            }`}
+                          >
+                            <div className="h-8 w-8 flex-shrink-0 overflow-hidden rounded bg-muted">
+                              {collection.image && (
+                                <img src={collection.image} alt={collection.name} className="h-full w-full object-cover" />
+                              )}
+                            </div>
+                            <span className="truncate text-sm">{collection.name}</span>
+                            {isSelected && (
+                              <span className="ml-auto text-xs text-muted-foreground">Added</span>
+                            )}
+                          </button>
+                        );
+                      })
+                    )}
                   </div>
                 </TabsContent>
                 

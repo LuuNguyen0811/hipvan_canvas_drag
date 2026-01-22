@@ -8,6 +8,10 @@ import { deleteImage } from './image-storage'
 interface ProjectStore {
   projects: Project[]
   currentProject: Project | null
+  _hasHydrated: boolean
+  
+  // Hydration action
+  setHasHydrated: (state: boolean) => void
   
   // Project actions
   createProject: (name: string) => string
@@ -54,6 +58,11 @@ export const useProjectStore = create<ProjectStore>()(
     (set, get) => ({
       projects: [],
       currentProject: null,
+      _hasHydrated: false,
+
+      setHasHydrated: (state: boolean) => {
+        set({ _hasHydrated: state })
+      },
       
       createProject: (name: string) => {
         const id = generateId()
@@ -527,7 +536,10 @@ export const useProjectStore = create<ProjectStore>()(
     }),
     {
       name: 'website-builder-storage',
-      partialize: (state) => ({ projects: state.projects })
+      partialize: (state) => ({ projects: state.projects }),
+      onRehydrateStorage: (state) => {
+        return () => state.setHasHydrated(true)
+      }
     }
   )
 )
