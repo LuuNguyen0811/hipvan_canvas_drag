@@ -1662,7 +1662,7 @@ export function ToolsPanel() {
                           placeholder="<html>&#10;  <body>&#10;    <h1>Hello World</h1>&#10;  </body>&#10;</html>"
                           value={htmlCode}
                           onChange={(e) => setHtmlCode(e.target.value)}
-                          className="min-h-[200px] font-mono text-xs"
+                          className="h-[200px] max-h-[200px] resize-none overflow-auto font-mono text-xs"
                           disabled={isLoading}
                         />
                       </div>
