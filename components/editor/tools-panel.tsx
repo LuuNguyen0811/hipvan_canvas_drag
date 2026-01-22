@@ -1,13 +1,22 @@
-'use client'
+"use client";
 
-import React from "react"
-import { useState } from 'react'
-import { useProjectStore } from '@/lib/store'
-import { SECTION_TEMPLATES, COMPONENT_TYPES, type Component } from '@/lib/types'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import React from "react";
+import { useState } from "react";
+import { useProjectStore } from "@/lib/store";
+import {
+  SECTION_TEMPLATES,
+  COMPONENT_TYPES,
+  type Component,
+} from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   Type,
   AlignLeft,
@@ -25,7 +34,7 @@ import {
   Trash2,
   GripVertical,
   Info,
-} from 'lucide-react'
+} from "lucide-react";
 
 const iconMap: Record<string, React.ReactNode> = {
   Type: <Type className="h-5 w-5" />,
@@ -37,58 +46,76 @@ const iconMap: Record<string, React.ReactNode> = {
   MoveVertical: <MoveVertical className="h-5 w-5" />,
   CreditCard: <CreditCard className="h-5 w-5" />,
   List: <List className="h-5 w-5" />,
-}
+};
 
-const generateId = () => Math.random().toString(36).substring(2, 9)
+const generateId = () => Math.random().toString(36).substring(2, 9);
 
 export function ToolsPanel() {
-  const { 
-    currentProject, 
-    addSection, 
+  const {
+    currentProject,
+    addSection,
     addComponent,
     removeSection,
     duplicateSection,
     moveSectionUp,
     moveSectionDown,
-  } = useProjectStore()
-  const [selectedSection, setSelectedSection] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState('sections')
+  } = useProjectStore();
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("sections");
+
+  const orderedSectionTemplates = [...SECTION_TEMPLATES].sort((a, b) => {
+    const order: Record<string, number> = {
+      "full-width": 0,
+      "two-equal": 1,
+      "three-equal": 2,
+    };
+    return (order[a.id] ?? 999) - (order[b.id] ?? 999);
+  });
 
   const handleAddSection = (templateId: string) => {
-    const template = SECTION_TEMPLATES.find((t) => t.id === templateId)
-    if (!template) return
-    addSection(template.id, template)
-  }
+    const template = SECTION_TEMPLATES.find((t) => t.id === templateId);
+    if (!template) return;
+    addSection(template.id, template);
+  };
+
+  const handleLayoutDragStart = (e: React.DragEvent, templateId: string) => {
+    e.dataTransfer.setData("layoutTemplateId", templateId);
+    e.dataTransfer.effectAllowed = "copy";
+  };
 
   const handleDragStart = (e: React.DragEvent, componentType: string) => {
-    e.dataTransfer.setData('componentType', componentType)
-    e.dataTransfer.effectAllowed = 'copy'
-  }
+    e.dataTransfer.setData("componentType", componentType);
+    e.dataTransfer.effectAllowed = "copy";
+  };
 
   const handleAddComponent = (type: string) => {
-    const targetSection = selectedSection || currentProject?.layout[0]?.id
-    if (!targetSection) return
+    const targetSection = selectedSection || currentProject?.layout[0]?.id;
+    if (!targetSection) return;
 
     const defaultContent: Record<string, string> = {
-      heading: 'Your Heading Here',
-      paragraph: 'This is a paragraph. Click to edit and add your own content.',
-      image: 'Image Placeholder',
-      button: 'Click Me',
-      divider: '',
-      spacer: '',
-      card: 'Card Title',
-      list: 'Item 1, Item 2, Item 3',
-    }
+      heading: "Your Heading Here",
+      paragraph: "This is a paragraph. Click to edit and add your own content.",
+      image: "Image Placeholder",
+      button: "Click Me",
+      divider: "",
+      spacer: "",
+      card: "Card Title",
+      list: "Item 1, Item 2, Item 3",
+    };
 
     const newComponent: Component = {
       id: generateId(),
-      type: type as Component['type'],
-      content: defaultContent[type] || '',
+      type: type as Component["type"],
+      content: defaultContent[type] || "",
       styles: {},
-    }
+      formatting:
+        type === "heading" || type === "paragraph"
+          ? { align: "center" }
+          : undefined,
+    };
 
-    addComponent(targetSection, newComponent)
-  }
+    addComponent(targetSection, newComponent);
+  };
 
   return (
     <TooltipProvider>
@@ -100,7 +127,11 @@ export function ToolsPanel() {
           </p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-1 flex-col">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex flex-1 flex-col"
+        >
           <TabsList className="mx-4 mt-4 grid w-auto grid-cols-3">
             <TabsTrigger value="sections" className="gap-1.5 text-xs">
               <Layout className="h-3.5 w-3.5" />
@@ -124,20 +155,24 @@ export function ToolsPanel() {
                   💡 Getting Started
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  <strong>Step 1:</strong> Click any section below to add it to your page
+                  <strong>Step 1:</strong> Click any section below to add it to
+                  your page
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  <strong>Step 2:</strong> Go to <strong>Elements</strong> tab to add content
+                  <strong>Step 2:</strong> Go to <strong>Elements</strong> tab
+                  to add content
                 </p>
               </div>
               <div className="grid gap-2">
-                {SECTION_TEMPLATES.map((template) => (
+                {orderedSectionTemplates.map((template) => (
                   <button
                     key={template.id}
+                    draggable
+                    onDragStart={(e) => handleLayoutDragStart(e, template.id)}
                     onClick={() => handleAddSection(template.id)}
                     className="group flex items-center gap-3 rounded-lg border border-border bg-background p-3 text-left transition-all hover:border-primary hover:bg-accent hover:shadow-sm active:scale-[0.98]"
                   >
-                    <div className="flex h-10 w-16 flex-shrink-0 items-center justify-center rounded bg-muted font-mono text-[10px] text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
+                    <div className="flex h-10 w-20 flex-shrink-0 items-center justify-center overflow-hidden whitespace-nowrap rounded bg-muted px-1 font-mono text-[10px] leading-none text-muted-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                       {template.preview}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -158,7 +193,9 @@ export function ToolsPanel() {
               {!currentProject || currentProject.layout.length === 0 ? (
                 <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center">
                   <Layout className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-                  <p className="text-sm font-medium text-foreground">No sections yet</p>
+                  <p className="text-sm font-medium text-foreground">
+                    No sections yet
+                  </p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     Go to <strong>Sections</strong> tab to add a layout first
                   </p>
@@ -176,7 +213,7 @@ export function ToolsPanel() {
                       <strong>Drag:</strong> Drop into any section on the canvas
                     </p>
                   </div>
-                  
+
                   {/* Section selector */}
                   <div className="mb-4">
                     <label className="mb-2 flex items-center gap-1 text-xs font-medium text-foreground">
@@ -195,18 +232,21 @@ export function ToolsPanel() {
                       </Tooltip>
                     </label>
                     <select
-                      value={selectedSection || currentProject.layout[0]?.id || ''}
+                      value={
+                        selectedSection || currentProject.layout[0]?.id || ""
+                      }
                       onChange={(e) => setSelectedSection(e.target.value)}
                       className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     >
                       {currentProject.layout.map((section, index) => (
                         <option key={section.id} value={section.id}>
-                          {section.name || `Section ${index + 1}`} ({section.columns} col)
+                          {section.name || `Section ${index + 1}`} (
+                          {section.columns} col)
                         </option>
                       ))}
                     </select>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 gap-2">
                     {COMPONENT_TYPES.map((comp) => (
                       <Tooltip key={comp.type}>
@@ -227,12 +267,11 @@ export function ToolsPanel() {
                         </TooltipTrigger>
                         <TooltipContent side="right">
                           <p className="text-xs">
-                            {comp.type === 'image' 
-                              ? 'Click to add, then upload/drag your image'
-                              : comp.type === 'spacer'
-                              ? 'Add vertical space (adjustable height)'
-                              : `Add a ${comp.label.toLowerCase()} to your page`
-                            }
+                            {comp.type === "image"
+                              ? "Click to add, then upload/drag your image"
+                              : comp.type === "spacer"
+                                ? "Add vertical space (adjustable height)"
+                                : `Add a ${comp.label.toLowerCase()} to your page`}
                           </p>
                         </TooltipContent>
                       </Tooltip>
@@ -252,11 +291,13 @@ export function ToolsPanel() {
                   Reorder, duplicate, or delete your sections
                 </p>
               </div>
-              
+
               {!currentProject || currentProject.layout.length === 0 ? (
                 <div className="rounded-lg border border-dashed border-border bg-muted/20 p-6 text-center">
                   <Layers className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-                  <p className="text-sm font-medium text-foreground">No sections yet</p>
+                  <p className="text-sm font-medium text-foreground">
+                    No sections yet
+                  </p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     Add sections from the <strong>Sections</strong> tab
                   </p>
@@ -268,8 +309,8 @@ export function ToolsPanel() {
                       key={section.id}
                       className={`group rounded-lg border p-3 transition-all ${
                         selectedSection === section.id
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border bg-background hover:border-primary/50'
+                          ? "border-primary bg-primary/5"
+                          : "border-border bg-background hover:border-primary/50"
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -282,10 +323,13 @@ export function ToolsPanel() {
                             {section.name || `Section ${index + 1}`}
                           </div>
                           <div className="text-xs text-muted-foreground">
-                            {section.columns} column{section.columns > 1 ? 's' : ''} · {section.components.length} element{section.components.length !== 1 ? 's' : ''}
+                            {section.columns} column
+                            {section.columns > 1 ? "s" : ""} ·{" "}
+                            {section.components.length} element
+                            {section.components.length !== 1 ? "s" : ""}
                           </div>
                         </button>
-                        
+
                         <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -301,7 +345,7 @@ export function ToolsPanel() {
                             </TooltipTrigger>
                             <TooltipContent>Move up</TooltipContent>
                           </Tooltip>
-                          
+
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
@@ -309,14 +353,16 @@ export function ToolsPanel() {
                                 size="icon"
                                 className="h-7 w-7"
                                 onClick={() => moveSectionDown(section.id)}
-                                disabled={index === currentProject.layout.length - 1}
+                                disabled={
+                                  index === currentProject.layout.length - 1
+                                }
                               >
                                 <ChevronDown className="h-4 w-4" />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>Move down</TooltipContent>
                           </Tooltip>
-                          
+
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
@@ -330,7 +376,7 @@ export function ToolsPanel() {
                             </TooltipTrigger>
                             <TooltipContent>Duplicate</TooltipContent>
                           </Tooltip>
-                          
+
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
@@ -355,5 +401,5 @@ export function ToolsPanel() {
         </Tabs>
       </div>
     </TooltipProvider>
-  )
+  );
 }
