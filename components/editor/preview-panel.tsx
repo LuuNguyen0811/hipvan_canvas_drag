@@ -934,7 +934,9 @@ export function PreviewPanel() {
         case "heading":
           return (
             <h2
-              className="text-2xl font-bold text-foreground"
+              contentEditable
+              suppressContentEditableWarning
+              className="text-2xl font-bold text-foreground outline-none focus:ring-2 focus:ring-primary/20 rounded px-1 -mx-1 cursor-text"
               style={{
                 fontWeight:
                   component.formatting?.bold !== false ? "bold" : "normal",
@@ -945,14 +947,32 @@ export function PreviewPanel() {
                 textAlign: component.formatting?.align || "center",
                 fontSize: component.formatting?.fontSize || "1.5rem",
               }}
+              onBlur={(e) => {
+                const newContent = e.currentTarget.textContent || "";
+                if (newContent !== component.content) {
+                  updateComponent(sectionId, component.id, { content: newContent });
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  e.currentTarget.blur();
+                }
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  e.currentTarget.blur();
+                }
+              }}
+              onClick={(e) => e.stopPropagation()}
             >
-              {renderRichText(component.content)}
+              {component.content || "Click to edit..."}
             </h2>
           );
         case "paragraph":
           return (
             <p
-              className="leading-relaxed text-muted-foreground"
+              contentEditable
+              suppressContentEditableWarning
+              className="leading-relaxed text-muted-foreground outline-none focus:ring-2 focus:ring-primary/20 rounded px-1 -mx-1 cursor-text whitespace-pre-wrap"
               style={{
                 fontWeight: component.formatting?.bold ? "bold" : "normal",
                 fontStyle: component.formatting?.italic ? "italic" : "normal",
@@ -962,8 +982,20 @@ export function PreviewPanel() {
                 textAlign: component.formatting?.align || "center",
                 fontSize: component.formatting?.fontSize || "1rem",
               }}
+              onBlur={(e) => {
+                const newContent = e.currentTarget.textContent || "";
+                if (newContent !== component.content) {
+                  updateComponent(sectionId, component.id, { content: newContent });
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  e.currentTarget.blur();
+                }
+              }}
+              onClick={(e) => e.stopPropagation()}
             >
-              {renderRichText(component.content)}
+              {component.content || "Click to edit..."}
             </p>
           );
         case "image":
@@ -1094,8 +1126,25 @@ export function PreviewPanel() {
           );
         case "button":
           return (
-            <button className="rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              {component.content}
+            <button
+              className="rounded-lg bg-primary px-6 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={(e) => {
+                const newContent = e.currentTarget.textContent || "";
+                if (newContent !== component.content) {
+                  updateComponent(sectionId, component.id, { content: newContent });
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape" || e.key === "Enter") {
+                  e.preventDefault();
+                  e.currentTarget.blur();
+                }
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {component.content || "Button"}
             </button>
           );
         case "divider":
@@ -1129,8 +1178,25 @@ export function PreviewPanel() {
         case "card":
           return (
             <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-              <h3 className="font-semibold text-foreground">
-                {component.content}
+              <h3
+                contentEditable
+                suppressContentEditableWarning
+                className="font-semibold text-foreground outline-none focus:ring-2 focus:ring-primary/20 rounded px-1 -mx-1"
+                onBlur={(e) => {
+                  const newContent = e.currentTarget.textContent || "";
+                  if (newContent !== component.content) {
+                    updateComponent(sectionId, component.id, { content: newContent });
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape" || e.key === "Enter") {
+                    e.preventDefault();
+                    e.currentTarget.blur();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {component.content || "Card Title"}
               </h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 Card content goes here. Click to edit.
@@ -1145,6 +1211,480 @@ export function PreviewPanel() {
               ))}
             </ul>
           );
+
+        // Form Components
+        case "input":
+          return (
+            <div className="space-y-1.5">
+              {component.label && (
+                <label className="text-sm font-medium text-foreground">
+                  {component.label}
+                  {component.required && <span className="text-destructive ml-1">*</span>}
+                </label>
+              )}
+              <input
+                type="text"
+                placeholder={component.placeholder || "Enter text..."}
+                disabled={component.disabled}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
+              />
+            </div>
+          );
+
+        case "textareaField":
+          return (
+            <div className="space-y-1.5">
+              {component.label && (
+                <label className="text-sm font-medium text-foreground">
+                  {component.label}
+                  {component.required && <span className="text-destructive ml-1">*</span>}
+                </label>
+              )}
+              <textarea
+                placeholder={component.placeholder || "Enter message..."}
+                disabled={component.disabled}
+                rows={4}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 resize-none"
+              />
+            </div>
+          );
+
+        case "select":
+          return (
+            <div className="space-y-1.5">
+              {component.label && (
+                <label className="text-sm font-medium text-foreground">
+                  {component.label}
+                  {component.required && <span className="text-destructive ml-1">*</span>}
+                </label>
+              )}
+              <select
+                disabled={component.disabled}
+                className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
+              >
+                <option value="">Select an option...</option>
+                {component.options?.map((opt, i) => (
+                  <option key={i} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          );
+
+        case "checkbox":
+          return (
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                disabled={component.disabled}
+                className="h-4 w-4 rounded border-border text-primary focus:ring-primary/20"
+              />
+              <label className="text-sm text-foreground">
+                {component.content || component.label || "Checkbox"}
+              </label>
+            </div>
+          );
+
+        case "radio":
+          return (
+            <div className="space-y-2">
+              {component.label && (
+                <label className="text-sm font-medium text-foreground">{component.label}</label>
+              )}
+              <div className="space-y-1.5">
+                {component.options?.map((opt, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name={`radio-${component.id}`}
+                      disabled={component.disabled}
+                      className="h-4 w-4 border-border text-primary focus:ring-primary/20"
+                    />
+                    <label className="text-sm text-foreground">{opt.label}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+
+        case "form":
+          return (
+            <div className="rounded-lg border border-border bg-card p-4 space-y-4">
+              <div className="text-sm font-medium text-foreground">Form Container</div>
+              <p className="text-xs text-muted-foreground">
+                Drag form elements here to build your form
+              </p>
+            </div>
+          );
+
+        // Navigation Components
+        case "navbar":
+          const navItems = component.items || [
+            { title: "Home", content: "/" },
+            { title: "About", content: "/about" },
+            { title: "Contact", content: "/contact" },
+          ];
+          return (
+            <nav className="flex items-center justify-between rounded-lg border border-border bg-card px-4 py-3">
+              <div className="font-bold text-foreground">{component.content || "Logo"}</div>
+              <div className="flex items-center gap-4">
+                {navItems.map((item, i) => (
+                  <a
+                    key={i}
+                    href={item.content}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {item.title}
+                  </a>
+                ))}
+              </div>
+            </nav>
+          );
+
+        case "menu":
+          return (
+            <div className="rounded-lg border border-border bg-card p-2 space-y-1">
+              {component.content.split(",").map((item, i) => (
+                <div
+                  key={i}
+                  className="px-3 py-2 text-sm text-foreground rounded-md hover:bg-accent cursor-pointer"
+                >
+                  {item.trim()}
+                </div>
+              ))}
+            </div>
+          );
+
+        case "breadcrumb":
+          return (
+            <nav className="flex items-center gap-2 text-sm">
+              {component.content.split(",").map((item, i, arr) => (
+                <React.Fragment key={i}>
+                  <span
+                    className={
+                      i === arr.length - 1
+                        ? "text-foreground font-medium"
+                        : "text-muted-foreground hover:text-foreground cursor-pointer"
+                    }
+                  >
+                    {item.trim()}
+                  </span>
+                  {i < arr.length - 1 && (
+                    <span className="text-muted-foreground">/</span>
+                  )}
+                </React.Fragment>
+              ))}
+            </nav>
+          );
+
+        case "footer":
+          return (
+            <footer className="rounded-lg border border-border bg-card px-4 py-6">
+              <div className="text-center text-sm text-muted-foreground">
+                {component.content || "© 2024 Your Company. All rights reserved."}
+              </div>
+            </footer>
+          );
+
+        case "link":
+          return (
+            <a
+              href={component.href || "#"}
+              target={component.target || "_self"}
+              className="text-primary hover:underline cursor-pointer"
+            >
+              {component.content || "Click here"}
+            </a>
+          );
+
+        // Media Components
+        case "video":
+          return (
+            <div className="rounded-lg overflow-hidden border border-border bg-muted/30">
+              {component.src ? (
+                <video
+                  src={component.src}
+                  poster={component.poster}
+                  controls={component.controls !== false}
+                  autoPlay={component.autoplay}
+                  className="w-full"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                  <svg
+                    className="h-12 w-12 mb-2 opacity-50"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <p className="text-sm">Video Player</p>
+                  <p className="text-xs opacity-70">Add video URL in properties</p>
+                </div>
+              )}
+            </div>
+          );
+
+        case "audio":
+          return (
+            <div className="rounded-lg border border-border bg-card p-4">
+              {component.src ? (
+                <audio
+                  src={component.src}
+                  controls={component.controls !== false}
+                  className="w-full"
+                />
+              ) : (
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Audio Player</p>
+                    <p className="text-xs">Add audio URL in properties</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+
+        case "embed":
+          return (
+            <div className="rounded-lg border border-border bg-muted/30 p-4">
+              <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+                <svg
+                  className="h-10 w-10 mb-2 opacity-50"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                  />
+                </svg>
+                <p className="text-sm font-medium">Embed Content</p>
+                <p className="text-xs opacity-70">Add embed code in properties</p>
+              </div>
+            </div>
+          );
+
+        case "icon":
+          return (
+            <div className="flex items-center justify-center p-2">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                  />
+                </svg>
+              </div>
+            </div>
+          );
+
+        // Data Display Components
+        case "table":
+          const tableHeaders = component.headers || ["Column 1", "Column 2", "Column 3"];
+          const tableRows = component.rows || [
+            ["Cell 1", "Cell 2", "Cell 3"],
+            ["Cell 4", "Cell 5", "Cell 6"],
+          ];
+          return (
+            <div className="rounded-lg border border-border overflow-hidden">
+              <table className="w-full">
+                <thead className="bg-muted/50">
+                  <tr>
+                    {tableHeaders.map((header, i) => (
+                      <th
+                        key={i}
+                        className="px-4 py-2 text-left text-sm font-medium text-foreground"
+                      >
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableRows.map((row, rowIndex) => (
+                    <tr key={rowIndex} className="border-t border-border">
+                      {row.map((cell, cellIndex) => (
+                        <td
+                          key={cellIndex}
+                          className="px-4 py-2 text-sm text-muted-foreground"
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+
+        case "badge":
+          const badgeVariants: Record<string, string> = {
+            default: "bg-primary text-primary-foreground",
+            secondary: "bg-secondary text-secondary-foreground",
+            destructive: "bg-destructive text-destructive-foreground",
+            outline: "border border-border text-foreground",
+          };
+          return (
+            <span
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                badgeVariants[component.badgeVariant || "default"]
+              }`}
+            >
+              {component.content || "Badge"}
+            </span>
+          );
+
+        case "avatar":
+          return (
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted text-sm font-medium text-muted-foreground">
+              {component.initials || "AB"}
+            </div>
+          );
+
+        case "progress":
+          const progressValue = component.value ?? 50;
+          const progressMax = component.max ?? 100;
+          const percentage = (progressValue / progressMax) * 100;
+          return (
+            <div className="space-y-1.5">
+              <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-primary transition-all"
+                  style={{ width: `${percentage}%` }}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground text-right">
+                {progressValue}/{progressMax}
+              </p>
+            </div>
+          );
+
+        // Advanced Layout Components
+        case "grid":
+          return (
+            <div className="grid grid-cols-3 gap-2 rounded-lg border border-dashed border-border p-4">
+              {[1, 2, 3, 4, 5, 6].map((n) => (
+                <div
+                  key={n}
+                  className="flex h-16 items-center justify-center rounded bg-muted text-xs text-muted-foreground"
+                >
+                  Grid {n}
+                </div>
+              ))}
+            </div>
+          );
+
+        case "flex":
+          return (
+            <div className="flex gap-2 rounded-lg border border-dashed border-border p-4">
+              {[1, 2, 3].map((n) => (
+                <div
+                  key={n}
+                  className="flex h-16 flex-1 items-center justify-center rounded bg-muted text-xs text-muted-foreground"
+                >
+                  Flex {n}
+                </div>
+              ))}
+            </div>
+          );
+
+        case "accordion":
+          const accordionItems = component.items || [
+            { title: "Section 1", content: "Content for section 1" },
+            { title: "Section 2", content: "Content for section 2" },
+          ];
+          return (
+            <div className="rounded-lg border border-border divide-y divide-border">
+              {accordionItems.map((item, i) => (
+                <div key={i}>
+                  <button className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-medium text-foreground hover:bg-accent">
+                    {item.title}
+                    <svg
+                      className="h-4 w-4 text-muted-foreground"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                  {i === 0 && (
+                    <div className="px-4 py-3 text-sm text-muted-foreground bg-muted/30">
+                      {item.content}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          );
+
+        case "tabs":
+          const tabItems = component.items || [
+            { title: "Tab 1", content: "Content for tab 1" },
+            { title: "Tab 2", content: "Content for tab 2" },
+          ];
+          const activeTab = component.activeIndex ?? 0;
+          return (
+            <div className="rounded-lg border border-border overflow-hidden">
+              <div className="flex border-b border-border bg-muted/30">
+                {tabItems.map((item, i) => (
+                  <button
+                    key={i}
+                    className={`px-4 py-2 text-sm font-medium transition-colors ${
+                      i === activeTab
+                        ? "text-foreground bg-background border-b-2 border-primary -mb-px"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {item.title}
+                  </button>
+                ))}
+              </div>
+              <div className="p-4 text-sm text-muted-foreground">
+                {tabItems[activeTab]?.content || "Tab content"}
+              </div>
+            </div>
+          );
+
         default:
           return <div>{component.content}</div>;
       }
