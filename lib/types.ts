@@ -20,8 +20,6 @@ export interface CollectionComponentData {
   itemsPerRow?: number
   showHeader?: boolean
   headerTitle?: string
-  headerCtaText?: string
-  headerCtaUrl?: string
   itemCtaText?: string
   itemCtaBgColor?: string
 }

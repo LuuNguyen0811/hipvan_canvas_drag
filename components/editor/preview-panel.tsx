@@ -591,13 +591,6 @@ export function PreviewPanel() {
               {collectionData?.showHeader && collectionData.headerTitle && (
                 <CollectionHeader>
                   <CollectionTitle>{collectionData.headerTitle}</CollectionTitle>
-                  {collectionData.headerCtaText && (
-                    <CollectionAction>
-                      <a href={collectionData.headerCtaUrl || '#'} className="text-sm font-medium text-primary hover:underline">
-                        {collectionData.headerCtaText}
-                      </a>
-                    </CollectionAction>
-                  )}
                 </CollectionHeader>
               )}
               {hasItems ? (
@@ -1400,7 +1393,27 @@ export function PreviewPanel() {
               <DialogTitle>Configure Collection</DialogTitle>
             </DialogHeader>
             
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>Header Title</Label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="showHeader"
+                      checked={editingCollectionData?.showHeader ?? true}
+                      onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, showHeader: e.target.checked })}
+                      className="h-4 w-4 rounded border-border"
+                    />
+                    <label htmlFor="showHeader" className="text-xs text-muted-foreground cursor-pointer">Show on page</label>
+                  </div>
+                </div>
+                <Input
+                  placeholder="e.g. Shop Our Bestselling Collections"
+                  value={editingCollectionData?.headerTitle || ''}
+                  onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, headerTitle: e.target.value })}
+                />
+              </div>
               <Tabs defaultValue="search" className="w-full">
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="search" className="gap-2">
@@ -1467,8 +1480,6 @@ export function PreviewPanel() {
                             collectionName: selectedCollections.map(c => c.name).join(', '),
                             items,
                             headerTitle: 'Shop Our Bestselling Collections',
-                            headerCtaText: undefined,
-                            headerCtaUrl: undefined,
                           });
                         }}
                         className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all hover:border-primary hover:bg-accent ${
@@ -1663,38 +1674,6 @@ export function PreviewPanel() {
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label>Header Settings</Label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="showHeader"
-                      checked={editingCollectionData?.showHeader ?? true}
-                      onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, showHeader: e.target.checked })}
-                      className="h-4 w-4 rounded border-border"
-                    />
-                    <label htmlFor="showHeader" className="text-sm">Show header</label>
-                  </div>
-                  {editingCollectionData?.showHeader && (
-                    <div className="grid grid-cols-3 gap-2">
-                      <Input
-                        placeholder="Header title"
-                        value={editingCollectionData?.headerTitle || ''}
-                        onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, headerTitle: e.target.value })}
-                      />
-                      <Input
-                        placeholder="CTA text (optional)"
-                        value={editingCollectionData?.headerCtaText || ''}
-                        onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, headerCtaText: e.target.value })}
-                      />
-                      <Input
-                        placeholder="CTA URL"
-                        value={editingCollectionData?.headerCtaUrl || ''}
-                        onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, headerCtaUrl: e.target.value })}
-                      />
-                    </div>
-                  )}
-                </div>
 
                 <div className="space-y-2 pt-2 border-t border-border">
                   <Label>Global Item CTA Settings</Label>

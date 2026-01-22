@@ -417,7 +417,6 @@ ${items}
       const headerHtml = data.showHeader && data.headerTitle ? `
           <div class="collection-header">
             <h3 class="collection-title">${data.headerTitle}</h3>
-            ${data.headerCtaText ? `<a href="${data.headerCtaUrl || '#'}" class="collection-cta">${data.headerCtaText}</a>` : ''}
           </div>` : ''
       
       const gridClass = data.layout === 'horizontal' ? 'horizontal' : ''
@@ -432,13 +431,18 @@ ${items}
           : ''
         const subtitleHtml = item.subtitle ? `<p class="collection-item-subtitle">${item.subtitle}</p>` : ''
         
+        const ctaText = item.ctaText || data.itemCtaText || 'Shop'
+        const ctaStyle = (item.ctaBgColor || data.itemCtaBgColor) 
+          ? ` style="background-color: ${item.ctaBgColor || data.itemCtaBgColor}; color: white;"` 
+          : ''
+        
         return `            <div class="collection-item">
               ${badgeHtml}
               <div class="collection-item-image">${imageHtml}</div>
               <div class="collection-item-content">
                 <h4 class="collection-item-title">${item.title}</h4>
                 ${subtitleHtml}
-                <a href="${item.ctaUrl}" class="collection-item-cta">${item.ctaText}</a>
+                <a href="${item.ctaUrl}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
               </div>
             </div>`
       }).join('\n')
