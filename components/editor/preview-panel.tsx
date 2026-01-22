@@ -2,13 +2,15 @@
 
 import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { useProjectStore } from '@/lib/store'
-import type { Component, LayoutSection } from '@/lib/types'
+import type { Component, LayoutSection, CollectionComponentData, CollectionItemData } from '@/lib/types'
 import { saveImage, loadImage, deleteImage } from '@/lib/image-storage'
+import { searchCollections, getCollectionById, getAllCollections, type Collection } from '@/lib/mock-collections'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Label } from '@/components/ui/label'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Dialog,
   DialogContent,
@@ -21,7 +23,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Trash2, GripVertical, Pencil, Monitor, Tablet, Smartphone, Plus, GripHorizontal, Upload, Image as ImageIcon, MoveVertical, MoveHorizontal, Info, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, List, ListOrdered } from 'lucide-react'
+import {
+  Collection as CollectionUI,
+  CollectionItem,
+  CollectionItemImage,
+  CollectionItemContent,
+  CollectionItemTitle,
+  CollectionItemSubtitle,
+  CollectionItemCTA,
+  CollectionItemBadge,
+  CollectionHeader,
+  CollectionTitle,
+  CollectionAction,
+} from '@/components/ui/collection'
+import { Trash2, GripVertical, Pencil, Monitor, Tablet, Smartphone, Plus, GripHorizontal, Upload, Image as ImageIcon, MoveVertical, MoveHorizontal, Info, Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Search, Grid2X2, LayoutList, X } from 'lucide-react'
 
 const generateId = () => Math.random().toString(36).substring(2, 9)
 
@@ -44,6 +59,11 @@ export function PreviewPanel() {
   const [showOnboarding, setShowOnboarding] = useState(true)
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({})
   const [uploadingImage, setUploadingImage] = useState(false)
+  
+  const [editingCollection, setEditingCollection] = useState<{ sectionId: string; component: Component } | null>(null)
+  const [collectionSearchQuery, setCollectionSearchQuery] = useState('')
+  const [collectionSearchResults, setCollectionSearchResults] = useState<Collection[]>([])
+  const [editingCollectionData, setEditingCollectionData] = useState<CollectionComponentData | null>(null)
   
   // Resizing state
   const [resizingSection, setResizingSection] = useState<string | null>(null)
@@ -165,6 +185,17 @@ export function PreviewPanel() {
         spacer: '',
         card: 'Card Title',
         list: 'Item 1, Item 2, Item 3',
+        collection: 'Collection',
+      }
+
+      const defaultCollectionData: CollectionComponentData = {
+        layout: 'horizontal',
+        sourceType: 'api',
+        items: [],
+        gap: '1rem',
+        itemsPerRow: 4,
+        showHeader: true,
+        headerTitle: 'Shop Our Collections',
       }
 
       const newComponent: Component = {
@@ -175,6 +206,7 @@ export function PreviewPanel() {
         props: columnIndex !== undefined ? { columnIndex } : undefined,
         width: componentType === 'image' ? '100%' : undefined,
         height: componentType === 'spacer' ? '4rem' : undefined,
+        ...(componentType === 'collection' && { collectionData: defaultCollectionData }),
       }
 
       addComponent(sectionId, newComponent)
@@ -551,6 +583,66 @@ export function PreviewPanel() {
               ))}
             </ul>
           )
+        case 'collection':
+          const collectionData = component.collectionData
+          const hasItems = collectionData && collectionData.items.length > 0
+          return (
+            <div className="w-full">
+              {collectionData?.showHeader && collectionData.headerTitle && (
+                <CollectionHeader>
+                  <CollectionTitle>{collectionData.headerTitle}</CollectionTitle>
+                  {collectionData.headerCtaText && (
+                    <CollectionAction>
+                      <a href={collectionData.headerCtaUrl || '#'} className="text-sm font-medium text-primary hover:underline">
+                        {collectionData.headerCtaText}
+                      </a>
+                    </CollectionAction>
+                  )}
+                </CollectionHeader>
+              )}
+              {hasItems ? (
+                <CollectionUI
+                  layout={collectionData.layout}
+                  itemsPerRow={collectionData.itemsPerRow || 4}
+                  gap={collectionData.gap || '1rem'}
+                >
+                  {collectionData.items.map((item) => (
+                    <CollectionItem key={item.id} layout={collectionData.layout}>
+                      {item.badge && <CollectionItemBadge>{item.badge}</CollectionItemBadge>}
+                      <CollectionItemImage src={item.image} alt={item.title} />
+                      <CollectionItemContent>
+                        <CollectionItemTitle>{item.title}</CollectionItemTitle>
+                        {item.subtitle && <CollectionItemSubtitle>{item.subtitle}</CollectionItemSubtitle>}
+                        <CollectionItemCTA href={item.ctaUrl}>{item.ctaText}</CollectionItemCTA>
+                      </CollectionItemContent>
+                    </CollectionItem>
+                  ))}
+                </CollectionUI>
+              ) : (
+                <div 
+                  className="flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30 transition-colors hover:border-primary hover:bg-muted/50"
+                  onClick={() => {
+                    setEditingCollection({ sectionId, component })
+                    setEditingCollectionData(collectionData || {
+                      layout: 'horizontal',
+                      sourceType: 'api',
+                      items: [],
+                      gap: '1rem',
+                      itemsPerRow: 4,
+                      showHeader: true,
+                      headerTitle: 'Shop Our Collections',
+                    })
+                    setCollectionSearchQuery('')
+                    setCollectionSearchResults(getAllCollections())
+                  }}
+                >
+                  <Grid2X2 className="mb-2 h-8 w-8 text-muted-foreground" />
+                  <p className="text-sm font-medium text-foreground">Click to configure collection</p>
+                  <p className="mt-1 text-xs text-muted-foreground">Search or manually add items</p>
+                </div>
+              )}
+            </div>
+          )
         default:
           return <div>{component.content}</div>
       }
@@ -572,7 +664,24 @@ export function PreviewPanel() {
             variant="secondary"
             size="icon"
             className="h-7 w-7"
-            onClick={() => setEditingComponent({ sectionId, component })}
+            onClick={() => {
+              if (component.type === 'collection') {
+                setEditingCollection({ sectionId, component })
+                setEditingCollectionData(component.collectionData || {
+                  layout: 'horizontal',
+                  sourceType: 'api',
+                  items: [],
+                  gap: '1rem',
+                  itemsPerRow: 4,
+                  showHeader: true,
+                  headerTitle: 'Shop Our Collections',
+                })
+                setCollectionSearchQuery('')
+                setCollectionSearchResults(getAllCollections())
+              } else {
+                setEditingComponent({ sectionId, component })
+              }
+            }}
           >
             <Pencil className="h-3 w-3" />
           </Button>
@@ -1263,6 +1372,324 @@ export function PreviewPanel() {
                   Cancel
                 </Button>
               </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Collection Edit Dialog */}
+        <Dialog 
+          open={!!editingCollection} 
+          onOpenChange={(open) => {
+            if (!open) {
+              setEditingCollection(null)
+              setEditingCollectionData(null)
+              setCollectionSearchQuery('')
+            }
+          }}
+        >
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
+            <DialogHeader>
+              <DialogTitle>Configure Collection</DialogTitle>
+            </DialogHeader>
+            
+            <div className="flex-1 overflow-y-auto">
+              <Tabs defaultValue="search" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="search" className="gap-2">
+                    <Search className="h-4 w-4" />
+                    Search Collection
+                  </TabsTrigger>
+                  <TabsTrigger value="manual" className="gap-2">
+                    <LayoutList className="h-4 w-4" />
+                    Manual Entry
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="search" className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <Label>Search Collections</Label>
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        placeholder="Type to search collections..."
+                        value={collectionSearchQuery}
+                        onChange={(e) => {
+                          setCollectionSearchQuery(e.target.value)
+                          setCollectionSearchResults(searchCollections(e.target.value))
+                        }}
+                        className="pl-10"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                    {collectionSearchResults.map((collection) => (
+                      <button
+                        key={collection.id}
+                        onClick={() => {
+                          if (!editingCollectionData) return;
+                          
+                          const currentIds = editingCollectionData.collectionIds || (editingCollectionData.collectionId ? [editingCollectionData.collectionId] : []);
+                          const isSelected = currentIds.includes(collection.id);
+                          
+                          let nextIds: string[];
+                          if (isSelected) {
+                            nextIds = currentIds.filter(id => id !== collection.id);
+                          } else {
+                            nextIds = [...currentIds, collection.id];
+                          }
+                          
+                          // Fetch all selected collections to merge them
+                          const selectedCollections = nextIds.map(id => getCollectionById(id)).filter(Boolean) as Collection[];
+                          
+                          // Merge items (take up to 4 from each to avoid overcrowding)
+                          const mergedItems: CollectionItemData[] = [];
+                          selectedCollections.forEach(col => {
+                            const colItems = col.products.slice(0, 4).map(p => ({
+                              id: p.id,
+                              title: p.title,
+                              subtitle: col.name,
+                              image: p.image,
+                              ctaText: p.ctaText,
+                              ctaUrl: p.ctaUrl,
+                              badge: p.badge,
+                            }));
+                            mergedItems.push(...colItems);
+                          });
+                          
+                          setEditingCollectionData({
+                            ...editingCollectionData,
+                            sourceType: 'api',
+                            collectionIds: nextIds,
+                            collectionId: nextIds[0], // For backward compatibility
+                            collectionName: selectedCollections.map(c => c.name).join(', '),
+                            items: mergedItems,
+                            headerTitle: selectedCollections.length === 1 ? selectedCollections[0].name : 'Our Collections',
+                            headerCtaText: selectedCollections.length === 1 ? selectedCollections[0].ctaText : undefined,
+                            headerCtaUrl: selectedCollections.length === 1 ? selectedCollections[0].ctaUrl : undefined,
+                          });
+                        }}
+                        className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all hover:border-primary hover:bg-accent ${
+                          (editingCollectionData?.collectionIds?.includes(collection.id) || editingCollectionData?.collectionId === collection.id) ? 'border-primary bg-primary/5' : 'border-border'
+                        }`}
+                      >
+                        <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted">
+                          {collection.products[0]?.image && (
+                            <img src={collection.products[0].image} alt={collection.name} className="h-full w-full object-cover" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-sm font-medium">{collection.name}</div>
+                          <div className="truncate text-xs text-muted-foreground">{collection.products.length} items</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="manual" className="space-y-4 mt-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label>Collection Items</Label>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newItem: CollectionItemData = {
+                            id: `item_${Date.now()}`,
+                            title: 'New Item',
+                            ctaText: 'Shop',
+                            ctaUrl: '#',
+                          }
+                          setEditingCollectionData({
+                            ...editingCollectionData!,
+                            sourceType: 'manual',
+                            items: [...(editingCollectionData?.items || []), newItem],
+                          })
+                        }}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Item
+                      </Button>
+                    </div>
+                    
+                    <div className="space-y-3 max-h-64 overflow-y-auto">
+                      {editingCollectionData?.items.map((item, index) => (
+                        <div key={item.id} className="flex gap-3 rounded-lg border border-border p-3">
+                          <div className="flex-1 space-y-2">
+                            <Input
+                              placeholder="Item title"
+                              value={item.title}
+                              onChange={(e) => {
+                                const newItems = [...(editingCollectionData?.items || [])]
+                                newItems[index] = { ...newItems[index], title: e.target.value }
+                                setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                              }}
+                            />
+                            <div className="grid grid-cols-2 gap-2">
+                              <Input
+                                placeholder="Image URL"
+                                value={item.image || ''}
+                                onChange={(e) => {
+                                  const newItems = [...(editingCollectionData?.items || [])]
+                                  newItems[index] = { ...newItems[index], image: e.target.value }
+                                  setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                                }}
+                              />
+                              <Input
+                                placeholder="Subtitle (optional)"
+                                value={item.subtitle || ''}
+                                onChange={(e) => {
+                                  const newItems = [...(editingCollectionData?.items || [])]
+                                  newItems[index] = { ...newItems[index], subtitle: e.target.value }
+                                  setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                                }}
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <Input
+                                placeholder="CTA Text"
+                                value={item.ctaText}
+                                onChange={(e) => {
+                                  const newItems = [...(editingCollectionData?.items || [])]
+                                  newItems[index] = { ...newItems[index], ctaText: e.target.value }
+                                  setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                                }}
+                              />
+                              <Input
+                                placeholder="CTA URL"
+                                value={item.ctaUrl}
+                                onChange={(e) => {
+                                  const newItems = [...(editingCollectionData?.items || [])]
+                                  newItems[index] = { ...newItems[index], ctaUrl: e.target.value }
+                                  setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:bg-destructive/10"
+                            onClick={() => {
+                              const newItems = editingCollectionData?.items.filter((_, i) => i !== index) || []
+                              setEditingCollectionData({ ...editingCollectionData!, items: newItems })
+                            }}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      
+                      {(!editingCollectionData?.items || editingCollectionData.items.length === 0) && (
+                        <div className="flex h-24 items-center justify-center rounded-lg border border-dashed border-border">
+                          <p className="text-sm text-muted-foreground">No items yet. Click "Add Item" to start.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+              
+              <div className="mt-6 space-y-4 border-t border-border pt-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Layout</Label>
+                    <div className="flex gap-2">
+                      <Button
+                        variant={editingCollectionData?.layout === 'horizontal' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setEditingCollectionData({ ...editingCollectionData!, layout: 'horizontal' })}
+                        className="flex-1"
+                      >
+                        <LayoutList className="mr-2 h-4 w-4 rotate-90" />
+                        Horizontal
+                      </Button>
+                      <Button
+                        variant={editingCollectionData?.layout === 'vertical' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setEditingCollectionData({ ...editingCollectionData!, layout: 'vertical' })}
+                        className="flex-1"
+                      >
+                        <Grid2X2 className="mr-2 h-4 w-4" />
+                        Grid
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Items Per Row (Grid)</Label>
+                    <div className="flex gap-2">
+                      {[2, 3, 4, 5, 6].map((num) => (
+                        <Button
+                          key={num}
+                          variant={editingCollectionData?.itemsPerRow === num ? 'default' : 'outline'}
+                          size="sm"
+                          onClick={() => setEditingCollectionData({ ...editingCollectionData!, itemsPerRow: num })}
+                          className="flex-1"
+                        >
+                          {num}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label>Header Settings</Label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="showHeader"
+                      checked={editingCollectionData?.showHeader ?? true}
+                      onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, showHeader: e.target.checked })}
+                      className="h-4 w-4 rounded border-border"
+                    />
+                    <label htmlFor="showHeader" className="text-sm">Show header</label>
+                  </div>
+                  {editingCollectionData?.showHeader && (
+                    <div className="grid grid-cols-3 gap-2">
+                      <Input
+                        placeholder="Header title"
+                        value={editingCollectionData?.headerTitle || ''}
+                        onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, headerTitle: e.target.value })}
+                      />
+                      <Input
+                        placeholder="CTA text (optional)"
+                        value={editingCollectionData?.headerCtaText || ''}
+                        onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, headerCtaText: e.target.value })}
+                      />
+                      <Input
+                        placeholder="CTA URL"
+                        value={editingCollectionData?.headerCtaUrl || ''}
+                        onChange={(e) => setEditingCollectionData({ ...editingCollectionData!, headerCtaUrl: e.target.value })}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-2 border-t border-border pt-4 mt-4">
+              <Button variant="outline" onClick={() => {
+                setEditingCollection(null)
+                setEditingCollectionData(null)
+              }}>
+                Cancel
+              </Button>
+              <Button onClick={() => {
+                if (editingCollection && editingCollectionData) {
+                  updateComponent(
+                    editingCollection.sectionId,
+                    editingCollection.component.id,
+                    { collectionData: editingCollectionData }
+                  )
+                  setEditingCollection(null)
+                  setEditingCollectionData(null)
+                }
+              }}>
+                Save Collection
+              </Button>
             </div>
           </DialogContent>
         </Dialog>

@@ -174,6 +174,145 @@ function generateCSS(layout: LayoutSection[]): string {
     li {
       margin-bottom: 0.5rem;
       color: #4a5568;
+    }
+    
+    .collection {
+      width: 100%;
+    }
+    
+    .collection-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    
+    .collection-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    
+    .collection-cta {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    
+    .collection-cta:hover {
+      text-decoration: underline;
+    }
+    
+    .collection-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    
+    .collection-grid.horizontal {
+      display: flex;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scroll-snap-type: x mandatory;
+    }
+    
+    .collection-grid.horizontal .collection-item {
+      flex-shrink: 0;
+      width: 12rem;
+      scroll-snap-align: start;
+    }
+    
+    .collection-item {
+      position: relative;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      background: white;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    
+    .collection-item:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-color: #3b82f6;
+    }
+    
+    .collection-item-badge {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      background: #3b82f6;
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      z-index: 1;
+    }
+    
+    .collection-item-image {
+      aspect-ratio: 1;
+      width: 100%;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    }
+    
+    .collection-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+    
+    .collection-item:hover .collection-item-image img {
+      transform: scale(1.05);
+    }
+    
+    .collection-item-content {
+      padding: 0.75rem;
+    }
+    
+    .collection-item-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #1a1a2e;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .collection-item-subtitle {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.25rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .collection-item-cta {
+      display: inline-flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.5rem;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: white;
+      background-color: #3b82f6;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+    
+    .collection-item-cta:hover {
+      background-color: #2563eb;
+    }
+    
+    @media (max-width: 768px) {
+      .collection-grid:not(.horizontal) {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
     }`
 }
 
@@ -266,6 +405,49 @@ function generateComponent(component: Component): string {
       return `        <ul class="component"${styleAttr}>
 ${items}
         </ul>`
+    
+    case 'collection':
+      const data = component.collectionData
+      if (!data || data.items.length === 0) {
+        return `        <div class="collection component"${styleAttr}>
+          <p style="text-align: center; color: #64748b;">No collection items configured</p>
+        </div>`
+      }
+      
+      const headerHtml = data.showHeader && data.headerTitle ? `
+          <div class="collection-header">
+            <h3 class="collection-title">${data.headerTitle}</h3>
+            ${data.headerCtaText ? `<a href="${data.headerCtaUrl || '#'}" class="collection-cta">${data.headerCtaText}</a>` : ''}
+          </div>` : ''
+      
+      const gridClass = data.layout === 'horizontal' ? 'horizontal' : ''
+      const gridStyle = data.layout === 'vertical' 
+        ? ` style="grid-template-columns: repeat(${data.itemsPerRow || 4}, 1fr); gap: ${data.gap || '1rem'};"`
+        : ` style="gap: ${data.gap || '1rem'};"`
+      
+      const itemsHtml = data.items.map((item) => {
+        const badgeHtml = item.badge ? `<span class="collection-item-badge">${item.badge}</span>` : ''
+        const imageHtml = item.image 
+          ? `<img src="${item.image}" alt="${item.title}" />`
+          : ''
+        const subtitleHtml = item.subtitle ? `<p class="collection-item-subtitle">${item.subtitle}</p>` : ''
+        
+        return `            <div class="collection-item">
+              ${badgeHtml}
+              <div class="collection-item-image">${imageHtml}</div>
+              <div class="collection-item-content">
+                <h4 class="collection-item-title">${item.title}</h4>
+                ${subtitleHtml}
+                <a href="${item.ctaUrl}" class="collection-item-cta">${item.ctaText}</a>
+              </div>
+            </div>`
+      }).join('\n')
+      
+      return `        <div class="collection component"${styleAttr}>${headerHtml}
+          <div class="collection-grid ${gridClass}"${gridStyle}>
+${itemsHtml}
+          </div>
+        </div>`
     
     default:
       return `        <div class="component"${styleAttr}>${component.content}</div>`

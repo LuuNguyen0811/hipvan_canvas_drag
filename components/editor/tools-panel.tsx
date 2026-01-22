@@ -3,7 +3,7 @@
 import React from "react"
 import { useState } from 'react'
 import { useProjectStore } from '@/lib/store'
-import { SECTION_TEMPLATES, COMPONENT_TYPES, type Component } from '@/lib/types'
+import { SECTION_TEMPLATES, COMPONENT_TYPES, type Component, type CollectionComponentData } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -25,6 +25,7 @@ import {
   Trash2,
   GripVertical,
   Info,
+  Grid2X2,
 } from 'lucide-react'
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -37,6 +38,7 @@ const iconMap: Record<string, React.ReactNode> = {
   MoveVertical: <MoveVertical className="h-5 w-5" />,
   CreditCard: <CreditCard className="h-5 w-5" />,
   List: <List className="h-5 w-5" />,
+  Grid2X2: <Grid2X2 className="h-5 w-5" />,
 }
 
 const generateId = () => Math.random().toString(36).substring(2, 9)
@@ -78,6 +80,17 @@ export function ToolsPanel() {
       spacer: '',
       card: 'Card Title',
       list: 'Item 1, Item 2, Item 3',
+      collection: 'Collection',
+    }
+
+    const defaultCollectionData: CollectionComponentData = {
+      layout: 'horizontal',
+      sourceType: 'api',
+      items: [],
+      gap: '1rem',
+      itemsPerRow: 4,
+      showHeader: true,
+      headerTitle: 'Shop Our Collections',
     }
 
     const newComponent: Component = {
@@ -85,6 +98,7 @@ export function ToolsPanel() {
       type: type as Component['type'],
       content: defaultContent[type] || '',
       styles: {},
+      ...(type === 'collection' && { collectionData: defaultCollectionData }),
     }
 
     addComponent(targetSection, newComponent)

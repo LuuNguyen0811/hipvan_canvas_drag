@@ -1,12 +1,37 @@
+export interface CollectionItemData {
+  id: string
+  title: string
+  subtitle?: string
+  image?: string
+  ctaText: string
+  ctaUrl: string
+  badge?: string
+}
+
+export interface CollectionComponentData {
+  layout: 'horizontal' | 'vertical'
+  sourceType: 'api' | 'manual'
+  collectionId?: string
+  collectionIds?: string[]
+  collectionName?: string
+  items: CollectionItemData[]
+  gap?: string
+  itemsPerRow?: number
+  showHeader?: boolean
+  headerTitle?: string
+  headerCtaText?: string
+  headerCtaUrl?: string
+}
+
 export interface Component {
   id: string
-  type: 'heading' | 'paragraph' | 'image' | 'button' | 'divider' | 'spacer' | 'card' | 'list'
+  type: 'heading' | 'paragraph' | 'image' | 'button' | 'divider' | 'spacer' | 'card' | 'list' | 'collection'
   content: string
   styles: Record<string, string>
   props?: Record<string, unknown>
-  imageId?: string // Reference to image in IndexedDB
-  width?: string // Component width (e.g., '100%', '50%', '300px')
-  height?: string // Component height
+  imageId?: string
+  width?: string
+  height?: string
   formatting?: {
     bold?: boolean
     italic?: boolean
@@ -14,6 +39,7 @@ export interface Component {
     align?: 'left' | 'center' | 'right'
     fontSize?: string
   }
+  collectionData?: CollectionComponentData
 }
 
 export type SectionLayoutType = 
@@ -158,4 +184,5 @@ export const COMPONENT_TYPES = [
   { type: 'spacer', label: 'Spacer', icon: 'MoveVertical' },
   { type: 'card', label: 'Card', icon: 'CreditCard' },
   { type: 'list', label: 'List', icon: 'List' },
+  { type: 'collection', label: 'Collection', icon: 'Grid2X2' },
 ] as const
