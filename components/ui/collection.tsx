@@ -103,19 +103,33 @@ function CollectionContent({
 
 interface CollectionItemProps extends React.ComponentProps<"div"> {
   layout?: CollectionLayout;
+  isDragging?: boolean;
 }
 
 function CollectionItem({
   className,
   layout = "horizontal",
+  draggable,
+  onDragStart,
+  onDragOver,
+  onDragEnd,
+  onDrop,
+  isDragging,
   ...props
 }: CollectionItemProps) {
   return (
     <div
       data-slot="collection-item"
+      draggable={draggable}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDragEnd={onDragEnd}
+      onDrop={onDrop}
       className={cn(
-        "group relative flex-shrink-0 overflow-hidden bg-[#f5f5f5] transition-all duration-300 hover:shadow-lg",
+        "group relative flex-shrink-0 overflow-hidden bg-[#f5f5f5] transition-all duration-300 ease-in-out",
         layout === "horizontal" ? "w-full md:w-[calc(25%-1rem)]" : "w-full",
+        isDragging && "z-50 opacity-40 scale-105 shadow-2xl ring-2 ring-primary/20",
+        !isDragging && "hover:shadow-lg",
         className,
       )}
       {...props}

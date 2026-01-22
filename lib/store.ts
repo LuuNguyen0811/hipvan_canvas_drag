@@ -37,6 +37,7 @@ interface ProjectStore {
   updateComponent: (sectionId: string, componentId: string, updates: Partial<Component>, skipHistory?: boolean) => void
   removeComponent: (sectionId: string, componentId: string) => void
   moveComponent: (fromSectionId: string, toSectionId: string, componentId: string, newIndex: number) => void
+  reorderCollectionItems: (sectionId: string, componentId: string, oldIndex: number, newIndex: number) => void
   
   // History actions
   saveToHistory: (action: string) => void
@@ -414,6 +415,49 @@ export const useProjectStore = create<ProjectStore>()(
           }
         })
         get().saveToHistory('Moved component')
+      },
+      
+      reorderCollectionItems: (sectionId: string, componentId: string, oldIndex: number, newIndex: number) => {
+        set((state) => {
+          if (!state.currentProject) return state
+          
+          const updatedLayout = state.currentProject.layout.map((section) => {
+            if (section.id !== sectionId) return section
+            
+            return {
+              ...section,
+              components: section.components.map((comp) => {
+                if (comp.id !== componentId || !comp.collectionData) return comp
+                
+                const newItems = [...comp.collectionData.items]
+                const [movedItem] = newItems.splice(oldIndex, 1)
+                newItems.splice(newIndex, 0, movedItem)
+                
+                return {
+                  ...comp,
+                  collectionData: {
+                    ...comp.collectionData,
+                    items: newItems
+                  }
+                }
+              })
+            }
+          })
+          
+          const updatedProject = {
+            ...state.currentProject,
+            layout: updatedLayout,
+            updatedAt: new Date()
+          }
+          
+          return {
+            currentProject: updatedProject,
+            projects: state.projects.map((p) =>
+              p.id === updatedProject.id ? updatedProject : p
+            )
+          }
+        })
+        get().saveToHistory('Reordered collection items')
       },
       
       saveToHistory: (action: string) => {
