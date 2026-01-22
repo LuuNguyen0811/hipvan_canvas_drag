@@ -630,7 +630,7 @@ export function PreviewPanel() {
                       gap: '1rem',
                       itemsPerRow: 4,
                       showHeader: true,
-                      headerTitle: 'Shop Our Collections',
+                      headerTitle: 'Shop Our Bestselling Collections',
                     })
                     setCollectionSearchQuery('')
                     setCollectionSearchResults(getAllCollections())
@@ -1442,20 +1442,14 @@ export function PreviewPanel() {
                           // Fetch all selected collections to merge them
                           const selectedCollections = nextIds.map(id => getCollectionById(id)).filter(Boolean) as Collection[];
                           
-                          // Merge items (take up to 4 from each to avoid overcrowding)
-                          const mergedItems: CollectionItemData[] = [];
-                          selectedCollections.forEach(col => {
-                            const colItems = col.products.slice(0, 4).map(p => ({
-                              id: p.id,
-                              title: p.title,
-                              subtitle: col.name,
-                              image: p.image,
-                              ctaText: p.ctaText,
-                              ctaUrl: p.ctaUrl,
-                              badge: p.badge,
-                            }));
-                            mergedItems.push(...colItems);
-                          });
+                          // Map selected collections directly to items
+                          const items: CollectionItemData[] = selectedCollections.map(col => ({
+                            id: col.id,
+                            title: col.name,
+                            image: col.image,
+                            ctaText: col.ctaText,
+                            ctaUrl: col.ctaUrl,
+                          }));
                           
                           setEditingCollectionData({
                             ...editingCollectionData,
@@ -1463,10 +1457,10 @@ export function PreviewPanel() {
                             collectionIds: nextIds,
                             collectionId: nextIds[0], // For backward compatibility
                             collectionName: selectedCollections.map(c => c.name).join(', '),
-                            items: mergedItems,
-                            headerTitle: selectedCollections.length === 1 ? selectedCollections[0].name : 'Our Collections',
-                            headerCtaText: selectedCollections.length === 1 ? selectedCollections[0].ctaText : undefined,
-                            headerCtaUrl: selectedCollections.length === 1 ? selectedCollections[0].ctaUrl : undefined,
+                            items,
+                            headerTitle: 'Shop Our Bestselling Collections',
+                            headerCtaText: undefined,
+                            headerCtaUrl: undefined,
                           });
                         }}
                         className={`flex items-center gap-3 rounded-lg border p-3 text-left transition-all hover:border-primary hover:bg-accent ${
@@ -1474,13 +1468,13 @@ export function PreviewPanel() {
                         }`}
                       >
                         <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-md bg-muted">
-                          {collection.products[0]?.image && (
-                            <img src={collection.products[0].image} alt={collection.name} className="h-full w-full object-cover" />
+                          {collection.image && (
+                            <img src={collection.image} alt={collection.name} className="h-full w-full object-cover" />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="truncate text-sm font-medium">{collection.name}</div>
-                          <div className="truncate text-xs text-muted-foreground">{collection.products.length} items</div>
+                          <div className="truncate text-xs text-muted-foreground">Category</div>
                         </div>
                       </button>
                     ))}

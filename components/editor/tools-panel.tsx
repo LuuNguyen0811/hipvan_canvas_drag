@@ -90,7 +90,7 @@ export function ToolsPanel() {
       gap: '1rem',
       itemsPerRow: 4,
       showHeader: true,
-      headerTitle: 'Shop Our Collections',
+      headerTitle: 'Shop Our Bestselling Collections',
     }
 
     const newComponent: Component = {
