@@ -133,6 +133,9 @@ const viewportWidths: Record<ViewportSize, string> = {
 export function PreviewPanel() {
   const {
     currentProject,
+    editorTarget,
+    clearEditorTarget,
+    addSection,
     addComponent,
     addComponentToLayout,
     removeComponent,
@@ -161,15 +164,102 @@ export function PreviewPanel() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [showBorders, setShowBorders] = useState(true);
   const [bordersTouched, setBordersTouched] = useState(false);
+  const [insertTarget, setInsertTarget] = useState<{
+    sectionId: string;
+    layoutId?: string;
+    insertIndex: number;
+    columnIndex?: number;
+    span?: "full" | "column";
+    anchorId?: string;
+    placement?: "before" | "after";
+  } | null>(null);
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
   const [uploadingImage, setUploadingImage] = useState(false);
   const paragraphTextareaRef = useRef<HTMLTextAreaElement | null>(null);
   const headingInputRef = useRef<HTMLInputElement | null>(null);
+  
+  // Section-level insertion state
+  const [sectionInsertTarget, setSectionInsertTarget] = useState<{
+    index: number;
+    placement: "before" | "after";
+  } | null>(null);
+  
+  // Track what's being dragged for better visual feedback
+  const [draggingType, setDraggingType] = useState<"section" | "element" | "component" | null>(null);
+
+  const autoScrollNearestViewport = (
+    e: React.DragEvent,
+    opts?: { speed?: number; threshold?: number },
+  ) => {
+    const speed = opts?.speed ?? 18;
+    const threshold = opts?.threshold ?? 64;
+    const el = e.currentTarget as HTMLElement;
+    const viewport = el.closest(
+      '[data-slot="scroll-area-viewport"]',
+    ) as HTMLElement | null;
+    if (!viewport) return;
+    const rect = viewport.getBoundingClientRect();
+    const y = e.clientY;
+    if (y < rect.top + threshold) {
+      viewport.scrollTop -= speed;
+    } else if (y > rect.bottom - threshold) {
+      viewport.scrollTop += speed;
+    }
+  };
 
   useEffect(() => {
     if (bordersTouched) return;
     setShowBorders(viewport !== "mobile");
   }, [viewport, bordersTouched]);
+
+  useEffect(() => {
+    if (!editorTarget || !currentProject) return;
+    const section = currentProject.layout.find(
+      (s) => s.id === editorTarget.sectionId,
+    );
+    if (!section) {
+      clearEditorTarget();
+      return;
+    }
+    const comp = findComponentInTree(
+      section.components,
+      editorTarget.componentId,
+    );
+    if (!comp) {
+      clearEditorTarget();
+      return;
+    }
+    setEditingComponent({ sectionId: editorTarget.sectionId, component: comp });
+    clearEditorTarget();
+  }, [editorTarget, currentProject, clearEditorTarget]);
+
+  const computeGroupedInsertIndex = (
+    components: Component[],
+    opts: {
+      targetSpan: "full" | "column";
+      targetColumnIndex?: number;
+      desiredIndexWithin: number;
+      maxColumns: number;
+    },
+  ) => {
+    let count = 0;
+    for (let i = 0; i < components.length; i++) {
+      const c = components[i];
+      const isFull =
+        (c.props as Record<string, unknown> | undefined)?.span === "full";
+      const colIndex = (c.props?.columnIndex as number) ?? 0;
+      const targetCol = Math.min(colIndex, Math.max(0, opts.maxColumns - 1));
+      const isTarget =
+        opts.targetSpan === "full"
+          ? isFull
+          : !isFull && targetCol === (opts.targetColumnIndex ?? 0);
+      if (isTarget) {
+        if (count === opts.desiredIndexWithin) return i;
+        count += 1;
+      }
+    }
+    return components.length;
+  };
 
   // Resizing state
   const [resizingSection, setResizingSection] = useState<string | null>(null);
@@ -291,6 +381,7 @@ export function PreviewPanel() {
     columnIndex?: number,
     layoutId?: string,
     span?: "full" | "column",
+    insertIndex?: number,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -298,6 +389,7 @@ export function PreviewPanel() {
     setDragOverColumn(null);
     setDragOverLayout(null);
     setDragOverLayoutColumn(null);
+    setInsertTarget(null);
 
     const componentType = e.dataTransfer.getData("componentType");
     const layoutTemplateId = e.dataTransfer.getData("layoutTemplateId");
@@ -373,16 +465,49 @@ export function PreviewPanel() {
       };
 
       if (layoutId) {
-        addComponentToLayout(sectionId, layoutId, newComponent);
+        addComponentToLayout(sectionId, layoutId, newComponent, insertIndex);
       } else {
-        addComponent(sectionId, newComponent);
+        addComponent(sectionId, newComponent, insertIndex);
       }
 
       // Hide onboarding after first interaction
       if (showOnboarding) setShowOnboarding(false);
     } else if (draggedComponentId && fromSectionId) {
       const section = currentProject?.layout.find((s) => s.id === sectionId);
-      const newIndex = section?.components.length || 0;
+      let newIndex =
+        insertIndex ??
+        (layoutId
+          ? (() => {
+              const layoutComp = section
+                ? findComponentInTree(section.components, layoutId)
+                : null;
+              if (layoutComp && layoutComp.type === "layout") {
+                return layoutComp.children?.length || 0;
+              }
+              return 0;
+            })()
+          : section?.components.length || 0);
+
+      if (insertIndex !== undefined && fromSectionId === sectionId) {
+        if (layoutId) {
+          const layoutComp = section
+            ? findComponentInTree(section.components, layoutId)
+            : null;
+          const oldIndex =
+            layoutComp && layoutComp.type === "layout"
+              ? (layoutComp.children || []).findIndex(
+                  (c) => c.id === draggedComponentId,
+                )
+              : -1;
+          if (oldIndex >= 0 && newIndex > oldIndex) newIndex -= 1;
+        } else {
+          const oldIndex = section
+            ? section.components.findIndex((c) => c.id === draggedComponentId)
+            : -1;
+          if (oldIndex >= 0 && newIndex > oldIndex) newIndex -= 1;
+        }
+      }
+
       moveComponent(fromSectionId, sectionId, draggedComponentId, newIndex, {
         targetColumnIndex: span === "full" ? undefined : columnIndex,
         targetSpan: span === "full" ? "full" : "column",
@@ -400,6 +525,11 @@ export function PreviewPanel() {
     span?: "full" | "column",
   ) => {
     e.preventDefault();
+    autoScrollNearestViewport(e);
+    
+    // Clear section insertion target when dragging into a section (element drag)
+    setSectionInsertTarget(null);
+    
     if (layoutId) {
       setDragOverSection(null);
       setDragOverColumn(null);
@@ -408,6 +538,8 @@ export function PreviewPanel() {
         setDragOverLayoutColumn(-1);
       } else if (columnIndex !== undefined) {
         setDragOverLayoutColumn(columnIndex);
+      } else {
+        setDragOverLayoutColumn(null);
       }
     } else {
       setDragOverLayout(null);
@@ -417,6 +549,8 @@ export function PreviewPanel() {
         setDragOverColumn(-1);
       } else if (columnIndex !== undefined) {
         setDragOverColumn(columnIndex);
+      } else {
+        setDragOverColumn(null);
       }
     }
   };
@@ -427,6 +561,8 @@ export function PreviewPanel() {
     setDragOverColumn(null);
     setDragOverLayout(null);
     setDragOverLayoutColumn(null);
+    setInsertTarget(null);
+    setSectionInsertTarget(null);
   };
 
   const handleComponentDragStart = (
@@ -441,6 +577,57 @@ export function PreviewPanel() {
       e.dataTransfer.setData("fromLayoutId", fromLayoutId);
     }
     e.dataTransfer.effectAllowed = "move";
+    setDraggingType("component");
+  };
+
+  // Handle section-level drag events for precise insertion
+  const handleSectionSlotDragOver = (e: React.DragEvent, index: number, placement: "before" | "after") => {
+    e.preventDefault();
+    e.stopPropagation();
+    autoScrollNearestViewport(e);
+    
+    // Check if it's a section template being dragged
+    // Note: Can only check types array during dragover, not getData()
+    const types = e.dataTransfer.types;
+    const hasLayoutTemplate = types.includes("layouttemplateid") || types.some(t => t.toLowerCase() === "layouttemplateid");
+    const hasDragType = types.includes("dragtype") || types.some(t => t.toLowerCase() === "dragtype");
+    
+    // If dragging a section template, show section insertion indicator
+    if (hasLayoutTemplate || (hasDragType && draggingType === "section")) {
+      setSectionInsertTarget({ index, placement });
+      setDragOverSection(null);
+      setDragOverColumn(null);
+      setDragOverLayout(null);
+      setDragOverLayoutColumn(null);
+    }
+  };
+
+  const handleSectionSlotDrop = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const layoutTemplateId = e.dataTransfer.getData("layoutTemplateId");
+    
+    if (layoutTemplateId) {
+      const template = SECTION_TEMPLATES.find((t) => t.id === layoutTemplateId);
+      if (template) {
+        addSection(template.id, template, index);
+        if (showOnboarding) setShowOnboarding(false);
+      }
+    }
+    
+    setSectionInsertTarget(null);
+    setDraggingType(null);
+  };
+
+  const handleGlobalDragEnd = () => {
+    setDraggingType(null);
+    setSectionInsertTarget(null);
+    setDragOverSection(null);
+    setDragOverColumn(null);
+    setDragOverLayout(null);
+    setDragOverLayoutColumn(null);
+    setInsertTarget(null);
   };
 
   const handleSaveEdit = () => {
@@ -732,14 +919,105 @@ export function PreviewPanel() {
                     display: "grid",
                     gridTemplateColumns: component.columnWidths.join(" "),
                     gap: "0",
-                    minWidth: 0,
+                    minWidth: 0, // Prevents grid overflow
                   }
                 : {
                     display: "grid",
                     gridTemplateColumns: `repeat(${cols}, 1fr)`,
                     gap: "0",
-                    minWidth: 0,
+                    minWidth: 0, // Prevents grid overflow
                   };
+
+          const renderLayoutChildWithInsert = (
+            child: Component,
+            idxWithinGroup: number,
+            groupType:
+              | { span: "full" }
+              | { span: "column"; columnIndex: number },
+          ) => {
+            return (
+              <div
+                key={child.id}
+                className="relative"
+                onDragOver={(e) => {
+                  const rect = (
+                    e.currentTarget as HTMLElement
+                  ).getBoundingClientRect();
+                  const before = e.clientY < rect.top + rect.height / 2;
+                  const desired = before ? idxWithinGroup : idxWithinGroup + 1;
+                  const insertAt = computeGroupedInsertIndex(children, {
+                    targetSpan: groupType.span,
+                    targetColumnIndex:
+                      groupType.span === "column"
+                        ? groupType.columnIndex
+                        : undefined,
+                    desiredIndexWithin: desired,
+                    maxColumns: cols,
+                  });
+                  setInsertTarget({
+                    sectionId,
+                    layoutId: component.id,
+                    insertIndex: insertAt,
+                    columnIndex:
+                      groupType.span === "column"
+                        ? groupType.columnIndex
+                        : undefined,
+                    span: groupType.span,
+                    anchorId: child.id,
+                    placement: before ? "before" : "after",
+                  });
+                  handleDragOver(
+                    e,
+                    sectionId,
+                    groupType.span === "column"
+                      ? groupType.columnIndex
+                      : undefined,
+                    component.id,
+                    groupType.span === "full" ? "full" : undefined,
+                  );
+                }}
+                onDrop={(e) => {
+                  const rect = (
+                    e.currentTarget as HTMLElement
+                  ).getBoundingClientRect();
+                  const before = e.clientY < rect.top + rect.height / 2;
+                  const desired = before ? idxWithinGroup : idxWithinGroup + 1;
+                  const insertAt = computeGroupedInsertIndex(children, {
+                    targetSpan: groupType.span,
+                    targetColumnIndex:
+                      groupType.span === "column"
+                        ? groupType.columnIndex
+                        : undefined,
+                    desiredIndexWithin: desired,
+                    maxColumns: cols,
+                  });
+                  handleDrop(
+                    e,
+                    sectionId,
+                    groupType.span === "column"
+                      ? groupType.columnIndex
+                      : undefined,
+                    component.id,
+                    groupType.span === "full" ? "full" : undefined,
+                    insertAt,
+                  );
+                }}
+                onDragLeave={handleDragLeave}
+              >
+                {insertTarget?.layoutId === component.id &&
+                  insertTarget.anchorId === child.id &&
+                  insertTarget.placement === "before" && (
+                    <div className="pointer-events-none absolute left-0 right-0 top-0 h-0.5 bg-primary" />
+                  )}
+                {renderComponent(child, sectionId, component.id)}
+                {insertTarget?.layoutId === component.id &&
+                  insertTarget.anchorId === child.id &&
+                  insertTarget.placement === "after" && (
+                    <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5 bg-primary" />
+                  )}
+              </div>
+            );
+          };
 
           return (
             <div
@@ -887,8 +1165,11 @@ export function PreviewPanel() {
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        {childrenByColumn[colIndex]?.map((child) =>
-                          renderComponent(child, sectionId, component.id),
+                        {childrenByColumn[colIndex]?.map((child, i) =>
+                          renderLayoutChildWithInsert(child, i, {
+                            span: "column",
+                            columnIndex: colIndex,
+                          }),
                         )}
                       </div>
                     )}
@@ -906,8 +1187,8 @@ export function PreviewPanel() {
                 >
                   {fullWidthChildren.length > 0 && (
                     <div className="mt-2 space-y-2">
-                      {fullWidthChildren.map((child) =>
-                        renderComponent(child, sectionId, component.id),
+                      {fullWidthChildren.map((child, i) =>
+                        renderLayoutChildWithInsert(child, i, { span: "full" }),
                       )}
                     </div>
                   )}
@@ -1245,6 +1526,96 @@ export function PreviewPanel() {
 
     const isEmpty = section.components.length === 0;
 
+    const renderSectionComponentWithInsert = (
+      comp: Component,
+      idxWithinGroup: number,
+      groupType: { span: "full" } | { span: "column"; columnIndex?: number },
+    ) => {
+      return (
+        <div
+          key={comp.id}
+          className="relative"
+          onDragOver={(e) => {
+            const rect = (
+              e.currentTarget as HTMLElement
+            ).getBoundingClientRect();
+            const before = e.clientY < rect.top + rect.height / 2;
+            const desired = before ? idxWithinGroup : idxWithinGroup + 1;
+            const insertAt =
+              section.columns <= 1
+                ? desired
+                : computeGroupedInsertIndex(section.components, {
+                    targetSpan: groupType.span,
+                    targetColumnIndex:
+                      groupType.span === "column"
+                        ? (groupType.columnIndex ?? 0)
+                        : undefined,
+                    desiredIndexWithin: desired,
+                    maxColumns: section.columns,
+                  });
+            setInsertTarget({
+              sectionId: section.id,
+              insertIndex: insertAt,
+              columnIndex:
+                groupType.span === "column" ? groupType.columnIndex : undefined,
+              span: groupType.span,
+              anchorId: comp.id,
+              placement: before ? "before" : "after",
+            });
+            handleDragOver(
+              e,
+              section.id,
+              groupType.span === "column" ? groupType.columnIndex : undefined,
+              undefined,
+              groupType.span === "full" ? "full" : undefined,
+            );
+          }}
+          onDrop={(e) => {
+            const rect = (
+              e.currentTarget as HTMLElement
+            ).getBoundingClientRect();
+            const before = e.clientY < rect.top + rect.height / 2;
+            const desired = before ? idxWithinGroup : idxWithinGroup + 1;
+            const insertAt =
+              section.columns <= 1
+                ? desired
+                : computeGroupedInsertIndex(section.components, {
+                    targetSpan: groupType.span,
+                    targetColumnIndex:
+                      groupType.span === "column"
+                        ? (groupType.columnIndex ?? 0)
+                        : undefined,
+                    desiredIndexWithin: desired,
+                    maxColumns: section.columns,
+                  });
+            handleDrop(
+              e,
+              section.id,
+              groupType.span === "column" ? groupType.columnIndex : undefined,
+              undefined,
+              groupType.span === "full" ? "full" : undefined,
+              insertAt,
+            );
+          }}
+          onDragLeave={handleDragLeave}
+        >
+          {insertTarget?.sectionId === section.id &&
+            !insertTarget.layoutId &&
+            insertTarget.anchorId === comp.id &&
+            insertTarget.placement === "before" && (
+              <div className="pointer-events-none absolute left-0 right-0 top-0 h-0.5 bg-primary" />
+            )}
+          {renderComponent(comp, section.id)}
+          {insertTarget?.sectionId === section.id &&
+            !insertTarget.layoutId &&
+            insertTarget.anchorId === comp.id &&
+            insertTarget.placement === "after" && (
+              <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5 bg-primary" />
+            )}
+        </div>
+      );
+    };
+
     return (
       <section
         key={section.id}
@@ -1336,8 +1707,10 @@ export function PreviewPanel() {
                 </div>
               ) : (
                 <div className="space-y-2">
-                  {section.components.map((comp) =>
-                    renderComponent(comp, section.id),
+                  {section.components.map((comp, i) =>
+                    renderSectionComponentWithInsert(comp, i, {
+                      span: "column",
+                    }),
                   )}
                 </div>
               )}
@@ -1387,8 +1760,11 @@ export function PreviewPanel() {
                       </div>
                     ) : (
                       <div className="space-y-2">
-                        {componentsByColumn[colIndex]?.map((comp) =>
-                          renderComponent(comp, section.id),
+                        {componentsByColumn[colIndex]?.map((comp, i) =>
+                          renderSectionComponentWithInsert(comp, i, {
+                            span: "column",
+                            columnIndex: colIndex,
+                          }),
                         )}
                       </div>
                     )}
@@ -1463,8 +1839,10 @@ export function PreviewPanel() {
               >
                 {fullWidthComponents.length > 0 && (
                   <div className="mt-2 space-y-2">
-                    {fullWidthComponents.map((comp) =>
-                      renderComponent(comp, section.id),
+                    {fullWidthComponents.map((comp, i) =>
+                      renderSectionComponentWithInsert(comp, i, {
+                        span: "full",
+                      }),
                     )}
                   </div>
                 )}
@@ -1605,26 +1983,114 @@ export function PreviewPanel() {
               >
                 <div className="p-4">
                   {!currentProject || currentProject.layout.length === 0 ? (
-                    <div className="flex h-48 flex-col items-center justify-center text-center">
-                      <div className="mb-3 rounded-full bg-muted p-3">
-                        <Plus className="h-6 w-6 text-muted-foreground" />
-                      </div>
-                      <p className="font-medium text-foreground">
-                        Start Building
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Add sections from the <strong>Sections</strong> tab on
-                        the left
-                      </p>
-                      <p className="mt-1 text-xs text-muted-foreground/70">
-                        💡 Tip: Click any section template to add it
-                      </p>
+                    <div 
+                      className={`flex h-48 flex-col items-center justify-center text-center border-2 border-dashed rounded-lg transition-all ${
+                        sectionInsertTarget ? "border-primary bg-primary/5" : "border-transparent"
+                      }`}
+                      onDragOver={(e) => handleSectionSlotDragOver(e, 0, "before")}
+                      onDrop={(e) => handleSectionSlotDrop(e, 0)}
+                      onDragLeave={handleDragLeave}
+                    >
+                      {sectionInsertTarget ? (
+                        <>
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white mb-3">
+                            <Plus className="h-5 w-5" />
+                          </div>
+                          <p className="font-medium text-primary">
+                            Drop Section Here
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <div className="mb-3 rounded-full bg-muted p-3">
+                            <Plus className="h-6 w-6 text-muted-foreground" />
+                          </div>
+                          <p className="font-medium text-foreground">
+                            Start Building
+                          </p>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            Add sections from the <strong>Sections</strong> tab on
+                            the left
+                          </p>
+                          <p className="mt-1 text-xs text-muted-foreground/70">
+                            💡 Tip: Drag and drop section templates here
+                          </p>
+                        </>
+                      )}
                     </div>
                   ) : (
-                    <div className="space-y-4">
-                      {currentProject.layout.map((section, index) =>
-                        renderSection(section, index),
-                      )}
+                    <div 
+                      className="space-y-4"
+                      onDragEnd={handleGlobalDragEnd}
+                    >
+                      {currentProject.layout.map((section, index) => (
+                        <React.Fragment key={section.id}>
+                          {/* Section insertion indicator - before */}
+                          <div
+                            className={`relative transition-all ${
+                              sectionInsertTarget?.index === index && sectionInsertTarget?.placement === "before"
+                                ? "h-3"
+                                : "h-0"
+                            }`}
+                            onDragOver={(e) => handleSectionSlotDragOver(e, index, "before")}
+                            onDrop={(e) => handleSectionSlotDrop(e, index)}
+                            onDragLeave={handleDragLeave}
+                          >
+                            {sectionInsertTarget?.index === index && sectionInsertTarget?.placement === "before" && (
+                              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+                                  <Plus className="h-3 w-3" />
+                                </div>
+                                <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Invisible drop zone above each section */}
+                          <div
+                            className="h-2 -mb-2 relative z-10"
+                            onDragOver={(e) => handleSectionSlotDragOver(e, index, "before")}
+                            onDrop={(e) => handleSectionSlotDrop(e, index)}
+                            onDragLeave={handleDragLeave}
+                          />
+                          
+                          {renderSection(section, index)}
+                          
+                          {/* Invisible drop zone below each section (only for last item) */}
+                          {index === currentProject.layout.length - 1 && (
+                            <>
+                              <div
+                                className="h-2 -mt-2 relative z-10"
+                                onDragOver={(e) => handleSectionSlotDragOver(e, index + 1, "before")}
+                                onDrop={(e) => handleSectionSlotDrop(e, index + 1)}
+                                onDragLeave={handleDragLeave}
+                              />
+                              {/* Section insertion indicator - after last */}
+                              <div
+                                className={`relative transition-all ${
+                                  sectionInsertTarget?.index === index + 1
+                                    ? "h-3"
+                                    : "h-0"
+                                }`}
+                                onDragOver={(e) => handleSectionSlotDragOver(e, index + 1, "before")}
+                                onDrop={(e) => handleSectionSlotDrop(e, index + 1)}
+                                onDragLeave={handleDragLeave}
+                              >
+                                {sectionInsertTarget?.index === index + 1 && (
+                                  <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                    <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+                                      <Plus className="h-3 w-3" />
+                                    </div>
+                                    <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </React.Fragment>
+                      ))}
                     </div>
                   )}
                 </div>

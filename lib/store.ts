@@ -16,6 +16,10 @@ interface ProjectStore {
   projects: Project[];
   currentProject: Project | null;
 
+  editorTarget: { sectionId: string; componentId: string } | null;
+  setEditorTarget: (target: { sectionId: string; componentId: string }) => void;
+  clearEditorTarget: () => void;
+
   // Project actions
   createProject: (name: string) => string;
   deleteProject: (id: string) => void;
@@ -30,6 +34,7 @@ interface ProjectStore {
   addSection: (
     layoutType: SectionLayoutType,
     template: SectionTemplate,
+    insertIndex?: number,
   ) => void;
   updateSection: (
     sectionId: string,
@@ -42,11 +47,16 @@ interface ProjectStore {
   moveSectionDown: (sectionId: string) => void;
 
   // Component actions
-  addComponent: (sectionId: string, component: Component) => void;
+  addComponent: (
+    sectionId: string,
+    component: Component,
+    insertIndex?: number,
+  ) => void;
   addComponentToLayout: (
     sectionId: string,
     layoutComponentId: string,
     component: Component,
+    insertIndex?: number,
   ) => void;
   addComponentToColumn: (
     sectionId: string,
@@ -151,10 +161,17 @@ const addComponentToLayoutInTree = (
   components: Component[],
   layoutComponentId: string,
   newChild: Component,
+  insertIndex?: number,
 ): Component[] => {
   return components.map((component) => {
     if (component.id === layoutComponentId && component.type === "layout") {
-      const children = [...(component.children || []), newChild];
+      const nextChildren = [...(component.children || [])];
+      const idx =
+        insertIndex === undefined
+          ? nextChildren.length
+          : Math.max(0, Math.min(insertIndex, nextChildren.length));
+      nextChildren.splice(idx, 0, newChild);
+      const children = nextChildren;
       return { ...component, children };
     }
     if (
@@ -168,6 +185,7 @@ const addComponentToLayoutInTree = (
           component.children,
           layoutComponentId,
           newChild,
+          insertIndex,
         ),
       };
     }
@@ -208,6 +226,10 @@ export const useProjectStore = create<ProjectStore>()(
     (set, get) => ({
       projects: [],
       currentProject: null,
+
+      editorTarget: null,
+      setEditorTarget: (target) => set({ editorTarget: target }),
+      clearEditorTarget: () => set({ editorTarget: null }),
 
       createProject: (name: string) => {
         const id = generateId();
@@ -327,6 +349,7 @@ export const useProjectStore = create<ProjectStore>()(
       addSection: (
         layoutType: SectionLayoutType,
         template: SectionTemplate,
+        insertIndex?: number,
       ) => {
         set((state) => {
           if (!state.currentProject) return state;
@@ -338,9 +361,15 @@ export const useProjectStore = create<ProjectStore>()(
             components: [],
             name: template.name,
           };
+          const newLayout = [...state.currentProject.layout];
+          if (insertIndex !== undefined && insertIndex >= 0 && insertIndex <= newLayout.length) {
+            newLayout.splice(insertIndex, 0, newSection);
+          } else {
+            newLayout.push(newSection);
+          }
           const updatedProject = {
             ...state.currentProject,
-            layout: [...state.currentProject.layout, newSection],
+            layout: newLayout,
             updatedAt: new Date(),
           };
           return {
@@ -486,12 +515,24 @@ export const useProjectStore = create<ProjectStore>()(
         get().saveToHistory("Moved section down");
       },
 
-      addComponent: (sectionId: string, component: Component) => {
+      addComponent: (
+        sectionId: string,
+        component: Component,
+        insertIndex?: number,
+      ) => {
         set((state) => {
           if (!state.currentProject) return state;
           const updatedLayout = state.currentProject.layout.map((section) =>
             section.id === sectionId
-              ? { ...section, components: [...section.components, component] }
+              ? (() => {
+                  const next = [...section.components];
+                  const idx =
+                    insertIndex === undefined
+                      ? next.length
+                      : Math.max(0, Math.min(insertIndex, next.length));
+                  next.splice(idx, 0, component);
+                  return { ...section, components: next };
+                })()
               : section,
           );
           const updatedProject = {
@@ -513,6 +554,7 @@ export const useProjectStore = create<ProjectStore>()(
         sectionId: string,
         layoutComponentId: string,
         component: Component,
+        insertIndex?: number,
       ) => {
         set((state) => {
           if (!state.currentProject) return state;
@@ -524,6 +566,7 @@ export const useProjectStore = create<ProjectStore>()(
                     section.components,
                     layoutComponentId,
                     component,
+                    insertIndex,
                   ),
                 }
               : section,
@@ -693,6 +736,7 @@ export const useProjectStore = create<ProjectStore>()(
                     section.components,
                     toLayoutId,
                     movedWithColumn,
+                    newIndex,
                   ),
                 };
               }
