@@ -45,10 +45,20 @@ async function processComponentImages(
   const processed = { ...component };
 
   // If this is an image component with imageId, load it as base64
-  if (component.type === "image" && component.imageId) {
-    const base64 = await getImageAsBase64(component.imageId);
-    if (base64) {
-      processed.src = base64;
+  if (component.type === "image") {
+    // Load desktop image
+    if (component.imageId) {
+      const base64 = await getImageAsBase64(component.imageId);
+      if (base64) {
+        processed.src = base64;
+      }
+    }
+    // Load mobile image if exists
+    if (component.mobileImageId) {
+      const mobileBase64 = await getImageAsBase64(component.mobileImageId);
+      if (mobileBase64) {
+        processed.mobileSrc = mobileBase64;
+      }
     }
   }
 

@@ -172,6 +172,22 @@ function generateCSS(layout: LayoutSection[]): string {
       display: block;
     }
     
+    .responsive-picture {
+      display: block;
+      max-width: 100%;
+    }
+    
+    .responsive-picture img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.75rem;
+      display: block;
+    }
+    
+    .image-bordered {
+      border: 1px solid #e2e8f0;
+    }
+    
     .image-placeholder {
       background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
       border-radius: 0.75rem;
@@ -901,7 +917,15 @@ function generateComponent(component: Component): string {
 
     case "image":
       if (component.src) {
-        return `        <img src="${component.src}" alt="${component.alt || component.content || "Image"}" class="component responsive-image"${styleAttr} />`;
+        const borderClass = component.border ? " image-bordered" : "";
+        // If mobile image exists, use <picture> for responsive images
+        if (component.mobileSrc) {
+          return `        <picture class="component responsive-picture${borderClass}"${styleAttr}>
+          <source media="(max-width: 768px)" srcset="${component.mobileSrc}" />
+          <img src="${component.src}" alt="${component.alt || component.content || "Image"}" class="responsive-image" />
+        </picture>`;
+        }
+        return `        <img src="${component.src}" alt="${component.alt || component.content || "Image"}" class="component responsive-image${borderClass}"${styleAttr} />`;
       }
       return `        <div class="component image-placeholder"${styleAttr}>${component.content || "Image Placeholder"}</div>`;
 

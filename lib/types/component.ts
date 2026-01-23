@@ -133,6 +133,7 @@ export interface Component {
   variant?: "default" | "outline" | "ghost" | "link";
   // Media props
   src?: string;
+  mobileSrc?: string; // Mobile-specific image source for responsive images
   alt?: string;
   poster?: string;
   autoplay?: boolean;
