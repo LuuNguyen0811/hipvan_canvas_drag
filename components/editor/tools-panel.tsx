@@ -18,6 +18,7 @@ import {
   type ComponentCategory,
   type ComponentTypeDefinition,
   type CollectionComponentData,
+  type ProductListComponentData,
 } from "@/lib/types";
 import {
   parseHTML,
@@ -635,12 +636,23 @@ export function ToolsPanel() {
       headerTitle: "Shop Our Bestselling Collections",
     };
 
+    const defaultProductListData: ProductListComponentData = {
+      layout: "vertical",
+      items: [],
+      gap: "1.5rem",
+      itemsPerRow: 4,
+      showHeader: true,
+      headerTitle: "Featured Products",
+      headerAlignment: "left",
+    };
+
     const newComponent: Component = {
       id: generateId(),
       type: componentType,
       content: DEFAULT_COMPONENT_CONTENT[componentType] || "",
       styles: {},
       ...(type === 'collection' && { collectionData: defaultCollectionData }),
+      ...(type === 'product-list' && { productListData: defaultProductListData }),
       formatting:
         type === "heading" || type === "paragraph"
           ? { align: "center" }
