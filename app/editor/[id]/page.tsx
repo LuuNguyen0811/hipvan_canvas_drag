@@ -14,7 +14,7 @@ export default function EditorPage() {
   const { projects, currentProject, setCurrentProject } = useProjectStore();
   const [activePanel, setActivePanel] = useState<"tools" | "history">("tools");
   const [isPanelsSwapped, setIsPanelsSwapped] = useState(false);
-  const [panelWidth, setPanelWidth] = useState(320);
+  const [panelWidth, setPanelWidth] = useState(400);
   const [isResizingPanel, setIsResizingPanel] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +22,7 @@ export default function EditorPage() {
     if (!isResizingPanel) return;
 
     const min = 260;
-    const max = 520;
+    const max = 600;
 
     const onMouseMove = (e: MouseEvent) => {
       const next = isPanelsSwapped ? window.innerWidth - e.clientX : e.clientX;
