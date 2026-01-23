@@ -47,16 +47,12 @@ interface EditorToolbarProps {
   project: Project;
   activePanel: "tools" | "history";
   onPanelChange: (panel: "tools" | "history") => void;
-  isPanelsSwapped: boolean;
-  onTogglePanelsSwapped: () => void;
 }
 
 export function EditorToolbar({
   project,
   activePanel,
   onPanelChange,
-  isPanelsSwapped,
-  onTogglePanelsSwapped,
 }: EditorToolbarProps) {
   const router = useRouter();
   const { updateProjectName, saveProject, clearHistory } = useProjectStore();
@@ -180,21 +176,6 @@ export function EditorToolbar({
               activePanel === "history" ? "text-primary -rotate-12" : ""
             }`} />
             History
-          </Button>
-          <Button
-            variant={isPanelsSwapped ? "secondary" : "ghost"}
-            size="sm"
-            className={`gap-2 transition-all duration-300 ease-out ${
-              isPanelsSwapped
-                ? "bg-background shadow-md scale-105 font-semibold"
-                : "hover:bg-background/50 hover:scale-102 active:scale-95"
-            }`}
-            onClick={onTogglePanelsSwapped}
-          >
-            <ArrowLeftRight className={`h-4 w-4 transition-transform duration-300 ${
-              isPanelsSwapped ? "text-primary rotate-180" : ""
-            }`} />
-            Swap
           </Button>
         </div>
 
