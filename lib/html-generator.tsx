@@ -854,11 +854,36 @@ ${columns}
 }
 
 function generateComponent(component: Component): string {
-  const styleAttr = Object.keys(component.styles).length
-    ? ` style="${Object.entries(component.styles)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join("; ")}"`
-    : "";
+  // Helper function to combine component.styles and component.formatting
+  const getStyleAttr = () => {
+    const styles: Record<string, string> = { ...component.styles };
+    
+    // Add formatting properties if they exist
+    if (component.formatting) {
+      if (component.formatting.bold !== undefined) {
+        styles['font-weight'] = component.formatting.bold ? 'bold' : 'normal';
+      }
+      if (component.formatting.italic) {
+        styles['font-style'] = 'italic';
+      }
+      if (component.formatting.underline) {
+        styles['text-decoration'] = 'underline';
+      }
+      if (component.formatting.align) {
+        styles['text-align'] = component.formatting.align;
+      }
+      if (component.formatting.fontSize) {
+        styles['font-size'] = component.formatting.fontSize;
+      }
+    }
+    
+    const styleEntries = Object.entries(styles);
+    return styleEntries.length
+      ? ` style="${styleEntries.map(([k, v]) => `${k}: ${v}`).join("; ")}"`
+      : "";
+  };
+
+  const styleAttr = getStyleAttr();
 
   switch (component.type) {
     // Basic Components
