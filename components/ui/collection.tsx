@@ -25,15 +25,15 @@ function Collection({
         "w-full",
         layout === "horizontal"
           ? "flex overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-transparent pb-2"
-          : "grid",
+          : "grid collection-grid-responsive",
         className,
       )}
       style={{
         gap,
-        ...(layout === "vertical" && {
-          gridTemplateColumns: `repeat(${itemsPerRow}, minmax(0, 1fr))`,
-        }),
-      }}
+        "--items-per-row": itemsPerRow,
+        "--items-per-row-mobile": Math.min(itemsPerRow, 1),
+        "--items-per-row-tablet": Math.min(itemsPerRow, 3),
+      } as React.CSSProperties}
       {...props}
     />
   );
