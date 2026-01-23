@@ -9,7 +9,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "PagesBuilder - Visual Pages Builder",
+  title: "WeBuilder - Visual Pages Builder",
   description:
     "Create beautiful pages with drag-and-drop simplicity. Choose layouts, add components, and export clean HTML/CSS.",
   generator: "v0.app",
