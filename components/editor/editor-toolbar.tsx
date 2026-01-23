@@ -47,16 +47,12 @@ interface EditorToolbarProps {
   project: Project;
   activePanel: "tools" | "history";
   onPanelChange: (panel: "tools" | "history") => void;
-  isPanelsSwapped: boolean;
-  onTogglePanelsSwapped: () => void;
 }
 
 export function EditorToolbar({
   project,
   activePanel,
   onPanelChange,
-  isPanelsSwapped,
-  onTogglePanelsSwapped,
 }: EditorToolbarProps) {
   const router = useRouter();
   const { updateProjectName, saveProject, clearHistory } = useProjectStore();
@@ -150,33 +146,36 @@ export function EditorToolbar({
         </div>
 
         {/* Center Section - Panel Toggle */}
-        <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+        <div className="flex items-center gap-1 rounded-lg bg-muted p-1 shadow-inner">
           <Button
             variant={activePanel === "tools" ? "secondary" : "ghost"}
             size="sm"
-            className="gap-2"
+            className={`gap-2 transition-all duration-300 ease-out ${
+              activePanel === "tools"
+                ? "bg-background shadow-md scale-105 font-semibold"
+                : "hover:bg-background/50 hover:scale-102 active:scale-95"
+            }`}
             onClick={() => onPanelChange("tools")}
           >
-            <Wrench className="h-4 w-4" />
+            <Wrench className={`h-4 w-4 transition-transform duration-300 ${
+              activePanel === "tools" ? "text-primary rotate-12" : ""
+            }`} />
             Tools
           </Button>
           <Button
             variant={activePanel === "history" ? "secondary" : "ghost"}
             size="sm"
-            className="gap-2"
+            className={`gap-2 transition-all duration-300 ease-out ${
+              activePanel === "history"
+                ? "bg-background shadow-md scale-105 font-semibold"
+                : "hover:bg-background/50 hover:scale-102 active:scale-95"
+            }`}
             onClick={() => onPanelChange("history")}
           >
-            <History className="h-4 w-4" />
+            <History className={`h-4 w-4 transition-transform duration-300 ${
+              activePanel === "history" ? "text-primary -rotate-12" : ""
+            }`} />
             History
-          </Button>
-          <Button
-            variant={isPanelsSwapped ? "secondary" : "ghost"}
-            size="sm"
-            className="gap-2"
-            onClick={onTogglePanelsSwapped}
-          >
-            <ArrowLeftRight className="h-4 w-4" />
-            Swap
           </Button>
         </div>
 

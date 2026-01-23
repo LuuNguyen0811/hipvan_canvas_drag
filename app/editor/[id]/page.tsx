@@ -13,8 +13,7 @@ export default function EditorPage() {
   const router = useRouter();
   const { projects, currentProject, setCurrentProject } = useProjectStore();
   const [activePanel, setActivePanel] = useState<"tools" | "history">("tools");
-  const [isPanelsSwapped, setIsPanelsSwapped] = useState(false);
-  const [panelWidth, setPanelWidth] = useState(320);
+  const [panelWidth, setPanelWidth] = useState(400);
   const [isResizingPanel, setIsResizingPanel] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,10 +21,10 @@ export default function EditorPage() {
     if (!isResizingPanel) return;
 
     const min = 260;
-    const max = 520;
+    const max = 600;
 
     const onMouseMove = (e: MouseEvent) => {
-      const next = isPanelsSwapped ? window.innerWidth - e.clientX : e.clientX;
+      const next = e.clientX;
       setPanelWidth(Math.max(min, Math.min(max, next)));
     };
 
@@ -39,7 +38,7 @@ export default function EditorPage() {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [isResizingPanel, isPanelsSwapped]);
+  }, [isResizingPanel]);
 
   useEffect(() => {
     const projectId = params.id as string;
@@ -70,50 +69,26 @@ export default function EditorPage() {
         project={currentProject}
         activePanel={activePanel}
         onPanelChange={setActivePanel}
-        isPanelsSwapped={isPanelsSwapped}
-        onTogglePanelsSwapped={() => setIsPanelsSwapped((v) => !v)}
       />
 
       <div className="flex flex-1 overflow-hidden">
-        {!isPanelsSwapped && (
-          <>
-            <div
-              className="shrink-0 border-r border-border bg-card"
-              style={{ width: panelWidth }}
-            >
-              {activePanel === "tools" ? <ToolsPanel /> : <HistoryPanel />}
-            </div>
-            <div
-              className="w-1 cursor-col-resize bg-transparent hover:bg-border"
-              onMouseDown={(e) => {
-                e.preventDefault();
-                setIsResizingPanel(true);
-              }}
-            />
-          </>
-        )}
+        <div
+          className="shrink-0 border-r border-border bg-card"
+          style={{ width: panelWidth }}
+        >
+          {activePanel === "tools" ? <ToolsPanel /> : <HistoryPanel />}
+        </div>
+        <div
+          className="w-1 cursor-col-resize bg-transparent hover:bg-border"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            setIsResizingPanel(true);
+          }}
+        />
 
         <div className="flex-1 overflow-hidden">
           <PreviewPanel />
         </div>
-
-        {isPanelsSwapped && (
-          <>
-            <div
-              className="w-1 cursor-col-resize bg-transparent hover:bg-border"
-              onMouseDown={(e) => {
-                e.preventDefault();
-                setIsResizingPanel(true);
-              }}
-            />
-            <div
-              className="shrink-0 border-l border-border bg-card"
-              style={{ width: panelWidth }}
-            >
-              {activePanel === "tools" ? <ToolsPanel /> : <HistoryPanel />}
-            </div>
-          </>
-        )}
       </div>
     </div>
   );
