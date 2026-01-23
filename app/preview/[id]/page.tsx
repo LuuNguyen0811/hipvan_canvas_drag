@@ -95,7 +95,7 @@ async function prepareLayoutWithImages(
 export default function PreviewPage() {
   const params = useParams();
   const router = useRouter();
-  const { projects, setCurrentProject, currentProject } = useProjectStore();
+  const { projects, setCurrentProject, currentProject, _hasHydrated } = useProjectStore();
   const [isLoading, setIsLoading] = useState(true);
   const [viewport, setViewport] = useState<ViewportSize>("desktop");
   const [copied, setCopied] = useState<"html" | "css" | "full" | null>(null);
@@ -107,6 +107,8 @@ export default function PreviewPage() {
   const [isProcessingImages, setIsProcessingImages] = useState(false);
 
   useEffect(() => {
+    if (!_hasHydrated) return;
+
     const projectId = params.id as string;
     const project = projects.find((p) => p.id === projectId);
 
@@ -116,7 +118,7 @@ export default function PreviewPage() {
     } else {
       router.push("/");
     }
-  }, [params.id, projects, setCurrentProject, router]);
+  }, [params.id, projects, setCurrentProject, router, _hasHydrated]);
 
   // Generate HTML and CSS with images when project loads or changes
   useEffect(() => {
