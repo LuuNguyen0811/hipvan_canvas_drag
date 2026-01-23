@@ -362,7 +362,11 @@ export const useProjectStore = create<ProjectStore>()(
             name: template.name,
           };
           const newLayout = [...state.currentProject.layout];
-          if (insertIndex !== undefined && insertIndex >= 0 && insertIndex <= newLayout.length) {
+          if (
+            insertIndex !== undefined &&
+            insertIndex >= 0 &&
+            insertIndex <= newLayout.length
+          ) {
             newLayout.splice(insertIndex, 0, newSection);
           } else {
             newLayout.push(newSection);

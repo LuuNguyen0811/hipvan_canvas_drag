@@ -1255,20 +1255,19 @@ export function PreviewPanel() {
           const imageHasBorder =
             (componentProps.imageBorder as boolean) ?? false;
           const imageRounded =
-            (componentProps.imageRounded as boolean) ?? false;
+            (componentProps.imageRounded as boolean) ?? true; // Default to rounded
           return (
             <div
               data-component-id={component.id}
               className={`relative transition-all ${
                 imageRounded ? "overflow-hidden rounded-lg" : ""
-              } ${imageHasBorder ? "border border-border" : "border border-transparent"} ${
+              } ${imageHasBorder ? "border border-border" : ""} ${
                 isDraggingFile ? "ring-2 ring-primary ring-offset-2" : ""
               }`}
               style={{
                 width: component.width || "100%",
                 height: component.height || "auto",
                 maxWidth: "100%",
-                minHeight: imageUrl ? undefined : "200px",
               }}
               onDrop={(e) => handleImageDrop(e, sectionId, component.id)}
               onDragOver={handleImageDragOver}
@@ -1310,15 +1309,15 @@ export function PreviewPanel() {
                 </>
               ) : uploadingImage &&
                 imageUploadTarget?.componentId === component.id ? (
-                <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50">
-                  <div className="mb-3 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-                  <p className="text-sm font-medium text-foreground">
-                    Uploading & Compressing...
+                <div className="flex h-24 flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-primary/5">
+                  <div className="mb-2 h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                  <p className="text-xs font-medium text-primary">
+                    Uploading...
                   </p>
                 </div>
               ) : (
                 <div
-                  className="flex h-full cursor-pointer flex-col items-center justify-center bg-gradient-to-br from-muted to-muted/50 text-muted-foreground transition-colors hover:from-muted/80 hover:to-muted/30"
+                  className="flex h-24 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 bg-muted/30 text-muted-foreground transition-all hover:border-primary/50 hover:bg-primary/5"
                   onClick={() =>
                     setImageUploadTarget({
                       sectionId,
@@ -1326,15 +1325,12 @@ export function PreviewPanel() {
                     })
                   }
                 >
-                  <ImageIcon className="mb-2 h-12 w-12 opacity-50" />
-                  <p className="text-sm font-medium">
-                    Click or drag image here
+                  <ImageIcon className="mb-1.5 h-8 w-8 opacity-40" />
+                  <p className="text-xs font-medium">
+                    Click to add image
                   </p>
-                  <p className="mt-1 text-xs opacity-70">
-                    Supports JPG, PNG, GIF, WebP
-                  </p>
-                  <p className="mt-1 text-xs opacity-50">
-                    Images are auto-compressed
+                  <p className="mt-0.5 text-[10px] opacity-60">
+                    or drag & drop
                   </p>
                 </div>
               )}
