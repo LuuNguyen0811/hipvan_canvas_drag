@@ -1971,14 +1971,22 @@ export function PreviewPanel() {
       <div
         key={component.id}
         draggable
-        onDragStart={(e) =>
-          handleComponentDragStart(e, sectionId, component.id, parentLayoutId)
-        }
-        className={`${baseStyles} cursor-move rounded-lg border border-transparent ${
-          component.type === "image" ? "p-0" : "p-3"
+        onDragStart={(e) => {
+          handleComponentDragStart(e, sectionId, component.id, parentLayoutId);
+          // Add drag styling
+          (e.currentTarget as HTMLElement).style.opacity = "0.5";
+        }}
+        onDragEnd={(e) => {
+          // Reset drag styling
+          (e.currentTarget as HTMLElement).style.opacity = "1";
+        }}
+        className={`${baseStyles} cursor-move ${
+          component.type === "image" 
+            ? "p-0 border-0 rounded-none" 
+            : "p-3 border border-transparent rounded-lg"
         } transition-all ${
           component.type === "image"
-            ? "hover:border-transparent hover:bg-transparent"
+            ? "hover:border-0 hover:bg-transparent"
             : "hover:border-border hover:bg-accent/50"
         } ${isResizing ? "ring-2 ring-primary" : ""}`}
         style={{ minWidth: 0, maxWidth: "100%" }}
@@ -2072,10 +2080,12 @@ export function PreviewPanel() {
           key={comp.id}
           className="relative"
           onDragOver={(e) => {
+            e.preventDefault();
             const rect = (
               e.currentTarget as HTMLElement
             ).getBoundingClientRect();
-            const before = e.clientY < rect.top + rect.height / 2;
+            // Make it easier to drop above - 60% of height triggers "before"
+            const before = e.clientY < rect.top + rect.height * 0.6;
             const desired = before ? idxWithinGroup : idxWithinGroup + 1;
             const insertAt =
               section.columns <= 1
@@ -2110,7 +2120,8 @@ export function PreviewPanel() {
             const rect = (
               e.currentTarget as HTMLElement
             ).getBoundingClientRect();
-            const before = e.clientY < rect.top + rect.height / 2;
+            // Make it easier to drop above - 60% of height triggers "before"
+            const before = e.clientY < rect.top + rect.height * 0.6;
             const desired = before ? idxWithinGroup : idxWithinGroup + 1;
             const insertAt =
               section.columns <= 1
@@ -2139,14 +2150,14 @@ export function PreviewPanel() {
             !insertTarget.layoutId &&
             insertTarget.anchorId === comp.id &&
             insertTarget.placement === "before" && (
-              <div className="pointer-events-none absolute left-0 right-0 top-0 h-0.5 bg-primary" />
+              <div className="pointer-events-none absolute left-0 right-0 -top-1 h-1 bg-primary rounded-full shadow-lg shadow-primary/50 animate-pulse" />
             )}
           {renderComponent(comp, section.id)}
           {insertTarget?.sectionId === section.id &&
             !insertTarget.layoutId &&
             insertTarget.anchorId === comp.id &&
             insertTarget.placement === "after" && (
-              <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-0.5 bg-primary" />
+              <div className="pointer-events-none absolute left-0 right-0 -bottom-1 h-1 bg-primary rounded-full shadow-lg shadow-primary/50 animate-pulse" />
             )}
         </div>
       );

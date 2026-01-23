@@ -60,6 +60,7 @@ export function EditorToolbar({
   const [editedName, setEditedName] = useState(project.name);
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [showClearImagesDialog, setShowClearImagesDialog] = useState(false);
+  const [showClearSectionsDialog, setShowClearSectionsDialog] = useState(false);
   const [storageInfo, setStorageInfo] = useState<{
     projectSize: number;
     imageCount: number;
@@ -88,6 +89,12 @@ export function EditorToolbar({
     await clearAllImages();
     setShowClearImagesDialog(false);
     window.location.reload(); // Reload to refresh image states
+  };
+
+  const handleClearSections = () => {
+    // Clear all sections from the current project
+    useProjectStore.getState().clearAllSections();
+    setShowClearSectionsDialog(false);
   };
 
   const loadStorageInfo = async () => {
@@ -188,6 +195,11 @@ export function EditorToolbar({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setShowClearSectionsDialog(true)}>
+                <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                <span className="text-destructive">Clear All Sections</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setShowClearDialog(true)}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Clear History
@@ -267,6 +279,33 @@ export function EditorToolbar({
               className="bg-destructive hover:bg-destructive/90"
             >
               Clear All Images
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Clear Sections Dialog */}
+      <AlertDialog
+        open={showClearSectionsDialog}
+        onOpenChange={setShowClearSectionsDialog}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear All Sections?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove all sections and components from your page, giving you a fresh start.
+              <strong className="mt-2 block text-destructive">
+                Warning: This action cannot be undone! Make sure you've saved any work you want to keep.
+              </strong>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleClearSections}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Clear All Sections
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

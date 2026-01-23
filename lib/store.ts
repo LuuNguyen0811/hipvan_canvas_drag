@@ -45,6 +45,7 @@ interface ProjectStore {
   duplicateSection: (sectionId: string) => void;
   moveSectionUp: (sectionId: string) => void;
   moveSectionDown: (sectionId: string) => void;
+  clearAllSections: () => void;
 
   // Component actions
   addComponent: (
@@ -517,6 +518,24 @@ export const useProjectStore = create<ProjectStore>()(
           };
         });
         get().saveToHistory("Moved section down");
+      },
+
+      clearAllSections: () => {
+        set((state) => {
+          if (!state.currentProject) return state;
+          const updatedProject = {
+            ...state.currentProject,
+            layout: [],
+            updatedAt: new Date(),
+          };
+          return {
+            currentProject: updatedProject,
+            projects: state.projects.map((p) =>
+              p.id === updatedProject.id ? updatedProject : p,
+            ),
+          };
+        });
+        get().saveToHistory("Cleared all sections");
       },
 
       addComponent: (
