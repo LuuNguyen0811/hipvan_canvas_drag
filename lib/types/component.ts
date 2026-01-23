@@ -104,8 +104,10 @@ export interface Component {
   styles: Record<string, string>;
   props?: Record<string, unknown>;
   imageId?: string; // Reference to image in IndexedDB
+  mobileImageId?: string; // Reference to mobile image in IndexedDB
   width?: string; // Component width (e.g., '100%', '50%', '300px')
   height?: string; // Component height
+  border?: boolean; // Whether to show border (for images)
   layoutType?: SectionLayoutType;
   columns?: number;
   columnWidths?: string[];

@@ -7,7 +7,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus } from "lucide-react";
 
 // Internal Sub-components
-import { ViewportControls, type ViewportSize } from "./preview/viewport-controls";
+import {
+  ViewportControls,
+  type ViewportSize,
+} from "./preview/viewport-controls";
 import { SectionRenderer } from "./preview/section-renderer";
 import { ComponentRenderer } from "./preview/component-renderer";
 import { EditComponentDialog } from "./preview/dialogs/edit-component-dialog";
@@ -23,7 +26,7 @@ import { usePreviewProductList } from "./hooks/use-preview-product-list";
 import { usePreviewDragAndDrop } from "./hooks/use-preview-drag-and-drop";
 
 // Utils
-import { findComponentInTree } from "@/lib/editor-utils";
+import { findComponentInTree, generateId } from "@/lib/editor-utils";
 import { getAllCollections } from "@/lib/mock-collections";
 
 const viewportWidths: Record<ViewportSize, string> = {
@@ -63,12 +66,17 @@ export function PreviewPanel() {
     imageUrls,
     uploadingImage,
     imageUploadTarget,
+    mobileImageUploadTarget,
     isDraggingFile,
     setImageUploadTarget,
+    setMobileImageUploadTarget,
+    handleMobileFileUpload,
+    handleRemoveMobileImage,
     handleFileUpload,
     handleImageDrop,
     handleImageDragOver,
     handleImageDragLeave,
+    setIsDraggingFile,
   } = usePreviewImages(currentProject, updateComponent);
 
   const {
@@ -88,7 +96,7 @@ export function PreviewPanel() {
     updateSection,
     updateComponent,
     saveToHistory,
-    containerRef
+    containerRef,
   );
 
   const {
@@ -106,7 +114,11 @@ export function PreviewPanel() {
     handleCollectionItemDragOver,
     handleCollectionItemDragEnd,
     handleCollectionItemDrop,
-  } = usePreviewCollection(updateComponent, reorderCollectionItems, saveToHistory);
+  } = usePreviewCollection(
+    updateComponent,
+    reorderCollectionItems,
+    saveToHistory,
+  );
 
   const {
     editingProductList,
@@ -139,18 +151,23 @@ export function PreviewPanel() {
     moveComponent,
     addSection,
     showOnboarding,
-    setShowOnboarding
+    setShowOnboarding,
   );
 
   // Effect to handle editor target from sidebar
   useEffect(() => {
     if (!editorTarget || !currentProject) return;
-    const section = currentProject.layout.find((s) => s.id === editorTarget.sectionId);
+    const section = currentProject.layout.find(
+      (s) => s.id === editorTarget.sectionId,
+    );
     if (!section) {
       clearEditorTarget();
       return;
     }
-    const comp = findComponentInTree(section.components, editorTarget.componentId);
+    const comp = findComponentInTree(
+      section.components,
+      editorTarget.componentId,
+    );
     if (!comp) {
       clearEditorTarget();
       return;
@@ -159,9 +176,76 @@ export function PreviewPanel() {
     clearEditorTarget();
   }, [editorTarget, currentProject, clearEditorTarget]);
 
+  const handleDropWithFiles: typeof handleDrop = (
+    e,
+    sectionId,
+    columnIndex,
+    layoutId,
+    span,
+    insertIndex,
+  ) => {
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith("image/")) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingFile(false);
+
+        const componentProps =
+          span === "full"
+            ? { span: "full" }
+            : columnIndex !== undefined
+              ? { span: "column", columnIndex }
+              : undefined;
+
+        const newImageComponent: Component = {
+          id: generateId(),
+          type: "image",
+          content: file.name,
+          styles: {},
+          props: componentProps,
+          width: "100%",
+        };
+
+        if (layoutId) {
+          addComponentToLayout(
+            sectionId,
+            layoutId,
+            newImageComponent,
+            insertIndex,
+          );
+        } else {
+          addComponent(sectionId, newImageComponent, insertIndex);
+        }
+
+        handleFileUpload(file, sectionId, newImageComponent.id);
+        if (showOnboarding) setShowOnboarding(false);
+        return;
+      }
+    }
+
+    handleDrop(e, sectionId, columnIndex, layoutId, span, insertIndex);
+  };
+
+  const handleDragOverWithFiles: typeof handleDragOver = (
+    e,
+    sectionId,
+    columnIndex,
+    layoutId,
+    span,
+  ) => {
+    const hasFiles = e.dataTransfer.types.includes("Files");
+    if (hasFiles) setIsDraggingFile(true);
+    handleDragOver(e, sectionId, columnIndex, layoutId, span);
+  };
   const handleSaveEdit = () => {
     if (editingComponent) {
-      updateComponent(editingComponent.sectionId, editingComponent.component.id, editingComponent.component);
+      updateComponent(
+        editingComponent.sectionId,
+        editingComponent.component.id,
+        editingComponent.component,
+      );
       saveToHistory("Updated component");
       setEditingComponent(null);
     }
@@ -172,10 +256,20 @@ export function PreviewPanel() {
       return { display: "flex", flexDirection: "column", gap: "1rem" };
     }
     if (section.columnWidths && section.columnWidths.length > 0) {
-      return { display: "grid", gridTemplateColumns: section.columnWidths.join(" "), gap: "0", minWidth: 0 };
+      return {
+        display: "grid",
+        gridTemplateColumns: section.columnWidths.join(" "),
+        gap: "0",
+        minWidth: 0,
+      };
     }
     const cols = section.columns || 1;
-    return { display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: "0", minWidth: 0 };
+    return {
+      display: "grid",
+      gridTemplateColumns: `repeat(${cols}, 1fr)`,
+      gap: "0",
+      minWidth: 0,
+    };
   };
 
   return (
@@ -199,22 +293,28 @@ export function PreviewPanel() {
 
       <div className="flex-1 overflow-hidden" data-slot="scroll-area-viewport">
         <ScrollArea className="h-full">
-          <div className="p-4">
+          <div className={viewport === "mobile" ? "p-0" : "p-4"}>
             <div
               ref={containerRef}
-              className={`preview-container mx-auto rounded-lg border border-border bg-background shadow-sm transition-all duration-300 ${
-                resizingSection || resizingComponent || resizingSectionHeight ? "select-none" : ""
-              }`}
+              className={`preview-container mx-auto bg-background transition-all duration-300 ${
+                viewport === "mobile"
+                  ? ""
+                  : "rounded-lg border border-border shadow-sm"
+              } ${resizingSection || resizingComponent || resizingSectionHeight ? "select-none" : ""}`}
               style={{ maxWidth: viewportWidths[viewport], width: "100%" }}
             >
-              <div className="p-4">
+              <div className={viewport === "mobile" ? "p-0" : "p-4"}>
                 {!currentProject || currentProject.layout.length === 0 ? (
                   <div className="flex h-48 flex-col items-center justify-center text-center">
                     <div className="mb-3 rounded-full bg-muted p-3">
                       <Plus className="h-6 w-6 text-muted-foreground" />
                     </div>
-                    <p className="font-medium text-foreground">Start Building</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Add sections from the Sections tab on the left</p>
+                    <p className="font-medium text-foreground">
+                      Start Building
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Add sections from the Sections tab on the left
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -222,18 +322,20 @@ export function PreviewPanel() {
                       <React.Fragment key={section.id}>
                         <div
                           className={`relative h-2 transition-all ${sectionInsertTarget?.index === index ? "h-8" : "h-2 hover:h-4"}`}
-                          onDragOver={(e) => handleSectionSlotDragOver(e, index, "before")}
+                          onDragOver={(e) =>
+                            handleSectionSlotDragOver(e, index, "before")
+                          }
                           onDrop={(e) => handleSectionSlotDrop(e, index)}
                           onDragLeave={handleDragLeave}
                         >
                           {sectionInsertTarget?.index === index && (
-                             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                               <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
-                                 <Plus className="h-3 w-3" />
-                               </div>
-                               <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                             </div>
+                            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                              <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+                                <Plus className="h-3 w-3" />
+                              </div>
+                              <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                            </div>
                           )}
                         </div>
 
@@ -245,12 +347,17 @@ export function PreviewPanel() {
                           dragOverColumn={dragOverColumn}
                           isResizing={resizingSection === section.id}
                           resizingDivider={resizingDivider}
-                          isResizingHeight={resizingSectionHeight === section.id}
-                          handleDrop={handleDrop}
-                          handleDragOver={handleDragOver}
+                          isResizingHeight={
+                            resizingSectionHeight === section.id
+                          }
+                          isDraggingFile={isDraggingFile}
+                          handleDrop={handleDropWithFiles}
+                          handleDragOver={handleDragOverWithFiles}
                           handleDragLeave={handleDragLeave}
                           handleResizeStart={handleResizeStart}
-                          handleSectionHeightResizeStart={handleSectionHeightResizeStart}
+                          handleSectionHeightResizeStart={
+                            handleSectionHeightResizeStart
+                          }
                           removeSection={removeSection}
                           getGridStyle={getGridStyle}
                           renderComponent={(comp, sId) => (
@@ -261,26 +368,49 @@ export function PreviewPanel() {
                               imageUrls={imageUrls}
                               uploadingImage={uploadingImage}
                               imageUploadTarget={imageUploadTarget}
-                              draggingCollectionItemIndex={draggingCollectionItemIndex}
+                              draggingCollectionItemIndex={
+                                draggingCollectionItemIndex
+                              }
                               resizingComponent={resizingComponent}
                               isDraggingFile={isDraggingFile}
-                              handleComponentDragStart={handleComponentDragStart}
-                              handleCollectionItemDragStart={handleCollectionItemDragStart}
-                              handleCollectionItemDragOver={handleCollectionItemDragOver}
-                              handleCollectionItemDragEnd={handleCollectionItemDragEnd}
-                              handleCollectionItemDrop={handleCollectionItemDrop}
+                              viewport={viewport}
+                              handleComponentDragStart={
+                                handleComponentDragStart
+                              }
+                              handleCollectionItemDragStart={
+                                handleCollectionItemDragStart
+                              }
+                              handleCollectionItemDragOver={
+                                handleCollectionItemDragOver
+                              }
+                              handleCollectionItemDragEnd={
+                                handleCollectionItemDragEnd
+                              }
+                              handleCollectionItemDrop={
+                                handleCollectionItemDrop
+                              }
                               handleImageDrop={handleImageDrop}
                               handleImageDragOver={handleImageDragOver}
                               handleImageDragLeave={handleImageDragLeave}
-                              handleComponentResizeStart={handleComponentResizeStart}
+                              handleComponentResizeStart={
+                                handleComponentResizeStart
+                              }
                               setEditingComponent={setEditingComponent}
                               setEditingCollection={setEditingCollection}
-                              setEditingCollectionData={setEditingCollectionData}
-                              setCollectionSearchQuery={setCollectionSearchQuery}
-                              setCollectionSearchResults={setCollectionSearchResults}
+                              setEditingCollectionData={
+                                setEditingCollectionData
+                              }
+                              setCollectionSearchQuery={
+                                setCollectionSearchQuery
+                              }
+                              setCollectionSearchResults={
+                                setCollectionSearchResults
+                              }
                               getAllCollections={getAllCollections}
                               setEditingProductList={setEditingProductList}
-                              setEditingProductListData={setEditingProductListData}
+                              setEditingProductListData={
+                                setEditingProductListData
+                              }
                               productSearchQuery={productSearchQuery}
                               setProductSearchQuery={setProductSearchQuery}
                               productSearchResults={productSearchResults}
@@ -294,19 +424,21 @@ export function PreviewPanel() {
                         {index === currentProject.layout.length - 1 && (
                           <div
                             className={`relative h-2 transition-all ${sectionInsertTarget?.index === index + 1 ? "h-8" : "h-2 hover:h-4"}`}
-                            onDragOver={(e) => handleSectionSlotDragOver(e, index + 1, "before")}
+                            onDragOver={(e) =>
+                              handleSectionSlotDragOver(e, index + 1, "before")
+                            }
                             onDrop={(e) => handleSectionSlotDrop(e, index + 1)}
                             onDragLeave={handleDragLeave}
                           >
-                             {sectionInsertTarget?.index === index + 1 && (
-                               <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                 <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
-                                   <Plus className="h-3 w-3" />
-                                 </div>
-                                 <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                               </div>
-                             )}
+                            {sectionInsertTarget?.index === index + 1 && (
+                              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+                                  <Plus className="h-3 w-3" />
+                                </div>
+                                <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                              </div>
+                            )}
                           </div>
                         )}
                       </React.Fragment>
@@ -323,6 +455,11 @@ export function PreviewPanel() {
         editingComponent={editingComponent}
         setEditingComponent={setEditingComponent}
         handleSaveEdit={handleSaveEdit}
+        imageUrls={imageUrls}
+        onUploadMobileImage={(sectionId, componentId) => {
+          setMobileImageUploadTarget({ sectionId, componentId });
+        }}
+        onRemoveMobileImage={handleRemoveMobileImage}
       />
 
       <ImageUploadDialog
@@ -331,7 +468,27 @@ export function PreviewPanel() {
         uploadingImage={uploadingImage}
         handleFileUpload={(file) => {
           if (imageUploadTarget) {
-            handleFileUpload(file, imageUploadTarget.sectionId, imageUploadTarget.componentId);
+            handleFileUpload(
+              file,
+              imageUploadTarget.sectionId,
+              imageUploadTarget.componentId,
+            );
+          }
+        }}
+      />
+
+      {/* Mobile Image Upload Dialog */}
+      <ImageUploadDialog
+        isOpen={!!mobileImageUploadTarget}
+        onClose={() => setMobileImageUploadTarget(null)}
+        uploadingImage={uploadingImage}
+        handleFileUpload={(file) => {
+          if (mobileImageUploadTarget) {
+            handleMobileFileUpload(
+              file,
+              mobileImageUploadTarget.sectionId,
+              mobileImageUploadTarget.componentId,
+            );
           }
         }}
       />

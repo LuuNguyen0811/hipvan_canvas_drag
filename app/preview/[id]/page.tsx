@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import { useProjectStore } from '@/lib/store'
-import { generateHTML, generateCSSSeparate } from '@/lib/html-generator'
-import { getImageAsBase64 } from '@/lib/image-storage'
-import type { LayoutSection, Component } from '@/lib/types'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useProjectStore } from "@/lib/store";
+import { generateHTML, generateCSSSeparate } from "@/lib/html-generator";
+import { getImageAsBase64 } from "@/lib/image-storage";
+import type { LayoutSection, Component } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from "@/components/ui/tooltip";
 import {
   ArrowLeft,
   Download,
@@ -28,143 +28,177 @@ import {
   Copy,
   Layers,
   Pencil,
-} from 'lucide-react'
+} from "lucide-react";
 
-type ViewportSize = 'desktop' | 'tablet' | 'mobile'
+type ViewportSize = "desktop" | "tablet" | "mobile";
 
 const viewportWidths: Record<ViewportSize, string> = {
-  desktop: '100%',
-  tablet: '768px',
-  mobile: '375px',
-}
+  desktop: "100%",
+  tablet: "768px",
+  mobile: "375px",
+};
 
 // Helper function to recursively process components and load images as base64
-async function processComponentImages(component: Component): Promise<Component> {
-  const processed = { ...component }
-  
+async function processComponentImages(
+  component: Component,
+): Promise<Component> {
+  const processed = { ...component };
+
   // If this is an image component with imageId, load it as base64
-  if (component.type === 'image' && component.imageId) {
-    const base64 = await getImageAsBase64(component.imageId)
+  if (component.type === "image" && component.imageId) {
+    const base64 = await getImageAsBase64(component.imageId);
     if (base64) {
-      processed.src = base64
+      processed.src = base64;
     }
   }
-  
+
   // Process children recursively if they exist
   if (component.children && component.children.length > 0) {
     processed.children = await Promise.all(
-      component.children.map(child => processComponentImages(child))
-    )
+      component.children.map((child) => processComponentImages(child)),
+    );
   }
-  
-  return processed
+
+  return processed;
 }
 
 // Helper function to prepare layout with all images as base64
-async function prepareLayoutWithImages(layout: LayoutSection[]): Promise<LayoutSection[]> {
+async function prepareLayoutWithImages(
+  layout: LayoutSection[],
+): Promise<LayoutSection[]> {
   const processedLayout = await Promise.all(
     layout.map(async (section) => {
       const processedComponents = await Promise.all(
-        section.components.map(comp => processComponentImages(comp))
-      )
-      
+        section.components.map((comp) => processComponentImages(comp)),
+      );
+
       return {
         ...section,
-        components: processedComponents
-      }
-    })
-  )
-  
-  return processedLayout
+        components: processedComponents,
+      };
+    }),
+  );
+
+  return processedLayout;
 }
 
 export default function PreviewPage() {
-  const params = useParams()
-  const router = useRouter()
-  const { projects, setCurrentProject, currentProject } = useProjectStore()
-  const [isLoading, setIsLoading] = useState(true)
-  const [viewport, setViewport] = useState<ViewportSize>('desktop')
-  const [copied, setCopied] = useState<'html' | 'css' | null>(null)
-  const [activeTab, setActiveTab] = useState<'preview' | 'html' | 'css'>('preview')
-  const [htmlContent, setHtmlContent] = useState<string>('')
-  const [cssContent, setCssContent] = useState<string>('')
-  const [isProcessingImages, setIsProcessingImages] = useState(false)
+  const params = useParams();
+  const router = useRouter();
+  const { projects, setCurrentProject, currentProject } = useProjectStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const [viewport, setViewport] = useState<ViewportSize>("desktop");
+  const [copied, setCopied] = useState<"html" | "css" | "full" | null>(null);
+  const [activeTab, setActiveTab] = useState<"preview" | "html" | "css">(
+    "preview",
+  );
+  const [htmlContent, setHtmlContent] = useState<string>("");
+  const [cssContent, setCssContent] = useState<string>("");
+  const [isProcessingImages, setIsProcessingImages] = useState(false);
 
   useEffect(() => {
-    const projectId = params.id as string
-    const project = projects.find((p) => p.id === projectId)
-    
+    const projectId = params.id as string;
+    const project = projects.find((p) => p.id === projectId);
+
     if (project) {
-      setCurrentProject(projectId)
-      setIsLoading(false)
+      setCurrentProject(projectId);
+      setIsLoading(false);
     } else {
-      router.push('/')
+      router.push("/");
     }
-  }, [params.id, projects, setCurrentProject, router])
+  }, [params.id, projects, setCurrentProject, router]);
 
   // Generate HTML and CSS with images when project loads or changes
   useEffect(() => {
-    if (!currentProject) return
+    if (!currentProject) return;
 
     const generateContent = async () => {
-      setIsProcessingImages(true)
+      setIsProcessingImages(true);
       try {
         // Prepare layout with images as base64
-        const layoutWithImages = await prepareLayoutWithImages(currentProject.layout)
-        const html = generateHTML(layoutWithImages, currentProject.name)
-        const css = generateCSSSeparate(layoutWithImages)
-        
-        setHtmlContent(html)
-        setCssContent(css)
-      } catch (error) {
-        console.error('Failed to generate content:', error)
-        // Fallback to content without images
-        setHtmlContent(generateHTML(currentProject.layout, currentProject.name))
-        setCssContent(generateCSSSeparate(currentProject.layout))
-      } finally {
-        setIsProcessingImages(false)
-      }
-    }
+        const layoutWithImages = await prepareLayoutWithImages(
+          currentProject.layout,
+        );
+        const html = generateHTML(layoutWithImages, currentProject.name);
+        const css = generateCSSSeparate(layoutWithImages);
 
-    generateContent()
-  }, [currentProject])
+        setHtmlContent(html);
+        setCssContent(css);
+      } catch (error) {
+        console.error("Failed to generate content:", error);
+        // Fallback to content without images
+        setHtmlContent(
+          generateHTML(currentProject.layout, currentProject.name),
+        );
+        setCssContent(generateCSSSeparate(currentProject.layout));
+      } finally {
+        setIsProcessingImages(false);
+      }
+    };
+
+    generateContent();
+  }, [currentProject]);
 
   const handleDownloadHTML = () => {
-    if (!currentProject || !htmlContent) return
-    
-    const blob = new Blob([htmlContent], { type: 'text/html' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${currentProject.name.toLowerCase().replace(/\s+/g, '-')}.html`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+    if (!currentProject || !htmlContent) return;
+
+    const blob = new Blob([htmlContent], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${currentProject.name.toLowerCase().replace(/\s+/g, "-")}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const handleDownloadCSS = () => {
-    if (!currentProject || !cssContent) return
-    
-    const blob = new Blob([cssContent], { type: 'text/css' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${currentProject.name.toLowerCase().replace(/\s+/g, '-')}.css`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+    if (!currentProject || !cssContent) return;
 
-  const handleCopy = async (type: 'html' | 'css') => {
-    const content = type === 'html' ? htmlContent : cssContent
-    if (!content) return
-    
-    await navigator.clipboard.writeText(content)
-    setCopied(type)
-    setTimeout(() => setCopied(null), 2000)
-  }
+    const blob = new Blob([cssContent], { type: "text/css" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${currentProject.name.toLowerCase().replace(/\s+/g, "-")}.css`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch {
+      const el = document.createElement("textarea");
+      el.value = text;
+      el.setAttribute("readonly", "");
+      el.style.position = "fixed";
+      el.style.left = "-9999px";
+      el.style.top = "0";
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+    }
+  };
+
+  const handleCopy = async (type: "html" | "css" | "full") => {
+    const content =
+      type === "html"
+        ? htmlContent
+        : type === "css"
+          ? cssContent
+          : `${htmlContent}\n\n/* CSS (separate file) */\n${cssContent}`;
+
+    if (!content) return;
+
+    await copyToClipboard(content);
+    setCopied(type);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   if (isLoading || !currentProject) {
     return (
@@ -174,7 +208,7 @@ export default function PreviewPage() {
           <p className="text-muted-foreground">Loading preview...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (isProcessingImages && !htmlContent) {
@@ -185,7 +219,7 @@ export default function PreviewPage() {
           <p className="text-muted-foreground">Processing images...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -199,7 +233,7 @@ export default function PreviewPage() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => router.push('/')}
+                  onClick={() => router.push("/")}
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
@@ -212,8 +246,12 @@ export default function PreviewPage() {
                 <Layers className="h-4 w-4 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-sm font-semibold text-foreground">{currentProject.name}</h1>
-                <p className="text-xs text-muted-foreground">Preview & Export</p>
+                <h1 className="text-sm font-semibold text-foreground">
+                  {currentProject.name}
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  Preview & Export
+                </p>
               </div>
             </div>
           </div>
@@ -252,73 +290,106 @@ export default function PreviewPage() {
             {/* Tab Controls */}
             <div className="flex items-center justify-between border-b border-border bg-muted/30 px-4">
               <TabsList className="h-12 bg-transparent">
-                <TabsTrigger value="preview" className="gap-2 data-[state=active]:bg-background">
+                <TabsTrigger
+                  value="preview"
+                  className="gap-2 data-[state=active]:bg-background"
+                >
                   <Eye className="h-4 w-4" />
                   Preview
                 </TabsTrigger>
-                <TabsTrigger value="html" className="gap-2 data-[state=active]:bg-background">
+                <TabsTrigger
+                  value="html"
+                  className="gap-2 data-[state=active]:bg-background"
+                >
                   <FileText className="h-4 w-4" />
                   HTML
                 </TabsTrigger>
-                <TabsTrigger value="css" className="gap-2 data-[state=active]:bg-background">
+                <TabsTrigger
+                  value="css"
+                  className="gap-2 data-[state=active]:bg-background"
+                >
                   <Code className="h-4 w-4" />
                   CSS
                 </TabsTrigger>
               </TabsList>
 
-              {activeTab === 'preview' && (
+              {activeTab === "preview" && (
                 <div className="flex items-center gap-1">
                   <Button
-                    variant={viewport === 'desktop' ? 'secondary' : 'ghost'}
+                    variant={viewport === "desktop" ? "secondary" : "ghost"}
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => setViewport('desktop')}
+                    onClick={() => setViewport("desktop")}
                   >
                     <Monitor className="h-4 w-4" />
                   </Button>
                   <Button
-                    variant={viewport === 'tablet' ? 'secondary' : 'ghost'}
+                    variant={viewport === "tablet" ? "secondary" : "ghost"}
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => setViewport('tablet')}
+                    onClick={() => setViewport("tablet")}
                   >
                     <Tablet className="h-4 w-4" />
                   </Button>
                   <Button
-                    variant={viewport === 'mobile' ? 'secondary' : 'ghost'}
+                    variant={viewport === "mobile" ? "secondary" : "ghost"}
                     size="icon"
                     className="h-8 w-8"
-                    onClick={() => setViewport('mobile')}
+                    onClick={() => setViewport("mobile")}
                   >
                     <Smartphone className="h-4 w-4" />
                   </Button>
                 </div>
               )}
 
-              {(activeTab === 'html' || activeTab === 'css') && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="gap-2"
-                  onClick={() => handleCopy(activeTab)}
-                >
-                  {copied === activeTab ? (
-                    <>
-                      <Check className="h-4 w-4 text-green-500" />
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4" />
-                      Copy
-                    </>
-                  )}
-                </Button>
+              {(activeTab === "html" || activeTab === "css") && (
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => handleCopy(activeTab)}
+                  >
+                    {copied === activeTab ? (
+                      <>
+                        <Check className="h-4 w-4 text-green-500" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-4 w-4" />
+                        Copy
+                      </>
+                    )}
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => handleCopy("full")}
+                  >
+                    {copied === "full" ? (
+                      <>
+                        <Check className="h-4 w-4 text-green-500" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-4 w-4" />
+                        Copy Full
+                      </>
+                    )}
+                  </Button>
+                </div>
               )}
             </div>
 
             {/* Tab Content */}
-            <TabsContent value="preview" className="m-0 flex-1 overflow-auto bg-muted/30 p-6">
+            <TabsContent
+              value="preview"
+              className="m-0 flex-1 overflow-auto bg-muted/30 p-6"
+            >
               <div
                 className="mx-auto overflow-hidden rounded-xl border border-border bg-background shadow-lg transition-all duration-300"
                 style={{ maxWidth: viewportWidths[viewport] }}
@@ -351,5 +422,5 @@ export default function PreviewPage() {
         </div>
       </div>
     </TooltipProvider>
-  )
+  );
 }

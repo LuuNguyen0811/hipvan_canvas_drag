@@ -6,6 +6,10 @@ import {
   AlignLeft,
   AlignCenter,
   AlignRight,
+  Smartphone,
+  Monitor,
+  Upload,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,19 +36,29 @@ interface EditComponentDialogProps {
     state: { sectionId: string; component: Component } | null,
   ) => void;
   handleSaveEdit: () => void;
+  imageUrls?: Record<string, string>;
+  onUploadMobileImage?: (sectionId: string, componentId: string) => void;
+  onRemoveMobileImage?: (sectionId: string, componentId: string) => void;
 }
 
 export function EditComponentDialog({
   editingComponent,
   setEditingComponent,
   handleSaveEdit,
+  imageUrls = {},
+  onUploadMobileImage,
+  onRemoveMobileImage,
 }: EditComponentDialogProps) {
   if (!editingComponent) return null;
 
   const paragraphRef = useRef<HTMLTextAreaElement | null>(null);
   const headingRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const { component } = editingComponent;
+  const { sectionId, component } = editingComponent;
+  
+  const desktopImageUrl = component.imageId ? imageUrls[component.imageId] : null;
+  const mobileImageUrl = component.mobileImageId ? imageUrls[component.mobileImageId] : null;
+  const hasMobileImage = !!component.mobileImageId;
 
   const applyBoldToSelection = () => {
     const type = component.type;
@@ -454,27 +468,112 @@ export function EditComponentDialog({
             </div>
           )}
 
-          {/* Image Border Toggle */}
+          {/* Image Options */}
           {component.type === "image" && (
-            <div className="flex items-center justify-between rounded-lg border border-border p-3">
-              <div className="space-y-0.5">
-                <Label htmlFor="border-toggle" className="cursor-pointer">
-                  Show Border
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Add a border around the image
-                </p>
+            <div className="space-y-3">
+              {/* Border Toggle */}
+              <div className="flex items-center justify-between rounded-lg border border-border p-3">
+                <div className="space-y-0.5">
+                  <Label htmlFor="border-toggle" className="cursor-pointer">
+                    Show Border
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Add a border around the image
+                  </p>
+                </div>
+                <Switch
+                  id="border-toggle"
+                  checked={component.border ?? false}
+                  onCheckedChange={(checked) =>
+                    setEditingComponent({
+                      ...editingComponent,
+                      component: { ...component, border: checked },
+                    })
+                  }
+                />
               </div>
-              <Switch
-                id="border-toggle"
-                checked={component.border ?? false}
-                onCheckedChange={(checked) =>
-                  setEditingComponent({
-                    ...editingComponent,
-                    component: { ...component, border: checked },
-                  })
-                }
-              />
+              
+              {/* Mobile Image Option */}
+              <div className="rounded-lg border border-border p-3">
+                <div className="flex items-center gap-2 mb-3">
+                  <Smartphone className="h-4 w-4 text-muted-foreground" />
+                  <Label className="font-medium">Mobile Image</Label>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Show a different image on mobile devices (e.g., vertical crop for banners)
+                </p>
+                
+                {/* Image Previews */}
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  {/* Desktop Preview */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Monitor className="h-3 w-3" />
+                      <span>Desktop</span>
+                    </div>
+                    <div className="aspect-video rounded-md border border-border bg-muted/30 overflow-hidden">
+                      {desktopImageUrl ? (
+                        <img 
+                          src={desktopImageUrl} 
+                          alt="Desktop preview" 
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Mobile Preview */}
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Smartphone className="h-3 w-3" />
+                      <span>Mobile</span>
+                    </div>
+                    <div className="aspect-video rounded-md border border-border bg-muted/30 overflow-hidden relative group/mobile">
+                      {mobileImageUrl ? (
+                        <>
+                          <img 
+                            src={mobileImageUrl} 
+                            alt="Mobile preview" 
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => onRemoveMobileImage?.(sectionId, component.id)}
+                            className="absolute top-1 right-1 p-1 rounded-full bg-destructive text-destructive-foreground opacity-0 group-hover/mobile:opacity-100 transition-opacity"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => onUploadMobileImage?.(sectionId, component.id)}
+                          className="w-full h-full flex flex-col items-center justify-center text-xs text-muted-foreground hover:bg-muted/50 transition-colors cursor-pointer"
+                        >
+                          <Upload className="h-4 w-4 mb-1" />
+                          <span>Add mobile</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                {hasMobileImage && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => onUploadMobileImage?.(sectionId, component.id)}
+                  >
+                    <Upload className="h-3 w-3 mr-2" />
+                    Change Mobile Image
+                  </Button>
+                )}
+              </div>
             </div>
           )}
 

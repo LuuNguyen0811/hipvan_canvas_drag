@@ -20,10 +20,16 @@ export const findComponentInTree = (
   return null;
 };
 
-export const collectImageComponentsInTree = (components: Component[]): Component[] => {
+export const collectImageComponentsInTree = (
+  components: Component[],
+): Component[] => {
   const out: Component[] = [];
   for (const component of components) {
-    if (component.type === "image" && component.imageId) out.push(component);
+    if (
+      component.type === "image" &&
+      (component.imageId || component.mobileImageId)
+    )
+      out.push(component);
     if (
       component.type === "layout" &&
       component.children &&
