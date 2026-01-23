@@ -1,4 +1,5 @@
 import type { LayoutSection, Component } from "./types";
+import { renderInlineMarkdownToHTML } from "./markdown-parser";
 
 export function generateHTML(
   layout: LayoutSection[],
@@ -862,10 +863,12 @@ function generateComponent(component: Component): string {
   switch (component.type) {
     // Basic Components
     case "heading":
-      return `        <h2 class="component"${styleAttr}>${component.content || "Heading"}</h2>`;
+      const headingContent = renderInlineMarkdownToHTML(component.content || "Heading")
+      return `        <h2 class="component"${styleAttr}>${headingContent}</h2>`;
 
     case "paragraph":
-      return `        <p class="component"${styleAttr}>${component.content || "Your paragraph text goes here."}</p>`;
+      const paragraphContent = renderInlineMarkdownToHTML(component.content || "Your paragraph text goes here.")
+      return `        <p class="component"${styleAttr}>${paragraphContent}</p>`;
 
     case "image":
       if (component.src) {

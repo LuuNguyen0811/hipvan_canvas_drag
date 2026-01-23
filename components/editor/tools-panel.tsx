@@ -1072,9 +1072,9 @@ export function ToolsPanel() {
             </TabsTrigger>
           </TabsList>
 
-          <ScrollArea className="flex-1">
+          <div className="flex-1 overflow-hidden">
             {/* Sections Tab - Add new section layouts */}
-            <TabsContent value="sections" className="m-0 p-4">
+            <TabsContent value="sections" className="m-0 h-full overflow-y-auto p-4">
               <div className="mb-4 rounded-lg border border-primary/20 bg-primary/5 p-3">
                 <p className="text-xs font-medium text-foreground">
                   💡 Getting Started
@@ -1114,7 +1114,7 @@ export function ToolsPanel() {
             </TabsContent>
 
             {/* Elements Tab */}
-            <TabsContent value="components" className="m-0 p-4">
+            <TabsContent value="components" className="m-0 h-full overflow-y-auto p-4">
               {!currentProject || currentProject.layout.length === 0 ? (
                 <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center">
                   <Layout className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
@@ -1263,7 +1263,7 @@ export function ToolsPanel() {
             </TabsContent>
 
             {/* Layers Tab - Manage sections */}
-            <TabsContent value="layers" className="m-0 p-4">
+            <TabsContent value="layers" className="m-0 h-full overflow-y-auto p-4">
               <div className="mb-4 rounded-lg border border-border bg-muted/30 p-3">
                 <p className="text-xs font-medium text-foreground">
                   📚 Layer Management
@@ -1481,7 +1481,7 @@ export function ToolsPanel() {
               )}
             </TabsContent>
 
-          </ScrollArea>
+          </div>
         </Tabs>
       </div>
 

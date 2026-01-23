@@ -15,6 +15,7 @@ import {
   CollectionTitle,
 } from '@/components/ui/collection'
 import type { Component, CollectionComponentData } from '@/lib/types'
+import { parseInlineMarkdown } from '@/lib/markdown-parser'
 
 interface ComponentRendererProps {
   component: Component
@@ -77,6 +78,7 @@ export function ComponentRenderer({
   const componentContent = () => {
     switch (component.type) {
       case 'heading':
+        const parsedHeading = parseInlineMarkdown(component.content || '')
         return (
           <h2 
             className="text-2xl font-bold text-foreground"
@@ -88,10 +90,22 @@ export function ComponentRenderer({
               fontSize: component.formatting?.fontSize || '1.5rem',
             }}
           >
-            {component.content}
+            {parsedHeading.map((part, index) => {
+              if (typeof part === 'string') {
+                return part
+              }
+              if (part.type === 'bold') {
+                return <strong key={index}>{part.content}</strong>
+              }
+              if (part.type === 'italic') {
+                return <em key={index}>{part.content}</em>
+              }
+              return part.content
+            })}
           </h2>
         )
       case 'paragraph':
+        const parsedContent = parseInlineMarkdown(component.content || '')
         return (
           <p 
             className="leading-relaxed text-muted-foreground"
@@ -103,7 +117,18 @@ export function ComponentRenderer({
               fontSize: component.formatting?.fontSize || '1rem',
             }}
           >
-            {component.content}
+            {parsedContent.map((part, index) => {
+              if (typeof part === 'string') {
+                return part
+              }
+              if (part.type === 'bold') {
+                return <strong key={index}>{part.content}</strong>
+              }
+              if (part.type === 'italic') {
+                return <em key={index}>{part.content}</em>
+              }
+              return part.content
+            })}
           </p>
         )
       case 'image':
