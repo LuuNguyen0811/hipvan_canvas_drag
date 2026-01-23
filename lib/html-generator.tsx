@@ -680,6 +680,7 @@ function generateCSS(layout: LayoutSection[]): string {
       }
     }
     
+    /* Collection Components */
     .collection {
       width: 100%;
     }
@@ -688,24 +689,13 @@ function generateCSS(layout: LayoutSection[]): string {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
     
     .collection-title {
-      font-size: 1.25rem;
+      font-size: 1.125rem;
       font-weight: 600;
       color: #1a1a2e;
-    }
-    
-    .collection-cta {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #3b82f6;
-      text-decoration: none;
-    }
-    
-    .collection-cta:hover {
-      text-decoration: underline;
     }
     
     .collection-grid {
@@ -718,53 +708,55 @@ function generateCSS(layout: LayoutSection[]): string {
       overflow-x: auto;
       padding-bottom: 0.5rem;
       scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
     }
     
     .collection-grid.horizontal .collection-item {
       flex-shrink: 0;
-      width: 12rem;
+      width: calc(25% - 0.75rem);
+      min-width: 200px;
       scroll-snap-align: start;
     }
     
     .collection-item {
       position: relative;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
+      border-radius: 0;
       overflow: hidden;
-      background: white;
-      transition: box-shadow 0.2s, border-color 0.2s;
+      background-color: #f5f5f5;
+      transition: all 0.3s ease-in-out;
     }
     
     .collection-item:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-color: #3b82f6;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
     
     .collection-item-badge {
       position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      background: #3b82f6;
+      left: 0.75rem;
+      top: 0.75rem;
+      background: #ff5a5f;
       color: white;
-      font-size: 0.625rem;
-      font-weight: 600;
+      font-size: 10px;
+      font-weight: 700;
       padding: 0.25rem 0.5rem;
-      border-radius: 0.375rem;
-      z-index: 1;
+      border-radius: 2px;
+      z-index: 10;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     
     .collection-item-image {
-      aspect-ratio: 1;
+      aspect-ratio: 5 / 3;
       width: 100%;
       overflow: hidden;
-      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      background-color: #e2e8f0;
     }
     
     .collection-item-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s;
+      transition: transform 0.5s;
     }
     
     .collection-item:hover .collection-item-image img {
@@ -772,50 +764,77 @@ function generateCSS(layout: LayoutSection[]): string {
     }
     
     .collection-item-content {
-      padding: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    
+    .collection-item-info {
+      flex: 1;
+      min-width: 0;
     }
     
     .collection-item-title {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #1a1a2e;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333333;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
     
     .collection-item-subtitle {
       font-size: 0.75rem;
       color: #64748b;
-      margin-top: 0.25rem;
+      margin-top: 0.125rem;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
     
     .collection-item-cta {
       display: inline-flex;
-      width: 100%;
+      height: 34px;
       align-items: center;
       justify-content: center;
-      margin-top: 0.5rem;
-      padding: 0.375rem 0.75rem;
-      font-size: 0.75rem;
-      font-weight: 500;
+      padding: 0 12px;
+      font-size: 15px;
+      font-weight: 600;
       color: white;
-      background-color: #3b82f6;
-      border-radius: 0.5rem;
+      background-color: #ff4d5f;
+      border-radius: 8px;
       text-decoration: none;
-      transition: background-color 0.2s;
+      transition: all 0.3s ease;
+      white-space: nowrap;
     }
     
     .collection-item-cta:hover {
-      background-color: #2563eb;
+      background-color: #ff334a;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     
     @media (max-width: 768px) {
-      .collection-grid:not(.horizontal) {
-        grid-template-columns: repeat(2, 1fr) !important;
+      .collection-grid.horizontal .collection-item {
+        width: calc(50% - 0.5rem);
+      }
+    }
+
+    /* Grid Responsive Utility */
+    .collection-grid-responsive {
+      grid-template-columns: repeat(var(--items-per-row, 4), 1fr);
+    }
+    
+    @media (max-width: 1024px) {
+      .collection-grid-responsive {
+        grid-template-columns: repeat(var(--items-per-row-tablet, 3), 1fr);
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .collection-grid-responsive {
+        grid-template-columns: repeat(var(--items-per-row-mobile, 1), 1fr);
       }
     }
 
@@ -831,18 +850,17 @@ function generateCSS(layout: LayoutSection[]): string {
     }
     
     .product-list-title {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #1a1a2e;
     }
     
     .product-list-grid {
-      display: grid;
+      display: flex;
       gap: 1.5rem;
     }
     
     .product-list-grid.horizontal {
-      display: flex;
       overflow-x: auto;
       padding-bottom: 1rem;
       scroll-snap-type: x mandatory;
@@ -855,39 +873,42 @@ function generateCSS(layout: LayoutSection[]): string {
     
     .product-list-grid.horizontal .product-item {
       flex-shrink: 0;
-      width: 16rem;
+      width: 240px;
       scroll-snap-align: start;
+    }
+    
+    @media (min-width: 640px) {
+      .product-list-grid.horizontal .product-item {
+        width: 280px;
+      }
     }
     
     .product-item {
       position: relative;
-      background: white;
-      border-radius: 0.75rem;
-      overflow: hidden;
-      border: 1px solid #e2e8f0;
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
       display: flex;
       flex-direction: column;
+      background: white;
+      transition: all 0.3s duration-300;
+      text-decoration: none;
     }
     
-    .product-item:hover {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
+    .product-item:hover .product-item-title {
+      color: #ff4d5f;
     }
     
     .product-item-image {
       aspect-ratio: 1;
       width: 100%;
       position: relative;
-      background: #f8fafc;
+      background: #f8f9fa;
       overflow: hidden;
+      border-radius: 2px;
     }
     
     .product-item-image img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       transition: transform 0.5s;
     }
     
@@ -897,65 +918,67 @@ function generateCSS(layout: LayoutSection[]): string {
     
     .product-item-badge {
       position: absolute;
-      top: 0.75rem;
-      left: 0.75rem;
+      top: 0.5rem;
+      left: 0.5rem;
       padding: 0.25rem 0.625rem;
-      background: #ef4444;
+      background: #ff4d5f;
       color: white;
-      font-size: 0.7rem;
+      font-size: 10px;
       font-weight: 700;
-      border-radius: 2rem;
-      z-index: 1;
+      border-radius: 2px;
+      z-index: 10;
       text-transform: uppercase;
-      letter-spacing: 0.025em;
+      letter-spacing: 0.05em;
+    }
+    
+    .product-item-badge.popular {
+      background: #10b981;
     }
     
     .product-item-content {
-      padding: 1rem;
-      flex-grow: 1;
       display: flex;
       flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.75rem 0;
     }
     
     .product-item-title {
-      font-size: 0.9375rem;
-      font-weight: 600;
+      font-size: 14px;
+      font-weight: 500;
       color: #1a1a2e;
-      margin-bottom: 0.75rem;
+      line-height: 1.25;
+      height: 2.5rem;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      line-height: 1.4;
-      height: 2.625rem;
+      transition: color 0.3s;
     }
     
     .product-item-price-container {
       display: flex;
-      align-items: baseline;
-      gap: 0.625rem;
-      margin-top: auto;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
     }
     
     .product-item-price {
-      font-size: 1.125rem;
+      font-size: 15px;
       font-weight: 700;
       color: #1a1a2e;
     }
     
     .product-item-original-price {
-      font-size: 0.875rem;
+      font-size: 13px;
       color: #94a3b8;
       text-decoration: line-through;
+      opacity: 0.7;
     }
 
     @media (max-width: 640px) {
       .product-list-grid:not(.horizontal) {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 1rem;
-      }
-      .product-list-grid.horizontal .product-item {
-        width: 14rem;
       }
     }`;
 }
@@ -1393,12 +1416,8 @@ ${tabContentsHtml}
           </div>`
           : "";
 
-      const collectionGridClass =
-        data.layout === "horizontal" ? "horizontal" : "";
-      const collectionGridStyle =
-        data.layout === "vertical"
-          ? ` style="grid-template-columns: repeat(${data.itemsPerRow || 4}, 1fr); gap: ${data.gap || "1rem"};"`
-          : ` style="gap: ${data.gap || "1rem"};"`;
+      const collectionGridClass = data.layout === "horizontal" ? "horizontal" : "collection-grid-responsive";
+      const collectionGridStyle = ` style="gap: ${data.gap || "1rem"}; --items-per-row: ${data.itemsPerRow || 4}; --items-per-row-tablet: ${Math.min(data.itemsPerRow || 4, 3)}; --items-per-row-mobile: ${Math.min(data.itemsPerRow || 4, 1)}; overflow-x: auto;"`;
 
       const collectionItemsHtml = data.items
         .map((item) => {
@@ -1413,23 +1432,24 @@ ${tabContentsHtml}
             : "";
 
           const ctaText = item.ctaText || data.itemCtaText || "Shop";
-          const finalCtaBgColor =
-            item.ctaBgColor || data.itemCtaBgColor || "#3b82f6";
-          const finalCtaTextColor =
-            item.ctaTextColor || data.itemCtaTextColor || "white";
-          const ctaStyle = ` style="background-color: ${finalCtaBgColor}; color: ${finalCtaTextColor};"`;
-
-          const itemBgStyle =
-            item.itemBgColor || data.itemBgColor
-              ? ` style="background-color: ${item.itemBgColor || data.itemBgColor};"`
-              : "";
+          const finalCtaBgColor = item.ctaBgColor || data.itemCtaBgColor;
+          const finalCtaTextColor = item.ctaTextColor || data.itemCtaTextColor;
+          const ctaStyle = finalCtaBgColor || finalCtaTextColor
+            ? ` style="${finalCtaBgColor ? `background-color: ${finalCtaBgColor};` : ""} ${finalCtaTextColor ? `color: ${finalCtaTextColor};` : ""}"`
+            : "";
+          
+          const itemBgStyle = (item.itemBgColor || data.itemBgColor) 
+            ? ` style="background-color: ${item.itemBgColor || data.itemBgColor};"` 
+            : "";
 
           return `            <div class="collection-item"${itemBgStyle}>
               ${badgeHtml}
               <div class="collection-item-image">${imageHtml}</div>
               <div class="collection-item-content">
-                <h4 class="collection-item-title">${item.title}</h4>
-                ${subtitleHtml}
+                <div class="collection-item-info">
+                  <h4 class="collection-item-title">${item.title}</h4>
+                  ${subtitleHtml}
+                </div>
                 <a href="${item.url || "#"}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
               </div>
             </div>`;
@@ -1468,16 +1488,14 @@ ${collectionItemsHtml}
           </div>`
           : "";
 
-      const pGridClass = pData.layout === "horizontal" ? "horizontal" : "";
-      const pGridStyle =
-        pData.layout === "vertical"
-          ? ` style="grid-template-columns: repeat(${pData.itemsPerRow || 4}, 1fr); gap: ${pData.gap || "1.5rem"};"`
-          : ` style="gap: ${pData.gap || "1.5rem"};"`;
+      const pGridClass = pData.layout === "horizontal" ? "horizontal" : "collection-grid-responsive";
+      const pGridStyle = ` style="gap: ${pData.gap || "1.5rem"}; --items-per-row: ${pData.itemsPerRow || 4}; --items-per-row-tablet: ${Math.min(pData.itemsPerRow || 4, 3)}; --items-per-row-mobile: ${Math.min(pData.itemsPerRow || 4, 2)}; overflow-x: auto;"`;
 
       const pItemsHtml = pData.items
         .map((item) => {
+          const badgeClass = `product-item-badge ${item.isPopular ? "popular" : ""}`;
           const badgeHtml = item.badge
-            ? `<span class="product-item-badge">${item.badge}</span>`
+            ? `<div class="absolute left-2 top-2 z-10"><div class="${badgeClass}">${item.badge}</div></div>`
             : "";
           const imageHtml = item.image
             ? `<img src="${item.image}" alt="${item.title}" />`
