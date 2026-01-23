@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Search, LayoutList, Plus, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import type { CollectionComponentData, CollectionItemData } from '@/lib/types'
 import { searchCollections, getCollectionById, type Collection } from '@/lib/mock-collections'
-import { Palette, Trash2, Columns, Rows, Grid2X2, Maximize2, MoveHorizontal } from 'lucide-react'
+import { Palette, Trash2, Columns, Rows, Grid2X2, Maximize2, MoveHorizontal, Upload, Image as ImageIcon, AlignLeft, AlignCenter, AlignRight } from 'lucide-react'
 
 interface CollectionEditDialogProps {
   isOpen: boolean
@@ -38,6 +38,9 @@ export function CollectionEditDialog({
   setCollectionSearchResults,
   handleSaveCollection,
 }: CollectionEditDialogProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploadingForItem, setUploadingForItem] = React.useState<number | null>(null)
+
   if (!editingCollectionData) return null
 
   return (
@@ -66,15 +69,55 @@ export function CollectionEditDialog({
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label>Header Title</Label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="showHeader"
-                  checked={editingCollectionData.showHeader ?? true}
-                  onChange={(e) => setEditingCollectionData({ ...editingCollectionData, showHeader: e.target.checked })}
-                  className="h-4 w-4 rounded border-border"
-                />
-                <label htmlFor="showHeader" className="text-xs text-muted-foreground cursor-pointer">Show on page</label>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center bg-muted/30 p-1 rounded-lg border border-divider/20">
+                  <button
+                    onClick={() => setEditingCollectionData({ ...editingCollectionData, headerAlignment: 'left' })}
+                    className={cn(
+                      "p-1.5 rounded-md transition-all",
+                      (editingCollectionData.headerAlignment === 'left' || !editingCollectionData.headerAlignment) 
+                        ? "bg-white shadow-sm text-primary" 
+                        : "text-muted-foreground hover:bg-white/50"
+                    )}
+                    title="Align Left"
+                  >
+                    <AlignLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => setEditingCollectionData({ ...editingCollectionData, headerAlignment: 'center' })}
+                    className={cn(
+                      "p-1.5 rounded-md transition-all",
+                      editingCollectionData.headerAlignment === 'center' 
+                        ? "bg-white shadow-sm text-primary" 
+                        : "text-muted-foreground hover:bg-white/50"
+                    )}
+                    title="Align Center"
+                  >
+                    <AlignCenter className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => setEditingCollectionData({ ...editingCollectionData, headerAlignment: 'right' })}
+                    className={cn(
+                      "p-1.5 rounded-md transition-all",
+                      editingCollectionData.headerAlignment === 'right' 
+                        ? "bg-white shadow-sm text-primary" 
+                        : "text-muted-foreground hover:bg-white/50"
+                    )}
+                    title="Align Right"
+                  >
+                    <AlignRight className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="showHeader"
+                    checked={editingCollectionData.showHeader ?? true}
+                    onChange={(e) => setEditingCollectionData({ ...editingCollectionData, showHeader: e.target.checked })}
+                    className="h-4 w-4 rounded border-border"
+                  />
+                  <label htmlFor="showHeader" className="text-xs text-muted-foreground cursor-pointer">Show on page</label>
+                </div>
               </div>
             </div>
             <Input
@@ -84,12 +127,18 @@ export function CollectionEditDialog({
             />
           </div>
           <Tabs defaultValue="content" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-muted/20 p-1 rounded-2xl border border-divider">
-              <TabsTrigger value="content" className="gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
+            <TabsList className="grid w-full grid-cols-2 h-12 bg-muted/20 p-1 rounded-2xl border border-divider">
+              <TabsTrigger 
+                value="content" 
+                className="flex items-center justify-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all"
+              >
                 <LayoutList className="h-4 w-4" />
                 Items & Content
               </TabsTrigger>
-              <TabsTrigger value="style" className="gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all">
+              <TabsTrigger 
+                value="style" 
+                className="flex items-center justify-center gap-2 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary transition-all"
+              >
                 <Palette className="h-4 w-4" />
                 Style & Appearance
               </TabsTrigger>
@@ -116,6 +165,79 @@ export function CollectionEditDialog({
                           }}
                           className="pl-10 h-11 rounded-xl bg-white border-none shadow-sm transition-all focus:ring-2 focus:ring-primary/20 w-full"
                         />
+
+                        {/* Autocomplete Dropdown Overlay - Floating */}
+                        {collectionSearchQuery.trim() !== '' && (
+                          <div className="absolute top-full left-0 right-0 mt-2 max-h-60 overflow-y-auto rounded-xl border border-divider bg-white p-1 shadow-2xl z-[100] animate-in fade-in zoom-in-95 duration-200">
+                            {collectionSearchResults.length === 0 ? (
+                              <div className="flex flex-col items-center justify-center py-6 text-center">
+                                <p className="text-sm text-muted-foreground italic">No collections found.</p>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm" 
+                                  className="mt-2 text-primary hover:bg-primary/5"
+                                  onClick={() => {
+                                    const newItem: CollectionItemData = {
+                                      id: `item_${Date.now()}`,
+                                      title: collectionSearchQuery,
+                                      ctaText: 'Shop',
+                                      ctaUrl: '#',
+                                    }
+                                    setEditingCollectionData({
+                                      ...editingCollectionData,
+                                      sourceType: 'manual',
+                                      items: [newItem, ...(editingCollectionData.items || [])],
+                                    })
+                                    setCollectionSearchQuery('')
+                                  }}
+                                >
+                                  Add "{collectionSearchQuery}" as a manual item?
+                                </Button>
+                              </div>
+                            ) : (
+                              collectionSearchResults.map((collection) => {
+                                const isSelected = editingCollectionData.collectionIds?.includes(collection.id);
+                                return (
+                                  <button
+                                    key={collection.id}
+                                    onClick={() => {
+                                      if (isSelected) return;
+                                      const currentIds = editingCollectionData.collectionIds || [];
+                                      const nextIds = [...currentIds, collection.id];
+                                      const selectedCollections = nextIds.map(id => getCollectionById(id)).filter(Boolean) as Collection[];
+                                      const items: CollectionItemData[] = selectedCollections.map(col => ({
+                                        id: col.id,
+                                        title: col.name,
+                                        image: col.image,
+                                        ctaText: col.ctaText,
+                                        ctaUrl: col.ctaUrl,
+                                      }));
+                                      setEditingCollectionData({
+                                        ...editingCollectionData,
+                                        sourceType: 'api',
+                                        collectionIds: nextIds,
+                                        collectionId: nextIds[0],
+                                        collectionName: selectedCollections.map(c => c.name).join(', '),
+                                        items,
+                                      });
+                                      setCollectionSearchQuery('');
+                                    }}
+                                    disabled={isSelected}
+                                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-all ${
+                                      isSelected ? 'bg-muted/40 cursor-default opacity-50' : 'hover:bg-primary/5 hover:translate-x-1'
+                                    }`}
+                                  >
+                                    <div className="h-8 w-8 rounded bg-muted overflow-hidden">
+                                      {collection.image && <img src={collection.image} className="h-full w-full object-cover" />}
+                                    </div>
+                                    <span className="text-sm font-medium">{collection.name}</span>
+                                    {isSelected && <span className="ml-auto text-[10px] font-bold uppercase text-primary">Added</span>}
+                                  </button>
+                                );
+                              })
+                            )}
+                          </div>
+                        )}
                       </div>
                       
                       <div className="flex items-center gap-2">
@@ -145,107 +267,57 @@ export function CollectionEditDialog({
                     </div>
                   </div>
 
-                  {/* Autocomplete Dropdown Overlay (Simplified) */}
-                  {collectionSearchQuery.trim() !== '' && (
-                    <div className="mt-2 max-h-48 overflow-y-auto rounded-xl border border-divider bg-white p-1 shadow-xl">
-                      {collectionSearchResults.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-6 text-center">
-                          <p className="text-sm text-muted-foreground italic">No collections found.</p>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="mt-2 text-primary hover:bg-primary/5"
-                            onClick={() => {
-                              const newItem: CollectionItemData = {
-                                id: `item_${Date.now()}`,
-                                title: collectionSearchQuery,
-                                ctaText: 'Shop',
-                                ctaUrl: '#',
-                              }
-                              setEditingCollectionData({
-                                ...editingCollectionData,
-                                sourceType: 'manual',
-                                items: [newItem, ...(editingCollectionData.items || [])],
-                              })
-                              setCollectionSearchQuery('')
-                            }}
-                          >
-                            Add "{collectionSearchQuery}" as a manual item?
-                          </Button>
-                        </div>
-                      ) : (
-                        collectionSearchResults.map((collection) => {
-                          const isSelected = editingCollectionData.collectionIds?.includes(collection.id);
-                          return (
-                            <button
-                              key={collection.id}
-                              onClick={() => {
-                                if (isSelected) return;
-                                const currentIds = editingCollectionData.collectionIds || [];
-                                const nextIds = [...currentIds, collection.id];
-                                const selectedCollections = nextIds.map(id => getCollectionById(id)).filter(Boolean) as Collection[];
-                                const items: CollectionItemData[] = selectedCollections.map(col => ({
-                                  id: col.id,
-                                  title: col.name,
-                                  image: col.image,
-                                  ctaText: col.ctaText,
-                                  ctaUrl: col.ctaUrl,
-                                }));
-                                setEditingCollectionData({
-                                  ...editingCollectionData,
-                                  sourceType: 'api',
-                                  collectionIds: nextIds,
-                                  collectionId: nextIds[0],
-                                  collectionName: selectedCollections.map(c => c.name).join(', '),
-                                  items,
-                                });
-                                setCollectionSearchQuery('');
-                              }}
-                              disabled={isSelected}
-                              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-all ${
-                                isSelected ? 'bg-muted/40 cursor-default opacity-50' : 'hover:bg-primary/5 hover:translate-x-1'
-                              }`}
-                            >
-                              <div className="h-8 w-8 rounded bg-muted overflow-hidden">
-                                {collection.image && <img src={collection.image} className="h-full w-full object-cover" />}
-                              </div>
-                              <span className="text-sm font-medium">{collection.name}</span>
-                              {isSelected && <span className="ml-auto text-[10px] font-bold uppercase text-primary">Added</span>}
-                            </button>
-                          );
-                        })
-                      )}
-                    </div>
-                  )}
                 </div>
 
                 {/* Active Items List - Combined API & Manual */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between px-1">
                     <Label className="text-[12px] font-bold uppercase tracking-wider text-[#1E1B4B]/70">Collection Items ({editingCollectionData.items.length})</Label>
-                    <p className="text-[10px] text-muted-foreground uppercase font-medium">Drag to reorder items (coming soon)</p>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-4 max-h-[450px] overflow-y-auto pr-2 scrollbar-thin">
+                  <div className="grid grid-cols-1 gap-6 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin">
                     {editingCollectionData.items.map((item, index) => (
-                      <div key={item.id} className="group relative rounded-2xl border border-divider bg-white p-4 transition-all hover:bg-accent/5 hover:shadow-md hover:border-primary/20">
-                        <div className="flex gap-4">
-                          <div className="h-16 w-20 flex-shrink-0 rounded-lg bg-muted overflow-hidden border border-border/50 shadow-inner group-hover:scale-105 transition-transform">
-                            {item.image ? (
-                              <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted/50 to-muted/20">
-                                <Plus className="h-5 w-5 text-muted-foreground/30" />
-                              </div>
-                            )}
+                      <div key={item.id} className="group relative rounded-2xl border border-divider bg-white p-5 transition-all hover:border-primary/30 hover:shadow-lg">
+                        <div className="flex items-start gap-6">
+                          {/* Image Preview & Delete Action */}
+                          <div className="flex flex-col gap-3">
+                            <div className="h-16 w-20 flex-shrink-0 rounded-xl bg-muted overflow-hidden border border-divider/50 shadow-inner group-hover:scale-[1.02] transition-transform text-center">
+                              {item.image ? (
+                                <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-muted/50 to-muted/20">
+                                  <ImageIcon className="h-6 w-6 text-muted-foreground/20" />
+                                </div>
+                              )}
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="w-full text-destructive hover:bg-destructive/10 h-7 gap-2 font-bold text-[9px] uppercase"
+                              onClick={() => {
+                                const newItems = editingCollectionData.items.filter((_, i) => i !== index)
+                                const nextCollectionIds = editingCollectionData.collectionIds?.filter(id => id !== item.id) || [];
+                                setEditingCollectionData({ 
+                                  ...editingCollectionData, 
+                                  items: newItems,
+                                  collectionIds: nextCollectionIds 
+                                })
+                              }}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                              Remove
+                            </Button>
                           </div>
                           
-                          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div className="space-y-1">
-                              <span className="text-[10px] uppercase font-bold text-muted-foreground/70">Title</span>
+                          {/* Vertical fields stack */}
+                          <div className="flex-1 space-y-4">
+                            {/* Title Row */}
+                            <div className="space-y-1.5">
+                              <Label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Item Title</Label>
                               <Input
                                 value={item.title}
-                                className="h-8 rounded-lg bg-muted/30 border-none shadow-none focus:bg-white focus:ring-1"
+                                placeholder="Enter item title..."
+                                className="h-10 rounded-xl bg-muted/20 border-divider/50 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm"
                                 onChange={(e) => {
                                   const newItems = [...(editingCollectionData.items || [])]
                                   newItems[index] = { ...newItems[index], title: e.target.value }
@@ -253,23 +325,14 @@ export function CollectionEditDialog({
                                 }}
                               />
                             </div>
-                            <div className="space-y-1">
-                              <span className="text-[10px] uppercase font-bold text-muted-foreground/70">Button Label</span>
-                              <Input
-                                value={item.ctaText}
-                                className="h-8 rounded-lg bg-muted/30 border-none shadow-none focus:bg-white focus:ring-1"
-                                onChange={(e) => {
-                                  const newItems = [...(editingCollectionData.items || [])]
-                                  newItems[index] = { ...newItems[index], ctaText: e.target.value }
-                                  setEditingCollectionData({ ...editingCollectionData, items: newItems })
-                                }}
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <span className="text-[10px] uppercase font-bold text-muted-foreground/70">Link URL</span>
+
+                            {/* Link Row */}
+                            <div className="space-y-1.5">
+                              <Label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Target URL</Label>
                               <Input
                                 value={item.ctaUrl}
-                                className="h-8 rounded-lg bg-muted/30 border-none shadow-none focus:bg-white focus:ring-1 text-xs font-mono"
+                                placeholder="/shop/..."
+                                className="h-10 rounded-xl bg-muted/20 border-divider/50 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all text-xs font-mono"
                                 onChange={(e) => {
                                   const newItems = [...(editingCollectionData.items || [])]
                                   newItems[index] = { ...newItems[index], ctaUrl: e.target.value }
@@ -277,28 +340,69 @@ export function CollectionEditDialog({
                                 }}
                               />
                             </div>
-                          </div>
 
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors shrink-0"
-                            onClick={() => {
-                              const newItems = editingCollectionData.items.filter((_, i) => i !== index)
-                              // Also remove from collectionIds if it was an API item
-                              const nextCollectionIds = editingCollectionData.collectionIds?.filter(id => id !== item.id) || [];
-                              setEditingCollectionData({ 
-                                ...editingCollectionData, 
-                                items: newItems,
-                                collectionIds: nextCollectionIds 
-                              })
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                            {/* Image Row */}
+                            <div className="space-y-1.5">
+                              <Label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Image Source</Label>
+                              <div className="flex gap-2">
+                                <Input
+                                  value={item.image || ''}
+                                  placeholder="https://..."
+                                  className="h-10 rounded-xl bg-muted/20 border-divider/50 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all text-xs font-mono"
+                                  onChange={(e) => {
+                                    const newItems = [...(editingCollectionData.items || [])]
+                                    newItems[index] = { ...newItems[index], image: e.target.value }
+                                    setEditingCollectionData({ ...editingCollectionData, items: newItems })
+                                  }}
+                                />
+                                <Button 
+                                  variant="outline" 
+                                  className="h-10 rounded-xl px-4 border-divider/50 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-all gap-2"
+                                  onClick={() => {
+                                    setUploadingForItem(index)
+                                    fileInputRef.current?.click()
+                                  }}
+                                >
+                                  <Upload className="h-4 w-4" />
+                                  <span className="text-xs font-bold">Upload</span>
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ))}
+
+                    {/* Hidden file input for uploads */}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0]
+                        if (file && uploadingForItem !== null) {
+                          try {
+                            const reader = new FileReader()
+                            reader.onload = (event) => {
+                              if (event.target?.result) {
+                                const newItems = [...(editingCollectionData.items || [])]
+                                newItems[uploadingForItem] = { 
+                                  ...newItems[uploadingForItem], 
+                                  image: event.target.result as string 
+                                }
+                                setEditingCollectionData({ ...editingCollectionData, items: newItems })
+                              }
+                            }
+                            reader.readAsDataURL(file)
+                          } catch (err) {
+                            console.error('Error handling file upload:', err)
+                          } finally {
+                            setUploadingForItem(null)
+                          }
+                        }
+                      }}
+                    />
 
                     {editingCollectionData.items.length === 0 && (
                       <div className="flex flex-col items-center justify-center py-20 rounded-2xl border-2 border-dashed border-divider bg-accent/5">
@@ -351,7 +455,7 @@ export function CollectionEditDialog({
                           color: editingCollectionData.itemCtaTextColor || '#ffffff'
                         }}
                       >
-                        {editingCollectionData.items?.[0]?.ctaText || 'Shop'}
+                        {editingCollectionData.itemCtaText || 'Shop'}
                       </div>
                     </div>
                   </div>
@@ -418,6 +522,15 @@ export function CollectionEditDialog({
                   <div className="py-4 border-b border-divider/50 grid grid-cols-[140px_1fr] items-center gap-6">
                     <Label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Action Button</Label>
                     <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-3">
+                        <span className="text-[10px] text-slate-400 font-bold">LABEL</span>
+                        <Input 
+                          placeholder="Shop"
+                          value={editingCollectionData.itemCtaText || ''}
+                          className="h-9 w-24 rounded-lg bg-muted/20 border-divider/50 text-center text-xs font-bold focus:bg-white transition-colors"
+                          onChange={(e) => setEditingCollectionData({...editingCollectionData, itemCtaText: e.target.value})}
+                        />
+                      </div>
                       <div className="flex items-center gap-3">
                         <span className="text-[10px] text-slate-400 font-bold">BG</span>
                         <div className="flex items-center gap-2 bg-muted/20 px-2 py-1 rounded-lg border border-divider/50">

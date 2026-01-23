@@ -22,6 +22,7 @@ export interface CollectionComponentData {
   itemsPerRow?: number;
   showHeader?: boolean;
   headerTitle?: string;
+  headerAlignment?: "left" | "center" | "right";
   itemCtaText?: string;
   itemCtaBgColor?: string;
   itemCtaTextColor?: string;

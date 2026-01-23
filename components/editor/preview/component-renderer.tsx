@@ -1,4 +1,5 @@
 import React from 'react'
+import { cn } from '@/lib/utils'
 import { Trash2, Pencil, GripVertical, Upload, Image as ImageIcon, MoveHorizontal, MoveVertical, Grid2X2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -233,7 +234,11 @@ export function ComponentRenderer({
         return (
           <div className="w-full">
             {collectionData?.showHeader && collectionData.headerTitle && (
-              <CollectionHeader>
+              <CollectionHeader className={cn(
+                collectionData.headerAlignment === 'center' && "justify-center",
+                collectionData.headerAlignment === 'right' && "justify-end",
+                (collectionData.headerAlignment === 'left' || !collectionData.headerAlignment) && "justify-start"
+              )}>
                 <CollectionTitle>{collectionData.headerTitle}</CollectionTitle>
               </CollectionHeader>
             )}
