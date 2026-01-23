@@ -13,43 +13,53 @@ export function generateProductListComponent(component: Component): string | nul
         </div>`;
   }
   
+  const headerAlignmentMap: Record<string, string> = {
+    left: "justify-content: flex-start;",
+    center: "justify-content: center; text-align: center;",
+    right: "justify-content: flex-end; text-align: right;",
+  };
+
+  const pHeaderStyle = data.headerAlignment
+    ? headerAlignmentMap[data.headerAlignment]
+    : "";
+
   const headerHtml = data.showHeader && data.headerTitle ? `
-          <div class="product-list-header">
-            <h3 class="product-list-header-title">${data.headerTitle}</h3>
+          <div class="product-list-header" style="${pHeaderStyle}">
+            <h3 class="product-list-title">${data.headerTitle}</h3>
           </div>` : '';
   
-  const gridClass = data.layout === 'horizontal' ? 'horizontal' : 'vertical';
-  const itemsPerRow = data.itemsPerRow || 4;
-  const gridStyle = data.layout === 'vertical' 
-    ? ` style="--items-per-row: ${itemsPerRow}; --items-per-row-mobile: 2; --items-per-row-tablet: 3; grid-template-columns: repeat(var(--items-per-row), 1fr); gap: ${data.gap || '1.5rem'};"`
-    : ` style="gap: ${data.gap || '1.5rem'};"`;
+  const gridClass = data.layout === 'horizontal' ? 'horizontal' : 'collection-grid-responsive';
+  const gridStyle = ` style="gap: ${data.gap || "1.5rem"}; --items-per-row: ${data.itemsPerRow || 4}; --items-per-row-tablet: ${Math.min(data.itemsPerRow || 4, 3)}; --items-per-row-mobile: ${Math.min(data.itemsPerRow || 4, 2)}; overflow-x: auto;"`;
   
   const itemsHtml = data.items.map((item) => {
-    const badgeHtml = item.badge ? `<div class="product-item-badge ${item.isPopular ? 'popular' : ''}">${item.badge}</div>` : '';
+    const badgeClass = `product-item-badge ${item.isPopular ? "popular" : ""}`;
+    const badgeHtml = item.badge
+      ? `<div class="absolute left-2 top-2 z-10"><div class="${badgeClass}">${item.badge}</div></div>`
+      : "";
     const imageHtml = item.image 
       ? `<img src="${item.image}" alt="${item.title}" />`
       : '';
-    const originalPriceHtml = item.originalPrice ? `<span class="product-item-price-original">${item.originalPrice}</span>` : '';
+    const originalPriceHtml = item.originalPrice 
+      ? `<span class="product-item-original-price">${item.originalPrice}</span>` 
+      : '';
     
-    return `            <div class="product-item">
-              <a href="${item.url}" class="product-item-link">
-                <div class="product-item-image-container">
-                  ${badgeHtml}
-                  ${imageHtml}
+    return `            <a href="${item.url || "#"}" class="product-item">
+              <div class="product-item-image">
+                ${badgeHtml}
+                ${imageHtml}
+              </div>
+              <div class="product-item-content">
+                <h4 class="product-item-title">${item.title}</h4>
+                <div class="product-item-price-container">
+                  <span class="product-item-price">${item.price}</span>
+                  ${originalPriceHtml}
                 </div>
-                <div class="product-item-content">
-                  <h4 class="product-item-title">${item.title}</h4>
-                  <div class="product-item-price">
-                    <span class="product-item-price-current">${item.price}</span>
-                    ${originalPriceHtml}
-                  </div>
-                </div>
-              </a>
-            </div>`;
+              </div>
+            </a>`;
   }).join('\n');
   
   return `        <div class="product-list component"${styleAttr}>${headerHtml}
-          <div class="product-list-container ${gridClass}"${gridStyle}>
+          <div class="product-list-grid ${gridClass}"${gridStyle}>
 ${itemsHtml}
           </div>
         </div>`;

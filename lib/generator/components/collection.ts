@@ -13,16 +13,23 @@ export function generateCollectionComponent(component: Component): string | null
         </div>`;
   }
   
+  const headerAlignmentMap: Record<string, string> = {
+    left: "justify-content: flex-start;",
+    center: "justify-content: center; text-align: center;",
+    right: "justify-content: flex-end; text-align: right;",
+  };
+
+  const collectionHeaderStyle = data.headerAlignment
+    ? headerAlignmentMap[data.headerAlignment]
+    : "";
+
   const headerHtml = data.showHeader && data.headerTitle ? `
-          <div class="collection-header">
+          <div class="collection-header" style="${collectionHeaderStyle}">
             <h3 class="collection-title">${data.headerTitle}</h3>
           </div>` : '';
   
-  const gridClass = data.layout === 'horizontal' ? 'horizontal' : '';
-  const itemsPerRow = data.itemsPerRow || 4;
-  const gridStyle = data.layout === 'vertical' 
-    ? ` style="--items-per-row: ${itemsPerRow}; --items-per-row-mobile: ${Math.min(itemsPerRow, 1)}; --items-per-row-tablet: ${Math.min(itemsPerRow, 3)}; grid-template-columns: repeat(var(--items-per-row), 1fr); gap: ${data.gap || '1rem'};"`
-    : ` style="gap: ${data.gap || '1rem'};"`;
+  const gridClass = data.layout === 'horizontal' ? 'horizontal' : 'collection-grid-responsive';
+  const gridStyle = ` style="gap: ${data.gap || "1rem"}; --items-per-row: ${data.itemsPerRow || 4}; --items-per-row-tablet: ${Math.min(data.itemsPerRow || 4, 3)}; --items-per-row-mobile: ${Math.min(data.itemsPerRow || 4, 1)}; overflow-x: auto;"`;
   
   const itemsHtml = data.items.map((item) => {
     const badgeHtml = item.badge ? `<span class="collection-item-badge">${item.badge}</span>` : '';
@@ -32,17 +39,25 @@ export function generateCollectionComponent(component: Component): string | null
     const subtitleHtml = item.subtitle ? `<p class="collection-item-subtitle">${item.subtitle}</p>` : '';
     
     const ctaText = item.ctaText || data.itemCtaText || 'Shop';
-    const ctaStyle = (item.ctaBgColor || data.itemCtaBgColor) 
-      ? ` style="background-color: ${item.ctaBgColor || data.itemCtaBgColor}; color: white;"` 
-      : '';
+    const finalCtaBgColor = item.ctaBgColor || data.itemCtaBgColor;
+    const finalCtaTextColor = item.ctaTextColor || data.itemCtaTextColor;
+    const ctaStyle = finalCtaBgColor || finalCtaTextColor
+      ? ` style="${finalCtaBgColor ? `background-color: ${finalCtaBgColor};` : ""} ${finalCtaTextColor ? `color: ${finalCtaTextColor};` : ""}"`
+      : "";
     
-    return `            <div class="collection-item">
+    const itemBgStyle = (item.itemBgColor || data.itemBgColor) 
+      ? ` style="background-color: ${item.itemBgColor || data.itemBgColor};"` 
+      : "";
+    
+    return `            <div class="collection-item"${itemBgStyle}>
               ${badgeHtml}
               <div class="collection-item-image">${imageHtml}</div>
               <div class="collection-item-content">
-                <h4 class="collection-item-title">${item.title}</h4>
-                ${subtitleHtml}
-                <a href="${item.url}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
+                <div class="collection-item-info">
+                  <h4 class="collection-item-title">${item.title}</h4>
+                  ${subtitleHtml}
+                </div>
+                <a href="${item.url || "#"}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
               </div>
             </div>`;
   }).join('\n');

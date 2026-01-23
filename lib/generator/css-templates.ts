@@ -14,6 +14,7 @@ export const BASE_CSS = `    * {
     }
     
     .page-container {
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
       padding: 2rem;
@@ -29,6 +30,27 @@ export const BASE_CSS = `    * {
     
     .column {
       padding: 0.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .page-container {
+        padding: 1.5rem;
+      }
+      .section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page-container {
+        padding: 1rem;
+      }
+      .section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0.5rem;
+      }
     }
     
     .component {
@@ -101,6 +123,22 @@ export const BASE_CSS = `    * {
       height: auto;
       border-radius: 0.75rem;
       display: block;
+    }
+    
+    .responsive-picture {
+      display: block;
+      max-width: 100%;
+    }
+    
+    .responsive-picture img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.75rem;
+      display: block;
+    }
+    
+    .image-bordered {
+      border: 1px solid #e2e8f0;
     }
     
     .image-placeholder {
@@ -204,6 +242,24 @@ export const BASE_CSS = `    * {
       background: white;
       border-bottom: 1px solid #e2e8f0;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      gap: 1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        padding: 1rem;
+        text-align: center;
+      }
+      .navbar-menu {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+      }
+      .nav-link {
+        width: 100%;
+        padding: 0.5rem;
+      }
     }
     
     .navbar-brand {
@@ -595,6 +651,7 @@ export const BASE_CSS = `    * {
       }
     }
     
+    /* Collection Components */
     .collection {
       width: 100%;
     }
@@ -603,24 +660,13 @@ export const BASE_CSS = `    * {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
     
     .collection-title {
-      font-size: 1.25rem;
+      font-size: 1.125rem;
       font-weight: 600;
       color: #1a1a2e;
-    }
-    
-    .collection-cta {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #3b82f6;
-      text-decoration: none;
-    }
-    
-    .collection-cta:hover {
-      text-decoration: underline;
     }
     
     .collection-grid {
@@ -633,53 +679,55 @@ export const BASE_CSS = `    * {
       overflow-x: auto;
       padding-bottom: 0.5rem;
       scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
     }
     
     .collection-grid.horizontal .collection-item {
       flex-shrink: 0;
-      width: 12rem;
+      width: calc(25% - 0.75rem);
+      min-width: 200px;
       scroll-snap-align: start;
     }
     
     .collection-item {
       position: relative;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
+      border-radius: 0;
       overflow: hidden;
-      background: white;
-      transition: box-shadow 0.2s, border-color 0.2s;
+      background-color: #f5f5f5;
+      transition: all 0.3s ease-in-out;
     }
     
     .collection-item:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-color: #3b82f6;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
     
     .collection-item-badge {
       position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      background: #3b82f6;
+      left: 0.75rem;
+      top: 0.75rem;
+      background: #ff5a5f;
       color: white;
-      font-size: 0.625rem;
-      font-weight: 600;
+      font-size: 10px;
+      font-weight: 700;
       padding: 0.25rem 0.5rem;
-      border-radius: 0.375rem;
-      z-index: 1;
+      border-radius: 2px;
+      z-index: 10;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     
     .collection-item-image {
-      aspect-ratio: 1;
+      aspect-ratio: 5 / 3;
       width: 100%;
       overflow: hidden;
-      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+      background-color: #e2e8f0;
     }
     
     .collection-item-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s;
+      transition: transform 0.5s;
     }
     
     .collection-item:hover .collection-item-image img {
@@ -687,127 +735,156 @@ export const BASE_CSS = `    * {
     }
     
     .collection-item-content {
-      padding: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    
+    .collection-item-info {
+      flex: 1;
+      min-width: 0;
     }
     
     .collection-item-title {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #1a1a2e;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333333;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
     
     .collection-item-subtitle {
       font-size: 0.75rem;
       color: #64748b;
-      margin-top: 0.25rem;
+      margin-top: 0.125rem;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
     
     .collection-item-cta {
       display: inline-flex;
-      width: 100%;
+      height: 34px;
       align-items: center;
       justify-content: center;
-      margin-top: 0.5rem;
-      padding: 0.375rem 0.75rem;
-      font-size: 0.75rem;
-      font-weight: 500;
+      padding: 0 12px;
+      font-size: 15px;
+      font-weight: 600;
       color: white;
-      background-color: #3b82f6;
-      border-radius: 0.5rem;
+      background-color: #ff4d5f;
+      border-radius: 8px;
       text-decoration: none;
-      transition: background-color 0.2s;
+      transition: all 0.3s ease;
+      white-space: nowrap;
     }
     
     .collection-item-cta:hover {
-      background-color: #2563eb;
+      background-color: #ff334a;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     
-    @media (max-width: 640px) {
-      .collection-grid:not(.horizontal) {
-        grid-template-columns: repeat(var(--items-per-row-mobile, 1), 1fr) !important;
-        gap: 1rem !important;
-      }
-    }
-    
-    @media (min-width: 641px) and (max-width: 1024px) {
-      .collection-grid:not(.horizontal) {
-        grid-template-columns: repeat(var(--items-per-row-tablet, 3), 1fr) !important;
-        gap: 1rem !important;
+    @media (max-width: 768px) {
+      .collection-grid.horizontal .collection-item {
+        width: calc(50% - 0.5rem);
       }
     }
 
-    /* Product List Styles */
+    /* Grid Responsive Utility */
+    .collection-grid-responsive {
+      display: grid;
+      grid-template-columns: repeat(var(--items-per-row, 4), minmax(0, 1fr));
+    }
+    
+    @media (max-width: 1024px) {
+      .collection-grid-responsive {
+        grid-template-columns: repeat(var(--items-per-row-tablet, 3), minmax(0, 1fr));
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .collection-grid-responsive {
+        grid-template-columns: repeat(var(--items-per-row-mobile, 1), minmax(0, 1fr));
+        gap: 0.75rem !important;
+      }
+    }
+
+    /* Product List Components */
     .product-list {
       width: 100%;
     }
     
     .product-list-header {
+      display: flex;
+      align-items: center;
       margin-bottom: 1.5rem;
     }
     
-    .product-list-header-title {
-      font-size: 1.5rem;
-      font-weight: 600;
+    .product-list-title {
+      font-size: 1.25rem;
+      font-weight: 700;
       color: #1a1a2e;
     }
     
-    .product-list-container {
+    .product-list-grid {
       display: grid;
     }
     
-    .product-list-container.horizontal {
-      display: flex;
+    .product-list-grid.horizontal {
       overflow-x: auto;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
       padding-bottom: 1rem;
       scroll-snap-type: x mandatory;
+      scrollbar-width: none;
     }
     
-    .product-list-container.horizontal::-webkit-scrollbar {
+    .product-list-grid.horizontal::-webkit-scrollbar {
       display: none;
     }
     
-    .product-list-container.horizontal .product-item {
-      flex: 0 0 240px;
+    .product-list-grid.horizontal .product-item {
+      flex-shrink: 0;
+      width: 240px;
       scroll-snap-align: start;
     }
     
+    @media (min-width: 640px) {
+      .product-list-grid.horizontal .product-item {
+        width: 280px;
+      }
+    }
+    
     .product-item {
-      border-radius: 0.5rem;
-      overflow: hidden;
-      background: white;
-      transition: transform 0.2s;
-    }
-    
-    .product-item-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    
-    .product-item-image-container {
       position: relative;
-      aspect-ratio: 1;
-      background: #f8f9fa;
-      border-radius: 0.25rem;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      transition: all 0.3s ease;
+      text-decoration: none;
     }
     
-    .product-item-image-container img {
+    .product-item:hover .product-item-title {
+      color: #ff4d5f;
+    }
+    
+    .product-item-image {
+      aspect-ratio: 1;
+      width: 100%;
+      position: relative;
+      background: #f8f9fa;
+      overflow: hidden;
+      border-radius: 2px;
+    }
+    
+    .product-item-image img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      transition: transform 0.3s;
+      transition: transform 0.5s;
     }
     
-    .product-item:hover .product-item-image-container img {
+    .product-item:hover .product-item-image img {
       transform: scale(1.05);
     }
     
@@ -815,14 +892,15 @@ export const BASE_CSS = `    * {
       position: absolute;
       top: 0.5rem;
       left: 0.5rem;
+      padding: 0.25rem 0.625rem;
       background: #ff4d5f;
       color: white;
-      font-size: 0.625rem;
+      font-size: 10px;
       font-weight: 700;
-      padding: 0.25rem 0.5rem;
-      border-radius: 0.125rem;
-      text-transform: uppercase;
+      border-radius: 2px;
       z-index: 10;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     
     .product-item-badge.popular {
@@ -830,50 +908,58 @@ export const BASE_CSS = `    * {
     }
     
     .product-item-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
       padding: 0.75rem 0;
     }
     
     .product-item-title {
-      font-size: 0.875rem;
-      font-weight: 400;
-      line-height: 1.4;
+      font-size: 14px;
+      font-weight: 500;
       color: #1a1a2e;
-      margin-bottom: 0.25rem;
+      line-height: 1.25;
+      height: 2.5rem;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      transition: color 0.3s;
     }
     
-    .product-item:hover .product-item-title {
-      color: #ff4d5f;
-    }
-    
-    .product-item-price {
+    .product-item-price-container {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      margin-top: 0.25rem;
     }
     
-    .product-item-price-current {
-      font-size: 0.9375rem;
+    .product-item-price {
+      font-size: 15px;
       font-weight: 700;
       color: #1a1a2e;
     }
     
-    .product-item-price-original {
-      font-size: 0.8125rem;
+    .product-item-original-price {
+      font-size: 13px;
       color: #94a3b8;
       text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+      .product-list-grid.horizontal .product-item {
+        width: 220px;
+      }
     }
 
     @media (max-width: 640px) {
-      .product-list-container.vertical {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 1rem !important;
+      .product-list-grid:not(.horizontal) {
+        grid-template-columns: repeat(var(--items-per-row-mobile, 2), minmax(0, 1fr)) !important;
+        gap: 1rem;
       }
-      .product-list-container.horizontal .product-item {
-        flex: 0 0 200px;
+      .product-list-grid.horizontal .product-item {
+        width: 180px;
       }
     }
 `;
@@ -897,9 +983,16 @@ export function generateDynamicSectionCSS(layout: LayoutSection[]): string {
       gap: 1.5rem;
     }
     
+    @media (max-width: 1024px) {
+      .${sectionClass} {
+        gap: 1rem;
+      }
+    }
+
     @media (max-width: 768px) {
       .${sectionClass} {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
       }
     }`;
     })
