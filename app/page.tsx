@@ -1,45 +1,59 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { useProjectStore } from '@/lib/store'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useProjectStore } from "@/lib/store";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Plus, MoreVertical, FileText, Copy, Trash2, Clock, Layers } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
+} from "@/components/ui/dropdown-menu";
+import {
+  Plus,
+  MoreVertical,
+  FileText,
+  Copy,
+  Trash2,
+  Clock,
+  Layers,
+} from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 export default function Dashboard() {
-  const router = useRouter()
-  const { projects, createProject, deleteProject, duplicateProject, setCurrentProject } = useProjectStore()
-  const [newProjectName, setNewProjectName] = useState('')
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const router = useRouter();
+  const {
+    projects,
+    createProject,
+    deleteProject,
+    duplicateProject,
+    setCurrentProject,
+  } = useProjectStore();
+  const [newProjectName, setNewProjectName] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleCreateProject = () => {
     if (newProjectName.trim()) {
-      const id = createProject(newProjectName.trim())
-      setNewProjectName('')
-      setIsDialogOpen(false)
-      router.push(`/editor/${id}`)
+      const id = createProject(newProjectName.trim());
+      setNewProjectName("");
+      setIsDialogOpen(false);
+      router.push(`/editor/${id}`);
     }
-  }
+  };
 
   const handleOpenProject = (id: string) => {
-    setCurrentProject(id)
-    router.push(`/editor/${id}`)
-  }
+    setCurrentProject(id);
+    router.push(`/editor/${id}`);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -50,9 +64,9 @@ export default function Dashboard() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
               <Layers className="h-5 w-5 text-primary-foreground" />
             </div>
-            <h1 className="text-xl font-semibold text-foreground">Pages Builder</h1>
+            <h1 className="text-xl font-semibold text-foreground">WeBuilder</h1>
           </div>
-          
+
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button className="gap-2">
@@ -69,9 +83,12 @@ export default function Dashboard() {
                   placeholder="Project name"
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleCreateProject()}
+                  onKeyDown={(e) => e.key === "Enter" && handleCreateProject()}
                 />
-                <Button onClick={handleCreateProject} disabled={!newProjectName.trim()}>
+                <Button
+                  onClick={handleCreateProject}
+                  disabled={!newProjectName.trim()}
+                >
                   Create Project
                 </Button>
               </div>
@@ -83,7 +100,9 @@ export default function Dashboard() {
       {/* Main Content */}
       <main className="mx-auto max-w-7xl px-6 py-8">
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold text-foreground">Your Projects</h2>
+          <h2 className="text-2xl font-semibold text-foreground">
+            Your Projects
+          </h2>
           <p className="mt-1 text-muted-foreground">
             Create and manage your website projects
           </p>
@@ -94,11 +113,16 @@ export default function Dashboard() {
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <FileText className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="mt-4 text-lg font-medium text-foreground">No projects yet</h3>
+            <h3 className="mt-4 text-lg font-medium text-foreground">
+              No projects yet
+            </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               Get started by creating your first project
             </p>
-            <Button className="mt-6 gap-2" onClick={() => setIsDialogOpen(true)}>
+            <Button
+              className="mt-6 gap-2"
+              onClick={() => setIsDialogOpen(true)}
+            >
               <Plus className="h-4 w-4" />
               Create Project
             </Button>
@@ -133,7 +157,10 @@ export default function Dashboard() {
                       <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
                         <span>
-                          Edited {formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })}
+                          Edited{" "}
+                          {formatDistanceToNow(new Date(project.updatedAt), {
+                            addSuffix: true,
+                          })}
                         </span>
                       </div>
                     </div>
@@ -149,11 +176,15 @@ export default function Dashboard() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleOpenProject(project.id)}>
+                        <DropdownMenuItem
+                          onClick={() => handleOpenProject(project.id)}
+                        >
                           <FileText className="mr-2 h-4 w-4" />
                           Open
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => duplicateProject(project.id)}>
+                        <DropdownMenuItem
+                          onClick={() => duplicateProject(project.id)}
+                        >
                           <Copy className="mr-2 h-4 w-4" />
                           Duplicate
                         </DropdownMenuItem>
@@ -172,12 +203,14 @@ export default function Dashboard() {
                   <div className="mt-3 flex items-center gap-4 text-xs text-muted-foreground">
                     <div className="flex items-center gap-1.5">
                       <Layers className="h-3 w-3" />
-                      {project.layout.length} section{project.layout.length !== 1 ? 's' : ''}
+                      {project.layout.length} section
+                      {project.layout.length !== 1 ? "s" : ""}
                     </div>
                     {project.history.length > 0 && (
                       <div className="flex items-center gap-1.5">
                         <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                        {project.history.length} change{project.history.length > 1 ? 's' : ''}
+                        {project.history.length} change
+                        {project.history.length > 1 ? "s" : ""}
                       </div>
                     )}
                   </div>
@@ -188,5 +221,5 @@ export default function Dashboard() {
         )}
       </main>
     </div>
-  )
+  );
 }
