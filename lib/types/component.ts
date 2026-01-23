@@ -5,8 +5,8 @@ export interface CollectionItemData {
   title: string;
   subtitle?: string;
   image?: string;
-  ctaText: string;
-  ctaUrl: string;
+  ctaText?: string;
+  url: string;
   ctaBgColor?: string;
   ctaTextColor?: string;
   itemBgColor?: string;

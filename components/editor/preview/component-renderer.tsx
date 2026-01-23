@@ -270,7 +270,7 @@ export function ComponentRenderer({
                       <CollectionItemTitle>{item.title}</CollectionItemTitle>
                       {item.subtitle && <CollectionItemSubtitle>{item.subtitle}</CollectionItemSubtitle>}
                       <CollectionItemCTA 
-                        href={item.ctaUrl}
+                        href={item.url}
                         style={{
                           backgroundColor: item.ctaBgColor || collectionData.itemCtaBgColor,
                           color: item.ctaTextColor || collectionData.itemCtaTextColor || ((item.ctaBgColor || collectionData.itemCtaBgColor) ? 'white' : undefined)

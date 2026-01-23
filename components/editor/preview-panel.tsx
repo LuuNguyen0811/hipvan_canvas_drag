@@ -188,7 +188,7 @@ export function PreviewPanel() {
           <div className="p-4">
             <div
               ref={containerRef}
-              className={`mx-auto rounded-lg border border-border bg-background shadow-sm transition-all duration-300 ${
+              className={`preview-container mx-auto rounded-lg border border-border bg-background shadow-sm transition-all duration-300 ${
                 resizingSection || resizingComponent || resizingSectionHeight ? "select-none" : ""
               }`}
               style={{ maxWidth: viewportWidths[viewport], width: "100%" }}

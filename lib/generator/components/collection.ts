@@ -19,8 +19,9 @@ export function generateCollectionComponent(component: Component): string | null
           </div>` : '';
   
   const gridClass = data.layout === 'horizontal' ? 'horizontal' : '';
+  const itemsPerRow = data.itemsPerRow || 4;
   const gridStyle = data.layout === 'vertical' 
-    ? ` style="grid-template-columns: repeat(${data.itemsPerRow || 4}, 1fr); gap: ${data.gap || '1rem'};"`
+    ? ` style="--items-per-row: ${itemsPerRow}; --items-per-row-mobile: ${Math.min(itemsPerRow, 1)}; --items-per-row-tablet: ${Math.min(itemsPerRow, 3)}; grid-template-columns: repeat(var(--items-per-row), 1fr); gap: ${data.gap || '1rem'};"`
     : ` style="gap: ${data.gap || '1rem'};"`;
   
   const itemsHtml = data.items.map((item) => {
@@ -41,7 +42,7 @@ export function generateCollectionComponent(component: Component): string | null
               <div class="collection-item-content">
                 <h4 class="collection-item-title">${item.title}</h4>
                 ${subtitleHtml}
-                <a href="${item.ctaUrl}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
+                <a href="${item.url}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
               </div>
             </div>`;
   }).join('\n');

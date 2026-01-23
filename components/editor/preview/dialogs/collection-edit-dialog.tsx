@@ -181,7 +181,7 @@ export function CollectionEditDialog({
                                       id: `item_${Date.now()}`,
                                       title: collectionSearchQuery,
                                       ctaText: 'Shop',
-                                      ctaUrl: '#',
+                                      url: '#',
                                     }
                                     setEditingCollectionData({
                                       ...editingCollectionData,
@@ -210,7 +210,7 @@ export function CollectionEditDialog({
                                         title: col.name,
                                         image: col.image,
                                         ctaText: col.ctaText,
-                                        ctaUrl: col.ctaUrl,
+                                        url: col.url,
                                       }));
                                       setEditingCollectionData({
                                         ...editingCollectionData,
@@ -251,7 +251,7 @@ export function CollectionEditDialog({
                               id: `item_${Date.now()}`,
                               title: 'New Item',
                               ctaText: 'Shop',
-                              ctaUrl: '#',
+                              url: '#',
                             }
                             setEditingCollectionData({
                               ...editingCollectionData,
@@ -315,7 +315,7 @@ export function CollectionEditDialog({
                             <div className="space-y-1.5">
                               <Label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Item Title</Label>
                               <Input
-                                value={item.title}
+                                value={item.title || ''}
                                 placeholder="Enter item title..."
                                 className="h-10 rounded-xl bg-muted/20 border-divider/50 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all font-medium text-sm"
                                 onChange={(e) => {
@@ -330,12 +330,12 @@ export function CollectionEditDialog({
                             <div className="space-y-1.5">
                               <Label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Target URL</Label>
                               <Input
-                                value={item.ctaUrl}
+                                value={item.url || ''}
                                 placeholder="/shop/..."
                                 className="h-10 rounded-xl bg-muted/20 border-divider/50 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all text-xs font-mono"
                                 onChange={(e) => {
                                   const newItems = [...(editingCollectionData.items || [])]
-                                  newItems[index] = { ...newItems[index], ctaUrl: e.target.value }
+                                  newItems[index] = { ...newItems[index], url: e.target.value }
                                   setEditingCollectionData({ ...editingCollectionData, items: newItems })
                                 }}
                               />

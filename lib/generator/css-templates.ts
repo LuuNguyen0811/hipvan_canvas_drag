@@ -728,9 +728,17 @@ export const BASE_CSS = `    * {
       background-color: #2563eb;
     }
     
-    @media (max-width: 768px) {
+    @media (max-width: 640px) {
       .collection-grid:not(.horizontal) {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(var(--items-per-row-mobile, 1), 1fr) !important;
+        gap: 1rem !important;
+      }
+    }
+    
+    @media (min-width: 641px) and (max-width: 1024px) {
+      .collection-grid:not(.horizontal) {
+        grid-template-columns: repeat(var(--items-per-row-tablet, 3), 1fr) !important;
+        gap: 1rem !important;
       }
     }
 `;
