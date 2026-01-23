@@ -14,7 +14,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus } from "lucide-react";
 
 // Internal Sub-components
-import { ViewportControls, type ViewportSize } from "./preview/viewport-controls";
+import {
+  ViewportControls,
+  type ViewportSize,
+} from "./preview/viewport-controls";
 import { SectionRenderer } from "./preview/section-renderer";
 import { ComponentRenderer } from "./preview/component-renderer";
 import { EditComponentDialog } from "./preview/dialogs/edit-component-dialog";
@@ -87,7 +90,9 @@ export function PreviewPanel() {
   const [dragOverSection, setDragOverSection] = useState<string | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<number | null>(null);
   const [dragOverLayout, setDragOverLayout] = useState<string | null>(null);
-  const [dragOverLayoutColumn, setDragOverLayoutColumn] = useState<number | null>(null);
+  const [dragOverLayoutColumn, setDragOverLayoutColumn] = useState<
+    number | null
+  >(null);
   const [imageUploadTarget, setImageUploadTarget] = useState<{
     sectionId: string;
     componentId: string;
@@ -103,13 +108,17 @@ export function PreviewPanel() {
     component: Component;
   } | null>(null);
   const [collectionSearchQuery, setCollectionSearchQuery] = useState("");
-  const [collectionSearchResults, setCollectionSearchResults] = useState<any[]>([]);
-  const [editingCollectionData, setEditingCollectionData] = useState<CollectionComponentData | null>(null);
-  const [draggingCollectionItemIndex, setDraggingCollectionItemIndex] = useState<{
-    sectionId: string;
-    componentId: string;
-    index: number;
-  } | null>(null);
+  const [collectionSearchResults, setCollectionSearchResults] = useState<any[]>(
+    [],
+  );
+  const [editingCollectionData, setEditingCollectionData] =
+    useState<CollectionComponentData | null>(null);
+  const [draggingCollectionItemIndex, setDraggingCollectionItemIndex] =
+    useState<{
+      sectionId: string;
+      componentId: string;
+      index: number;
+    } | null>(null);
 
   // Insertion State
   const [sectionInsertTarget, setSectionInsertTarget] = useState<{
@@ -125,7 +134,9 @@ export function PreviewPanel() {
     anchorId?: string;
     placement?: "before" | "after";
   } | null>(null);
-  const [draggingType, setDraggingType] = useState<"section" | "element" | "component" | null>(null);
+  const [draggingType, setDraggingType] = useState<
+    "section" | "element" | "component" | null
+  >(null);
 
   // Resizing state
   const [resizingSection, setResizingSection] = useState<string | null>(null);
@@ -135,7 +146,9 @@ export function PreviewPanel() {
     componentId: string;
     direction: "width" | "height";
   } | null>(null);
-  const [resizingSectionHeight, setResizingSectionHeight] = useState<string | null>(null);
+  const [resizingSectionHeight, setResizingSectionHeight] = useState<
+    string | null
+  >(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeAnimationFrameRef = useRef<number | null>(null);
@@ -148,7 +161,9 @@ export function PreviewPanel() {
     const speed = opts?.speed ?? 18;
     const threshold = opts?.threshold ?? 64;
     const el = e.currentTarget as HTMLElement;
-    const viewport = el.closest('[data-slot="scroll-area-viewport"]') as HTMLElement | null;
+    const viewport = el.closest(
+      '[data-slot="scroll-area-viewport"]',
+    ) as HTMLElement | null;
     if (!viewport) return;
     const rect = viewport.getBoundingClientRect();
     const y = e.clientY;
@@ -161,12 +176,17 @@ export function PreviewPanel() {
 
   useEffect(() => {
     if (!editorTarget || !currentProject) return;
-    const section = currentProject.layout.find((s) => s.id === editorTarget.sectionId);
+    const section = currentProject.layout.find(
+      (s) => s.id === editorTarget.sectionId,
+    );
     if (!section) {
       clearEditorTarget();
       return;
     }
-    const comp = findComponentInTree(section.components, editorTarget.componentId);
+    const comp = findComponentInTree(
+      section.components,
+      editorTarget.componentId,
+    );
     if (!comp) {
       clearEditorTarget();
       return;
@@ -195,7 +215,11 @@ export function PreviewPanel() {
     loadAllImages();
   }, [currentProject?.id]);
 
-  const handleFileUpload = async (file: File, sectionId: string, componentId: string) => {
+  const handleFileUpload = async (
+    file: File,
+    sectionId: string,
+    componentId: string,
+  ) => {
     if (!file.type.startsWith("image/")) {
       alert("Please upload an image file (JPG, PNG, GIF, WebP)");
       return;
@@ -222,7 +246,11 @@ export function PreviewPanel() {
     }
   };
 
-  const handleImageDrop = (e: React.DragEvent, sectionId: string, componentId: string) => {
+  const handleImageDrop = (
+    e: React.DragEvent,
+    sectionId: string,
+    componentId: string,
+  ) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDraggingFile(false);
@@ -258,6 +286,40 @@ export function PreviewPanel() {
     setDragOverLayout(null);
     setDragOverLayoutColumn(null);
     setInsertTarget(null);
+    setIsDraggingFile(false);
+
+    // Check if files are being dropped (e.g., image files)
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const isImage = file.type.startsWith("image/");
+      if (isImage) {
+        // Create a new image component and upload the image
+        const componentProps =
+          span === "full"
+            ? { span: "full" }
+            : columnIndex !== undefined
+              ? { span: "column", columnIndex }
+              : undefined;
+        const newImageComponent: Component = {
+          id: generateId(),
+          type: "image",
+          content: file.name,
+          styles: {},
+          props: componentProps,
+          width: "100%",
+        };
+        if (layoutId) {
+          addComponentToLayout(sectionId, layoutId, newImageComponent);
+        } else {
+          addComponent(sectionId, newImageComponent);
+        }
+        // Upload the image to the newly created component
+        handleFileUpload(file, sectionId, newImageComponent.id);
+        if (showOnboarding) setShowOnboarding(false);
+        return;
+      }
+    }
 
     const componentType = e.dataTransfer.getData("componentType");
     const layoutTemplateId = e.dataTransfer.getData("layoutTemplateId");
@@ -268,7 +330,12 @@ export function PreviewPanel() {
     if (layoutTemplateId) {
       const template = SECTION_TEMPLATES.find((t) => t.id === layoutTemplateId);
       if (!template) return;
-      const layoutProps = span === "full" ? { span: "full" } : columnIndex !== undefined ? { span: "column", columnIndex } : undefined;
+      const layoutProps =
+        span === "full"
+          ? { span: "full" }
+          : columnIndex !== undefined
+            ? { span: "column", columnIndex }
+            : undefined;
       const newLayout: Component = {
         id: generateId(),
         type: "layout",
@@ -292,7 +359,8 @@ export function PreviewPanel() {
     if (componentType) {
       const defaultContent: Record<string, string> = {
         heading: "Your Heading Here",
-        paragraph: "This is a paragraph. Click to edit and add your own content.",
+        paragraph:
+          "This is a paragraph. Click to edit and add your own content.",
         image: "Image Placeholder",
         button: "Click Me",
         divider: "",
@@ -310,17 +378,27 @@ export function PreviewPanel() {
         showHeader: true,
         headerTitle: "Shop Our Collections",
       };
-      const componentProps = span === "full" ? { span: "full" } : columnIndex !== undefined ? { span: "column", columnIndex } : undefined;
+      const componentProps =
+        span === "full"
+          ? { span: "full" }
+          : columnIndex !== undefined
+            ? { span: "column", columnIndex }
+            : undefined;
       const newComponent: Component = {
         id: generateId(),
         type: componentType as Component["type"],
         content: defaultContent[componentType] || "",
         styles: {},
         props: componentProps,
-        formatting: (componentType === "heading" || componentType === "paragraph") ? { align: "center" } : undefined,
+        formatting:
+          componentType === "heading" || componentType === "paragraph"
+            ? { align: "center" }
+            : undefined,
         width: componentType === "image" ? "100%" : undefined,
         height: componentType === "spacer" ? "4rem" : undefined,
-        ...(componentType === "collection" && { collectionData: defaultCollectionData }),
+        ...(componentType === "collection" && {
+          collectionData: defaultCollectionData,
+        }),
       };
       if (layoutId) {
         addComponentToLayout(sectionId, layoutId, newComponent, insertIndex);
@@ -329,12 +407,13 @@ export function PreviewPanel() {
       }
       if (showOnboarding) setShowOnboarding(false);
     } else if (draggedComponentId && fromSectionId) {
-      const section = currentProject?.layout.find(s => s.id === sectionId);
-      const targetIndex = insertIndex ?? (
-        layoutId 
-          ? (findComponentInTree(section?.components || [], layoutId)?.children?.length || 0)
-          : (section?.components.length || 0)
-      );
+      const section = currentProject?.layout.find((s) => s.id === sectionId);
+      const targetIndex =
+        insertIndex ??
+        (layoutId
+          ? findComponentInTree(section?.components || [], layoutId)?.children
+              ?.length || 0
+          : section?.components.length || 0);
 
       moveComponent(fromSectionId, sectionId, draggedComponentId, targetIndex, {
         targetColumnIndex: span === "full" ? undefined : columnIndex,
@@ -345,10 +424,23 @@ export function PreviewPanel() {
     }
   };
 
-  const handleDragOver = (e: React.DragEvent, sectionId: string, columnIndex?: number, layoutId?: string, span?: "full" | "column") => {
+  const handleDragOver = (
+    e: React.DragEvent,
+    sectionId: string,
+    columnIndex?: number,
+    layoutId?: string,
+    span?: "full" | "column",
+  ) => {
     e.preventDefault();
     autoScrollNearestViewport(e);
     setSectionInsertTarget(null);
+
+    // Check if files are being dragged (e.g., image files from desktop)
+    const hasFiles = e.dataTransfer.types.includes("Files");
+    if (hasFiles) {
+      setIsDraggingFile(true);
+    }
+
     if (layoutId) {
       setDragOverSection(null);
       setDragOverColumn(null);
@@ -370,9 +462,15 @@ export function PreviewPanel() {
     setDragOverLayoutColumn(null);
     setInsertTarget(null);
     setSectionInsertTarget(null);
+    setIsDraggingFile(false);
   };
 
-  const handleComponentDragStart = (e: React.DragEvent, sectionId: string, componentId: string, fromLayoutId?: string | null) => {
+  const handleComponentDragStart = (
+    e: React.DragEvent,
+    sectionId: string,
+    componentId: string,
+    fromLayoutId?: string | null,
+  ) => {
     e.dataTransfer.setData("componentId", componentId);
     e.dataTransfer.setData("fromSectionId", sectionId);
     if (fromLayoutId) e.dataTransfer.setData("fromLayoutId", fromLayoutId);
@@ -380,7 +478,11 @@ export function PreviewPanel() {
     setDraggingType("component");
   };
 
-  const handleSectionSlotDragOver = (e: React.DragEvent, index: number, placement: "before" | "after") => {
+  const handleSectionSlotDragOver = (
+    e: React.DragEvent,
+    index: number,
+    placement: "before" | "after",
+  ) => {
     e.preventDefault();
     e.stopPropagation();
     autoScrollNearestViewport(e);
@@ -407,26 +509,48 @@ export function PreviewPanel() {
     setDraggingType(null);
   };
 
-  const handleCollectionItemDragStart = (e: React.DragEvent, sectionId: string, componentId: string, itemIndex: number) => {
+  const handleCollectionItemDragStart = (
+    e: React.DragEvent,
+    sectionId: string,
+    componentId: string,
+    itemIndex: number,
+  ) => {
     e.stopPropagation();
     e.dataTransfer.setData("collectionItemIndex", itemIndex.toString());
     e.dataTransfer.setData("sectionId", sectionId);
     e.dataTransfer.setData("componentId", componentId);
     e.dataTransfer.effectAllowed = "move";
-    setDraggingCollectionItemIndex({ sectionId, componentId, index: itemIndex });
+    setDraggingCollectionItemIndex({
+      sectionId,
+      componentId,
+      index: itemIndex,
+    });
     setTimeout(() => {
       if (e.target instanceof HTMLElement) e.target.style.opacity = "0.2";
     }, 0);
   };
 
-  const handleCollectionItemDragOver = (e: React.DragEvent, sectionId: string, componentId: string, hoverIndex: number) => {
+  const handleCollectionItemDragOver = (
+    e: React.DragEvent,
+    sectionId: string,
+    componentId: string,
+    hoverIndex: number,
+  ) => {
     e.preventDefault();
     e.stopPropagation();
     if (!draggingCollectionItemIndex) return;
-    const { sectionId: sId, componentId: cId, index: dIdx } = draggingCollectionItemIndex;
+    const {
+      sectionId: sId,
+      componentId: cId,
+      index: dIdx,
+    } = draggingCollectionItemIndex;
     if (sId === sectionId && cId === componentId && dIdx !== hoverIndex) {
       reorderCollectionItems(sectionId, componentId, dIdx, hoverIndex);
-      setDraggingCollectionItemIndex({ sectionId, componentId, index: hoverIndex });
+      setDraggingCollectionItemIndex({
+        sectionId,
+        componentId,
+        index: hoverIndex,
+      });
     }
   };
 
@@ -443,7 +567,11 @@ export function PreviewPanel() {
 
   const handleSaveEdit = () => {
     if (editingComponent) {
-      updateComponent(editingComponent.sectionId, editingComponent.component.id, editingComponent.component);
+      updateComponent(
+        editingComponent.sectionId,
+        editingComponent.component.id,
+        editingComponent.component,
+      );
       saveToHistory("Updated component");
       setEditingComponent(null);
     }
@@ -451,7 +579,11 @@ export function PreviewPanel() {
 
   const handleSaveCollection = () => {
     if (editingCollection && editingCollectionData) {
-      updateComponent(editingCollection.sectionId, editingCollection.component.id, { collectionData: editingCollectionData });
+      updateComponent(
+        editingCollection.sectionId,
+        editingCollection.component.id,
+        { collectionData: editingCollectionData },
+      );
       saveToHistory("Updated collection");
       setEditingCollection(null);
       setEditingCollectionData(null);
@@ -459,92 +591,142 @@ export function PreviewPanel() {
   };
 
   // Resize Handlers
-  const handleResizeStart = (sectionId: string, dividerIndex: number, e: React.MouseEvent) => {
+  const handleResizeStart = (
+    sectionId: string,
+    dividerIndex: number,
+    e: React.MouseEvent,
+  ) => {
     e.preventDefault();
     setResizingSection(sectionId);
     setResizingDivider(dividerIndex);
   };
 
-  const handleResizeMove = useCallback((e: React.MouseEvent) => {
-    if (resizingSection === null || resizingDivider === null || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = (x / rect.width) * 100;
-    const section = currentProject?.layout.find(s => s.id === resizingSection);
-    if (!section) return;
-    const newWidths = [...(section.columnWidths || Array(section.columns).fill(`${100 / section.columns}%`))];
-    const prevSum = newWidths.slice(0, resizingDivider).reduce((sum, w) => sum + parseFloat(w), 0);
-    const currentWidth = percentage - prevSum;
-    const nextWidth = parseFloat(newWidths[resizingDivider]) + parseFloat(newWidths[resizingDivider + 1]) - currentWidth;
-    if (currentWidth > 5 && nextWidth > 5) {
-      newWidths[resizingDivider] = `${currentWidth}%`;
-      newWidths[resizingDivider + 1] = `${nextWidth}%`;
-      updateSection(resizingSection, { columnWidths: newWidths });
-    }
-  }, [resizingSection, resizingDivider, currentProject, updateSection]);
+  const handleResizeMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (
+        resizingSection === null ||
+        resizingDivider === null ||
+        !containerRef.current
+      )
+        return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percentage = (x / rect.width) * 100;
+      const section = currentProject?.layout.find(
+        (s) => s.id === resizingSection,
+      );
+      if (!section) return;
+      const newWidths = [
+        ...(section.columnWidths ||
+          Array(section.columns).fill(`${100 / section.columns}%`)),
+      ];
+      const prevSum = newWidths
+        .slice(0, resizingDivider)
+        .reduce((sum, w) => sum + parseFloat(w), 0);
+      const currentWidth = percentage - prevSum;
+      const nextWidth =
+        parseFloat(newWidths[resizingDivider]) +
+        parseFloat(newWidths[resizingDivider + 1]) -
+        currentWidth;
+      if (currentWidth > 5 && nextWidth > 5) {
+        newWidths[resizingDivider] = `${currentWidth}%`;
+        newWidths[resizingDivider + 1] = `${nextWidth}%`;
+        updateSection(resizingSection, { columnWidths: newWidths });
+      }
+    },
+    [resizingSection, resizingDivider, currentProject, updateSection],
+  );
 
-  const handleComponentResizeStart = (e: React.MouseEvent, sectionId: string, componentId: string, direction: "width" | "height") => {
+  const handleComponentResizeStart = (
+    e: React.MouseEvent,
+    sectionId: string,
+    componentId: string,
+    direction: "width" | "height",
+  ) => {
     e.preventDefault();
     e.stopPropagation();
     setResizingComponent({ sectionId, componentId, direction });
   };
 
-  const handleComponentResizeMove = useCallback((e: React.MouseEvent) => {
-    if (!resizingComponent || !containerRef.current) return;
-    pendingResizeRef.current = { x: e.clientX, y: e.clientY };
-    if (resizeAnimationFrameRef.current === null) {
-      resizeAnimationFrameRef.current = requestAnimationFrame(() => {
-        if (!pendingResizeRef.current || !containerRef.current) {
+  const handleComponentResizeMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!resizingComponent || !containerRef.current) return;
+      pendingResizeRef.current = { x: e.clientX, y: e.clientY };
+      if (resizeAnimationFrameRef.current === null) {
+        resizeAnimationFrameRef.current = requestAnimationFrame(() => {
+          if (!pendingResizeRef.current || !containerRef.current) {
+            resizeAnimationFrameRef.current = null;
+            return;
+          }
+          const { x, y } = pendingResizeRef.current;
+          const componentElement = containerRef.current.querySelector(
+            `[data-component-id="${resizingComponent.componentId}"]`,
+          );
+          if (!componentElement) {
+            resizeAnimationFrameRef.current = null;
+            return;
+          }
+          const rect = componentElement.getBoundingClientRect();
+          if (resizingComponent.direction === "width") {
+            const newWidth = Math.max(100, x - rect.left);
+            updateComponent(
+              resizingComponent.sectionId,
+              resizingComponent.componentId,
+              { width: `${newWidth}px` },
+              true,
+            );
+          } else {
+            const newHeight = Math.max(50, y - rect.top);
+            updateComponent(
+              resizingComponent.sectionId,
+              resizingComponent.componentId,
+              { height: `${newHeight}px` },
+              true,
+            );
+          }
           resizeAnimationFrameRef.current = null;
-          return;
-        }
-        const { x, y } = pendingResizeRef.current;
-        const componentElement = containerRef.current.querySelector(`[data-component-id="${resizingComponent.componentId}"]`);
-        if (!componentElement) {
-          resizeAnimationFrameRef.current = null;
-          return;
-        }
-        const rect = componentElement.getBoundingClientRect();
-        if (resizingComponent.direction === "width") {
-          const newWidth = Math.max(100, x - rect.left);
-          updateComponent(resizingComponent.sectionId, resizingComponent.componentId, { width: `${newWidth}px` }, true);
-        } else {
-          const newHeight = Math.max(50, y - rect.top);
-          updateComponent(resizingComponent.sectionId, resizingComponent.componentId, { height: `${newHeight}px` }, true);
-        }
-        resizeAnimationFrameRef.current = null;
-      });
-    }
-  }, [resizingComponent, updateComponent]);
+        });
+      }
+    },
+    [resizingComponent, updateComponent],
+  );
 
-  const handleSectionHeightResizeStart = useCallback((e: React.MouseEvent, sectionId: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setResizingSectionHeight(sectionId);
-  }, []);
+  const handleSectionHeightResizeStart = useCallback(
+    (e: React.MouseEvent, sectionId: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setResizingSectionHeight(sectionId);
+    },
+    [],
+  );
 
-  const handleSectionHeightResizeMove = useCallback((e: React.MouseEvent) => {
-    if (!resizingSectionHeight || !containerRef.current) return;
-    pendingResizeRef.current = { x: e.clientX, y: e.clientY };
-    if (resizeAnimationFrameRef.current === null) {
-      resizeAnimationFrameRef.current = requestAnimationFrame(() => {
-        if (!pendingResizeRef.current || !containerRef.current) {
+  const handleSectionHeightResizeMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!resizingSectionHeight || !containerRef.current) return;
+      pendingResizeRef.current = { x: e.clientX, y: e.clientY };
+      if (resizeAnimationFrameRef.current === null) {
+        resizeAnimationFrameRef.current = requestAnimationFrame(() => {
+          if (!pendingResizeRef.current || !containerRef.current) {
+            resizeAnimationFrameRef.current = null;
+            return;
+          }
+          const { y } = pendingResizeRef.current;
+          const sectionElement = containerRef.current.querySelector(
+            `[data-section-id="${resizingSectionHeight}"]`,
+          );
+          if (!sectionElement) {
+            resizeAnimationFrameRef.current = null;
+            return;
+          }
+          const rect = sectionElement.getBoundingClientRect();
+          const newHeight = Math.max(100, y - rect.top);
+          updateSection(resizingSectionHeight, { minHeight: `${newHeight}px` });
           resizeAnimationFrameRef.current = null;
-          return;
-        }
-        const { y } = pendingResizeRef.current;
-        const sectionElement = containerRef.current.querySelector(`[data-section-id="${resizingSectionHeight}"]`);
-        if (!sectionElement) {
-          resizeAnimationFrameRef.current = null;
-          return;
-        }
-        const rect = sectionElement.getBoundingClientRect();
-        const newHeight = Math.max(100, y - rect.top);
-        updateSection(resizingSectionHeight, { minHeight: `${newHeight}px` });
-        resizeAnimationFrameRef.current = null;
-      });
-    }
-  }, [resizingSectionHeight, updateSection]);
+        });
+      }
+    },
+    [resizingSectionHeight, updateSection],
+  );
 
   const handleResizeEnd = () => {
     if (resizingSection || resizingComponent || resizingSectionHeight) {
@@ -565,10 +747,20 @@ export function PreviewPanel() {
       return { display: "flex", flexDirection: "column", gap: "1rem" };
     }
     if (section.columnWidths && section.columnWidths.length > 0) {
-      return { display: "grid", gridTemplateColumns: section.columnWidths.join(" "), gap: "0", minWidth: 0 };
+      return {
+        display: "grid",
+        gridTemplateColumns: section.columnWidths.join(" "),
+        gap: "0",
+        minWidth: 0,
+      };
     }
     const cols = section.columns || 1;
-    return { display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: "0", minWidth: 0 };
+    return {
+      display: "grid",
+      gridTemplateColumns: `repeat(${cols}, 1fr)`,
+      gap: "0",
+      minWidth: 0,
+    };
   };
 
   return (
@@ -592,22 +784,28 @@ export function PreviewPanel() {
 
       <div className="flex-1 overflow-hidden" data-slot="scroll-area-viewport">
         <ScrollArea className="h-full">
-          <div className="p-4">
+          <div className={viewport === "mobile" ? "p-0" : "p-4"}>
             <div
               ref={containerRef}
-              className={`mx-auto rounded-lg border border-border bg-background shadow-sm transition-all duration-300 ${
-                resizingSection || resizingComponent || resizingSectionHeight ? "select-none" : ""
-              }`}
+              className={`mx-auto bg-background transition-all duration-300 ${
+                viewport === "mobile"
+                  ? ""
+                  : "rounded-lg border border-border shadow-sm"
+              } ${resizingSection || resizingComponent || resizingSectionHeight ? "select-none" : ""}`}
               style={{ maxWidth: viewportWidths[viewport], width: "100%" }}
             >
-              <div className="p-4">
+              <div className={viewport === "mobile" ? "p-0" : "p-4"}>
                 {!currentProject || currentProject.layout.length === 0 ? (
                   <div className="flex h-48 flex-col items-center justify-center text-center">
                     <div className="mb-3 rounded-full bg-muted p-3">
                       <Plus className="h-6 w-6 text-muted-foreground" />
                     </div>
-                    <p className="font-medium text-foreground">Start Building</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Add sections from the Sections tab on the left</p>
+                    <p className="font-medium text-foreground">
+                      Start Building
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Add sections from the Sections tab on the left
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -616,18 +814,20 @@ export function PreviewPanel() {
                         {/* Section insertion slot - before current */}
                         <div
                           className={`relative h-2 transition-all ${sectionInsertTarget?.index === index ? "h-8" : "h-2 hover:h-4"}`}
-                          onDragOver={(e) => handleSectionSlotDragOver(e, index, "before")}
+                          onDragOver={(e) =>
+                            handleSectionSlotDragOver(e, index, "before")
+                          }
                           onDrop={(e) => handleSectionSlotDrop(e, index)}
                           onDragLeave={handleDragLeave}
                         >
                           {sectionInsertTarget?.index === index && (
-                             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                               <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                               <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
-                                 <Plus className="h-3 w-3" />
-                               </div>
-                               <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                             </div>
+                            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                              <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                              <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+                                <Plus className="h-3 w-3" />
+                              </div>
+                              <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                            </div>
                           )}
                         </div>
 
@@ -639,12 +839,17 @@ export function PreviewPanel() {
                           dragOverColumn={dragOverColumn}
                           isResizing={resizingSection === section.id}
                           resizingDivider={resizingDivider}
-                          isResizingHeight={resizingSectionHeight === section.id}
+                          isResizingHeight={
+                            resizingSectionHeight === section.id
+                          }
+                          isDraggingFile={isDraggingFile}
                           handleDrop={handleDrop}
                           handleDragOver={handleDragOver}
                           handleDragLeave={handleDragLeave}
                           handleResizeStart={handleResizeStart}
-                          handleSectionHeightResizeStart={handleSectionHeightResizeStart}
+                          handleSectionHeightResizeStart={
+                            handleSectionHeightResizeStart
+                          }
                           removeSection={removeSection}
                           getGridStyle={getGridStyle}
                           renderComponent={(comp, sId) => (
@@ -655,23 +860,43 @@ export function PreviewPanel() {
                               imageUrls={imageUrls}
                               uploadingImage={uploadingImage}
                               imageUploadTarget={imageUploadTarget}
-                              draggingCollectionItemIndex={draggingCollectionItemIndex}
+                              draggingCollectionItemIndex={
+                                draggingCollectionItemIndex
+                              }
                               resizingComponent={resizingComponent}
                               isDraggingFile={isDraggingFile}
-                              handleComponentDragStart={handleComponentDragStart}
-                              handleCollectionItemDragStart={handleCollectionItemDragStart}
-                              handleCollectionItemDragOver={handleCollectionItemDragOver}
-                              handleCollectionItemDragEnd={handleCollectionItemDragEnd}
-                              handleCollectionItemDrop={handleCollectionItemDrop}
+                              handleComponentDragStart={
+                                handleComponentDragStart
+                              }
+                              handleCollectionItemDragStart={
+                                handleCollectionItemDragStart
+                              }
+                              handleCollectionItemDragOver={
+                                handleCollectionItemDragOver
+                              }
+                              handleCollectionItemDragEnd={
+                                handleCollectionItemDragEnd
+                              }
+                              handleCollectionItemDrop={
+                                handleCollectionItemDrop
+                              }
                               handleImageDrop={handleImageDrop}
                               handleImageDragOver={handleImageDragOver}
                               handleImageDragLeave={handleImageDragLeave}
-                              handleComponentResizeStart={handleComponentResizeStart}
+                              handleComponentResizeStart={
+                                handleComponentResizeStart
+                              }
                               setEditingComponent={setEditingComponent}
                               setEditingCollection={setEditingCollection}
-                              setEditingCollectionData={setEditingCollectionData}
-                              setCollectionSearchQuery={setCollectionSearchQuery}
-                              setCollectionSearchResults={setCollectionSearchResults}
+                              setEditingCollectionData={
+                                setEditingCollectionData
+                              }
+                              setCollectionSearchQuery={
+                                setCollectionSearchQuery
+                              }
+                              setCollectionSearchResults={
+                                setCollectionSearchResults
+                              }
                               getAllCollections={getAllCollections}
                               removeComponent={removeComponent}
                               setImageUploadTarget={setImageUploadTarget}
@@ -683,19 +908,21 @@ export function PreviewPanel() {
                         {index === currentProject.layout.length - 1 && (
                           <div
                             className={`relative h-2 transition-all ${sectionInsertTarget?.index === index + 1 ? "h-8" : "h-2 hover:h-4"}`}
-                            onDragOver={(e) => handleSectionSlotDragOver(e, index + 1, "before")}
+                            onDragOver={(e) =>
+                              handleSectionSlotDragOver(e, index + 1, "before")
+                            }
                             onDrop={(e) => handleSectionSlotDrop(e, index + 1)}
                             onDragLeave={handleDragLeave}
                           >
-                             {sectionInsertTarget?.index === index + 1 && (
-                               <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                 <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                                 <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
-                                   <Plus className="h-3 w-3" />
-                                 </div>
-                                 <div className="h-0.5 flex-1 bg-primary rounded-full" />
-                               </div>
-                             )}
+                            {sectionInsertTarget?.index === index + 1 && (
+                              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+                                  <Plus className="h-3 w-3" />
+                                </div>
+                                <div className="h-0.5 flex-1 bg-primary rounded-full" />
+                              </div>
+                            )}
                           </div>
                         )}
                       </React.Fragment>
@@ -720,7 +947,11 @@ export function PreviewPanel() {
         uploadingImage={uploadingImage}
         handleFileUpload={(file) => {
           if (imageUploadTarget) {
-            handleFileUpload(file, imageUploadTarget.sectionId, imageUploadTarget.componentId);
+            handleFileUpload(
+              file,
+              imageUploadTarget.sectionId,
+              imageUploadTarget.componentId,
+            );
           }
         }}
       />

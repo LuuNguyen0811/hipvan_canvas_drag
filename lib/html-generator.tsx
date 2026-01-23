@@ -857,26 +857,26 @@ function generateComponent(component: Component): string {
   // Helper function to combine component.styles and component.formatting
   const getStyleAttr = () => {
     const styles: Record<string, string> = { ...component.styles };
-    
+
     // Add formatting properties if they exist
     if (component.formatting) {
       if (component.formatting.bold !== undefined) {
-        styles['font-weight'] = component.formatting.bold ? 'bold' : 'normal';
+        styles["font-weight"] = component.formatting.bold ? "bold" : "normal";
       }
       if (component.formatting.italic) {
-        styles['font-style'] = 'italic';
+        styles["font-style"] = "italic";
       }
       if (component.formatting.underline) {
-        styles['text-decoration'] = 'underline';
+        styles["text-decoration"] = "underline";
       }
       if (component.formatting.align) {
-        styles['text-align'] = component.formatting.align;
+        styles["text-align"] = component.formatting.align;
       }
       if (component.formatting.fontSize) {
-        styles['font-size'] = component.formatting.fontSize;
+        styles["font-size"] = component.formatting.fontSize;
       }
     }
-    
+
     const styleEntries = Object.entries(styles);
     return styleEntries.length
       ? ` style="${styleEntries.map(([k, v]) => `${k}: ${v}`).join("; ")}"`
@@ -888,11 +888,15 @@ function generateComponent(component: Component): string {
   switch (component.type) {
     // Basic Components
     case "heading":
-      const headingContent = renderInlineMarkdownToHTML(component.content || "Heading")
+      const headingContent = renderInlineMarkdownToHTML(
+        component.content || "Heading",
+      ).replace(/\n/g, "<br/>");
       return `        <h2 class="component"${styleAttr}>${headingContent}</h2>`;
 
     case "paragraph":
-      const paragraphContent = renderInlineMarkdownToHTML(component.content || "Your paragraph text goes here.")
+      const paragraphContent = renderInlineMarkdownToHTML(
+        component.content || "Your paragraph text goes here.",
+      ).replace(/\n/g, "<br/>");
       return `        <p class="component"${styleAttr}>${paragraphContent}</p>`;
 
     case "image":
@@ -924,7 +928,7 @@ function generateComponent(component: Component): string {
       return `        <ul class="component"${styleAttr}>
 ${items}
         </ul>`;
-    
+
     // Form Components
     case "input":
       return `        <div class="form-field"${styleAttr}>
@@ -945,7 +949,10 @@ ${items}
         { label: "Option 3", value: "3" },
       ];
       const selectOptionsHtml = selectOptions
-        .map((opt) => `              <option value="${opt.value}">${opt.label}</option>`)
+        .map(
+          (opt) =>
+            `              <option value="${opt.value}">${opt.label}</option>`,
+        )
         .join("\n");
       return `        <div class="form-field"${styleAttr}>
           ${component.label ? `<label class="form-label">${component.label}</label>` : ""}
@@ -972,7 +979,7 @@ ${selectOptionsHtml}
           (opt) => `          <label class="radio-label">
             <input type="radio" name="radio-${component.id}" value="${opt.value}" class="form-radio" ${component.disabled ? "disabled" : ""} />
             <span>${opt.label}</span>
-          </label>`
+          </label>`,
         )
         .join("\n");
       return `        <div class="form-field radio-group"${styleAttr}>
@@ -994,7 +1001,10 @@ ${radioHtml}
         { title: "Contact", content: "/contact" },
       ];
       const navItemsHtml = navItems
-        .map((item) => `            <a href="${item.content}" class="nav-link">${item.title}</a>`)
+        .map(
+          (item) =>
+            `            <a href="${item.content}" class="nav-link">${item.title}</a>`,
+        )
         .join("\n");
       return `        <nav class="navbar"${styleAttr}>
           <div class="navbar-brand">${component.content || "Logo"}</div>
@@ -1004,9 +1014,14 @@ ${navItemsHtml}
         </nav>`;
 
     case "menu":
-      const menuItems = (component.content || "Menu Item 1, Menu Item 2, Menu Item 3")
+      const menuItems = (
+        component.content || "Menu Item 1, Menu Item 2, Menu Item 3"
+      )
         .split(",")
-        .map((item) => `            <li class="menu-item"><a href="#">${item.trim()}</a></li>`)
+        .map(
+          (item) =>
+            `            <li class="menu-item"><a href="#">${item.trim()}</a></li>`,
+        )
         .join("\n");
       return `        <ul class="menu"${styleAttr}>
 ${menuItems}
@@ -1016,7 +1031,10 @@ ${menuItems}
       const breadcrumbItems = (component.content || "Home, Products, Category")
         .split(",")
         .map((item, idx, arr) => {
-          const separator = idx < arr.length - 1 ? '<span class="breadcrumb-separator">/</span>' : "";
+          const separator =
+            idx < arr.length - 1
+              ? '<span class="breadcrumb-separator">/</span>'
+              : "";
           return `            <span class="breadcrumb-item"><a href="#">${item.trim()}</a></span>${separator}`;
         })
         .join("\n");
@@ -1074,7 +1092,7 @@ ${breadcrumbItems}
           (row) =>
             `            <tr>
 ${row.map((cell) => `              <td>${cell}</td>`).join("\n")}
-            </tr>`
+            </tr>`,
         )
         .join("\n");
       return `        <div class="table-container"${styleAttr}>
@@ -1148,7 +1166,7 @@ ${flexChildren || "          <p>Flex content goes here</p>"}
             <div class="accordion-content">
               <p>${item.content}</p>
             </div>
-          </div>`
+          </div>`,
         )
         .join("\n");
       return `        <div class="accordion"${styleAttr}>
@@ -1161,12 +1179,20 @@ ${accordionHtml}
         { title: "Tab 2", content: "Content for tab 2" },
       ];
       const tabHeadersHtml = tabItems
-        .map((item, idx) => `            <button class="tab-header${idx === 0 ? " active" : ""}" onclick="showTab(this, ${idx})">${item.title}</button>`)
+        .map(
+          (item, idx) =>
+            `            <button class="tab-header${idx === 0 ? " active" : ""}" onclick="showTab(this, ${idx})">${item.title}</button>`,
+        )
         .join("\n");
       const tabContentsHtml = tabItems
-        .map((item, idx) => `          <div class="tab-content${idx === 0 ? " active" : ""}">
+        .map(
+          (
+            item,
+            idx,
+          ) => `          <div class="tab-content${idx === 0 ? " active" : ""}">
             <p>${item.content}</p>
-          </div>`)
+          </div>`,
+        )
         .join("\n");
       return `        <div class="tabs"${styleAttr}>
           <div class="tab-headers">
@@ -1177,37 +1203,47 @@ ${tabContentsHtml}
           </div>
         </div>`;
 
-    case 'collection':
-      const data = component.collectionData
+    case "collection":
+      const data = component.collectionData;
       if (!data || data.items.length === 0) {
         return `        <div class="collection component"${styleAttr}>
           <p style="text-align: center; color: #64748b;">No collection items configured</p>
-        </div>`
+        </div>`;
       }
-      
-      const headerHtml = data.showHeader && data.headerTitle ? `
+
+      const headerHtml =
+        data.showHeader && data.headerTitle
+          ? `
           <div class="collection-header">
             <h3 class="collection-title">${data.headerTitle}</h3>
-          </div>` : ''
-      
-      const gridClass = data.layout === 'horizontal' ? 'horizontal' : ''
-      const gridStyle = data.layout === 'vertical' 
-        ? ` style="grid-template-columns: repeat(${data.itemsPerRow || 4}, 1fr); gap: ${data.gap || '1rem'};"`
-        : ` style="gap: ${data.gap || '1rem'};"`
-      
-      const itemsHtml = data.items.map((item) => {
-        const badgeHtml = item.badge ? `<span class="collection-item-badge">${item.badge}</span>` : ''
-        const imageHtml = item.image 
-          ? `<img src="${item.image}" alt="${item.title}" />`
-          : ''
-        const subtitleHtml = item.subtitle ? `<p class="collection-item-subtitle">${item.subtitle}</p>` : ''
-        
-        const ctaText = item.ctaText || data.itemCtaText || 'Shop'
-        const ctaStyle = (item.ctaBgColor || data.itemCtaBgColor) 
-          ? ` style="background-color: ${item.ctaBgColor || data.itemCtaBgColor}; color: white;"` 
-          : ''
-        
-        return `            <div class="collection-item">
+          </div>`
+          : "";
+
+      const gridClass = data.layout === "horizontal" ? "horizontal" : "";
+      const gridStyle =
+        data.layout === "vertical"
+          ? ` style="grid-template-columns: repeat(${data.itemsPerRow || 4}, 1fr); gap: ${data.gap || "1rem"};"`
+          : ` style="gap: ${data.gap || "1rem"};"`;
+
+      const itemsHtml = data.items
+        .map((item) => {
+          const badgeHtml = item.badge
+            ? `<span class="collection-item-badge">${item.badge}</span>`
+            : "";
+          const imageHtml = item.image
+            ? `<img src="${item.image}" alt="${item.title}" />`
+            : "";
+          const subtitleHtml = item.subtitle
+            ? `<p class="collection-item-subtitle">${item.subtitle}</p>`
+            : "";
+
+          const ctaText = item.ctaText || data.itemCtaText || "Shop";
+          const ctaStyle =
+            item.ctaBgColor || data.itemCtaBgColor
+              ? ` style="background-color: ${item.ctaBgColor || data.itemCtaBgColor}; color: white;"`
+              : "";
+
+          return `            <div class="collection-item">
               ${badgeHtml}
               <div class="collection-item-image">${imageHtml}</div>
               <div class="collection-item-content">
@@ -1215,14 +1251,15 @@ ${tabContentsHtml}
                 ${subtitleHtml}
                 <a href="${item.ctaUrl}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
               </div>
-            </div>`
-      }).join('\n')
-      
+            </div>`;
+        })
+        .join("\n");
+
       return `        <div class="collection component"${styleAttr}>${headerHtml}
           <div class="collection-grid ${gridClass}"${gridStyle}>
 ${itemsHtml}
           </div>
-        </div>`
+        </div>`;
     default:
       return `        <div class="component"${styleAttr}>${component.content}</div>`;
   }

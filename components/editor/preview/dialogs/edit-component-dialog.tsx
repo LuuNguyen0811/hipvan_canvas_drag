@@ -1,27 +1,37 @@
-import React from 'react'
-import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+import React, { useRef } from "react";
+import {
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import type { Component } from '@/lib/types'
+} from "@/components/ui/tooltip";
+import type { Component } from "@/lib/types";
 
 interface EditComponentDialogProps {
-  editingComponent: { sectionId: string; component: Component } | null
-  setEditingComponent: (state: { sectionId: string; component: Component } | null) => void
-  handleSaveEdit: () => void
+  editingComponent: { sectionId: string; component: Component } | null;
+  setEditingComponent: (
+    state: { sectionId: string; component: Component } | null,
+  ) => void;
+  handleSaveEdit: () => void;
 }
 
 export function EditComponentDialog({
@@ -29,45 +39,142 @@ export function EditComponentDialog({
   setEditingComponent,
   handleSaveEdit,
 }: EditComponentDialogProps) {
-  if (!editingComponent) return null
+  if (!editingComponent) return null;
 
-  const { component } = editingComponent
+  const paragraphRef = useRef<HTMLTextAreaElement | null>(null);
+  const headingRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const { component } = editingComponent;
+
+  const applyBoldToSelection = () => {
+    const type = component.type;
+    if (type !== "paragraph" && type !== "heading") {
+      setEditingComponent({
+        ...editingComponent,
+        component: {
+          ...component,
+          formatting: {
+            ...component.formatting,
+            bold: !component.formatting?.bold,
+          },
+        },
+      });
+      return;
+    }
+
+    const ref =
+      type === "paragraph" ? paragraphRef.current : headingRef.current;
+    if (!ref) {
+      setEditingComponent({
+        ...editingComponent,
+        component: {
+          ...component,
+          formatting: {
+            ...component.formatting,
+            bold: !component.formatting?.bold,
+          },
+        },
+      });
+      return;
+    }
+
+    const start = ref.selectionStart ?? 0;
+    const end = ref.selectionEnd ?? 0;
+    const content = component.content || "";
+
+    // If no selection, keep the old behavior (toggle whole component bold)
+    if (start === end) {
+      setEditingComponent({
+        ...editingComponent,
+        component: {
+          ...component,
+          formatting: {
+            ...component.formatting,
+            bold: !component.formatting?.bold,
+          },
+        },
+      });
+      return;
+    }
+
+    const hasWrap =
+      start >= 2 &&
+      end + 2 <= content.length &&
+      content.slice(start - 2, start) === "**" &&
+      content.slice(end, end + 2) === "**";
+
+    const newContent = hasWrap
+      ? content.slice(0, start - 2) +
+        content.slice(start, end) +
+        content.slice(end + 2)
+      : content.slice(0, start) +
+        "**" +
+        content.slice(start, end) +
+        "**" +
+        content.slice(end);
+
+    const nextStart = hasWrap ? start - 2 : start + 2;
+    const nextEnd = hasWrap ? end - 2 : end + 2;
+
+    setEditingComponent({
+      ...editingComponent,
+      component: {
+        ...component,
+        content: newContent,
+        // Ensure we don't keep the whole component bold when doing selection-based bold.
+        formatting: {
+          ...component.formatting,
+          bold: false,
+        },
+      },
+    });
+
+    requestAnimationFrame(() => {
+      try {
+        ref.focus();
+        ref.setSelectionRange(nextStart, nextEnd);
+      } catch {
+        // ignore
+      }
+    });
+  };
+
+  const handleTextKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
+      e.preventDefault();
+      applyBoldToSelection();
+    }
+  };
 
   return (
-    <Dialog open={!!editingComponent} onOpenChange={() => setEditingComponent(null)}>
+    <Dialog
+      open={!!editingComponent}
+      onOpenChange={() => setEditingComponent(null)}
+    >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            Edit {component.type}
-          </DialogTitle>
+          <DialogTitle>Edit {component.type}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 pt-4">
           {/* Rich Text Formatting Toolbar */}
-          {component.type !== 'divider' &&
-            component.type !== 'spacer' &&
-            component.type !== 'image' &&
-            component.type !== 'button' && (
+          {component.type !== "divider" &&
+            component.type !== "spacer" &&
+            component.type !== "image" &&
+            component.type !== "button" && (
               <div className="flex flex-wrap gap-1 rounded-lg border border-border bg-muted/30 p-2">
                 <TooltipProvider>
                   <div className="flex gap-1">
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={component.formatting?.bold ? 'secondary' : 'ghost'}
+                          variant={
+                            component.formatting?.bold ? "secondary" : "ghost"
+                          }
                           size="sm"
                           className="h-8 w-8 p-0"
-                          onClick={() =>
-                            setEditingComponent({
-                              ...editingComponent,
-                              component: {
-                                ...component,
-                                formatting: {
-                                  ...component.formatting,
-                                  bold: !component.formatting?.bold,
-                                },
-                              },
-                            })
-                          }
+                          onClick={applyBoldToSelection}
                         >
                           <Bold className="h-4 w-4" />
                         </Button>
@@ -78,7 +185,9 @@ export function EditComponentDialog({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={component.formatting?.italic ? 'secondary' : 'ghost'}
+                          variant={
+                            component.formatting?.italic ? "secondary" : "ghost"
+                          }
                           size="sm"
                           className="h-8 w-8 p-0"
                           onClick={() =>
@@ -103,7 +212,11 @@ export function EditComponentDialog({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={component.formatting?.underline ? 'secondary' : 'ghost'}
+                          variant={
+                            component.formatting?.underline
+                              ? "secondary"
+                              : "ghost"
+                          }
                           size="sm"
                           className="h-8 w-8 p-0"
                           onClick={() =>
@@ -132,7 +245,11 @@ export function EditComponentDialog({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={component.formatting?.align === 'left' ? 'secondary' : 'ghost'}
+                          variant={
+                            component.formatting?.align === "left"
+                              ? "secondary"
+                              : "ghost"
+                          }
                           size="sm"
                           className="h-8 w-8 p-0"
                           onClick={() =>
@@ -142,7 +259,7 @@ export function EditComponentDialog({
                                 ...component,
                                 formatting: {
                                   ...component.formatting,
-                                  align: 'left',
+                                  align: "left",
                                 },
                               },
                             })
@@ -157,7 +274,11 @@ export function EditComponentDialog({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={component.formatting?.align === 'center' ? 'secondary' : 'ghost'}
+                          variant={
+                            component.formatting?.align === "center"
+                              ? "secondary"
+                              : "ghost"
+                          }
                           size="sm"
                           className="h-8 w-8 p-0"
                           onClick={() =>
@@ -167,7 +288,7 @@ export function EditComponentDialog({
                                 ...component,
                                 formatting: {
                                   ...component.formatting,
-                                  align: 'center',
+                                  align: "center",
                                 },
                               },
                             })
@@ -182,7 +303,11 @@ export function EditComponentDialog({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
-                          variant={component.formatting?.align === 'right' ? 'secondary' : 'ghost'}
+                          variant={
+                            component.formatting?.align === "right"
+                              ? "secondary"
+                              : "ghost"
+                          }
                           size="sm"
                           className="h-8 w-8 p-0"
                           onClick={() =>
@@ -192,7 +317,7 @@ export function EditComponentDialog({
                                 ...component,
                                 formatting: {
                                   ...component.formatting,
-                                  align: 'right',
+                                  align: "right",
                                 },
                               },
                             })
@@ -210,7 +335,10 @@ export function EditComponentDialog({
                   <div className="flex items-center gap-2">
                     <Label className="text-xs">Size:</Label>
                     <select
-                      value={component.formatting?.fontSize || (component.type === 'heading' ? '1.5rem' : '1rem')}
+                      value={
+                        component.formatting?.fontSize ||
+                        (component.type === "heading" ? "1.5rem" : "1rem")
+                      }
                       onChange={(e) =>
                         setEditingComponent({
                           ...editingComponent,
@@ -238,67 +366,80 @@ export function EditComponentDialog({
             )}
 
           {/* Content Input */}
-          {component.type !== 'divider' &&
-            component.type !== 'spacer' && (
-              <>
-                {component.type === 'paragraph' ? (
-                  <Textarea
-                    value={component.content}
-                    onChange={(e) =>
-                      setEditingComponent({
-                        ...editingComponent,
-                        component: { ...component, content: e.target.value },
-                      })
-                    }
-                    placeholder="Enter content..."
-                    rows={6}
-                    className="font-inherit"
-                    style={{
-                      fontWeight: component.formatting?.bold ? 'bold' : 'normal',
-                      fontStyle: component.formatting?.italic ? 'italic' : 'normal',
-                      textDecoration: component.formatting?.underline ? 'underline' : 'none',
-                      textAlign: component.formatting?.align || 'left',
-                      fontSize: component.formatting?.fontSize || '1rem',
-                    }}
-                  />
-                ) : component.type === 'heading' ? (
-                  <Input
-                    value={component.content || ''}
-                    onChange={(e) =>
-                      setEditingComponent({
-                        ...editingComponent,
-                        component: { ...component, content: e.target.value },
-                      })
-                    }
-                    placeholder="Enter heading..."
-                    className="text-lg font-inherit"
-                    style={{
-                      fontWeight: component.formatting?.bold !== false ? 'bold' : 'normal',
-                      fontStyle: component.formatting?.italic ? 'italic' : 'normal',
-                      textDecoration: component.formatting?.underline ? 'underline' : 'none',
-                      textAlign: component.formatting?.align || 'left',
-                      fontSize: component.formatting?.fontSize || '1.5rem',
-                    }}
-                  />
-                ) : (
-                  <Input
-                    value={component.content || ''}
-                    onChange={(e) =>
-                      setEditingComponent({
-                        ...editingComponent,
-                        component: { ...component, content: e.target.value },
-                      })
-                    }
-                    placeholder="Enter content..."
-                  />
-                )}
-              </>
-            )}
-          {component.type === 'spacer' && (
+          {component.type !== "divider" && component.type !== "spacer" && (
+            <>
+              {component.type === "paragraph" ? (
+                <Textarea
+                  ref={paragraphRef}
+                  value={component.content}
+                  onChange={(e) =>
+                    setEditingComponent({
+                      ...editingComponent,
+                      component: { ...component, content: e.target.value },
+                    })
+                  }
+                  onKeyDown={handleTextKeyDown}
+                  placeholder="Enter content..."
+                  rows={6}
+                  className="font-inherit"
+                  style={{
+                    fontWeight: component.formatting?.bold ? "bold" : "normal",
+                    fontStyle: component.formatting?.italic
+                      ? "italic"
+                      : "normal",
+                    textDecoration: component.formatting?.underline
+                      ? "underline"
+                      : "none",
+                    textAlign: component.formatting?.align || "left",
+                    fontSize: component.formatting?.fontSize || "1rem",
+                  }}
+                />
+              ) : component.type === "heading" ? (
+                <Textarea
+                  ref={headingRef}
+                  value={component.content || ""}
+                  onChange={(e) =>
+                    setEditingComponent({
+                      ...editingComponent,
+                      component: { ...component, content: e.target.value },
+                    })
+                  }
+                  onKeyDown={handleTextKeyDown}
+                  placeholder="Enter heading..."
+                  rows={2}
+                  className="text-lg font-inherit resize-none"
+                  style={{
+                    fontWeight:
+                      component.formatting?.bold !== false ? "bold" : "normal",
+                    fontStyle: component.formatting?.italic
+                      ? "italic"
+                      : "normal",
+                    textDecoration: component.formatting?.underline
+                      ? "underline"
+                      : "none",
+                    textAlign: component.formatting?.align || "left",
+                    fontSize: component.formatting?.fontSize || "1.5rem",
+                  }}
+                />
+              ) : (
+                <Input
+                  value={component.content || ""}
+                  onChange={(e) =>
+                    setEditingComponent({
+                      ...editingComponent,
+                      component: { ...component, content: e.target.value },
+                    })
+                  }
+                  placeholder="Enter content..."
+                />
+              )}
+            </>
+          )}
+          {component.type === "spacer" && (
             <div className="space-y-2">
               <Label>Height</Label>
               <Input
-                value={component.height || '4rem'}
+                value={component.height || "4rem"}
                 onChange={(e) =>
                   setEditingComponent({
                     ...editingComponent,
@@ -307,9 +448,36 @@ export function EditComponentDialog({
                 }
                 placeholder="e.g., 4rem, 100px"
               />
-              <p className="text-xs text-muted-foreground">Use units like rem, px, vh</p>
+              <p className="text-xs text-muted-foreground">
+                Use units like rem, px, vh
+              </p>
             </div>
           )}
+
+          {/* Image Border Toggle */}
+          {component.type === "image" && (
+            <div className="flex items-center justify-between rounded-lg border border-border p-3">
+              <div className="space-y-0.5">
+                <Label htmlFor="border-toggle" className="cursor-pointer">
+                  Show Border
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Add a border around the image
+                </p>
+              </div>
+              <Switch
+                id="border-toggle"
+                checked={component.border ?? false}
+                onCheckedChange={(checked) =>
+                  setEditingComponent({
+                    ...editingComponent,
+                    component: { ...component, border: checked },
+                  })
+                }
+              />
+            </div>
+          )}
+
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setEditingComponent(null)}>
               Cancel
@@ -319,5 +487,5 @@ export function EditComponentDialog({
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
