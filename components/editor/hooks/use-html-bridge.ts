@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 
 export function useHtmlBridge(
   html: string,
-  iframeRef: React.RefObject<HTMLIFrameElement>,
+  iframeRef: React.RefObject<HTMLIFrameElement | null>,
   onElementSelect?: (element: any) => void
 ) {
   const [iframeLoaded, setIframeLoaded] = useState(false);

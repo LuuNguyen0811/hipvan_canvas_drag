@@ -1,0 +1,3175 @@
+{
+"navigation" : {
+        "categories" : [
+          {
+            "handle" : "new",
+            "product_count" : 2031,
+            "hidden_nav_node" : false,
+            "id" : 8741,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+              {
+                "handle" : "furniture-sets",
+                "product_count" : 520,
+                "hidden_nav_node" : false,
+                "id" : 8579,
+                "categories" : [
+                  {
+                    "handle" : "new-sofa-sets",
+                    "product_count" : 143,
+                    "hidden_nav_node" : false,
+                    "id" : 8711,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/3d3e3815-84ca-4c07-9828-fbb53b915e0d/New-Sofa-Sets.png?fit=clamp&w=90&h=90&auto=format&s=a5e62512126f6e8f8b2e1949ea1bb92a",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-sofa-sets",
+                    "ios_banner" : "",
+                    "name" : "Sofa & Armchair Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-tv-console-sets",
+                    "product_count" : 24,
+                    "hidden_nav_node" : false,
+                    "id" : 8715,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/aed7526a-8e17-417a-93ac-3f601788a4c1/new-tv-console-sets.jpeg?fit=clamp&w=90&h=90&auto=format&s=8aad41062c635256c8fc78f638ee93e5",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-tv-console-sets",
+                    "ios_banner" : "",
+                    "name" : "TV Console Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-coffee-table-sets",
+                    "product_count" : 24,
+                    "hidden_nav_node" : false,
+                    "id" : 8723,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/61fd3ba8-0d55-4396-bb72-0474747bc0b2/new-coffee-table-sets.jpg?fit=clamp&w=90&h=90&auto=format&s=2f1aa6664c8e51161d9620c44e7f4287",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-coffee-table-sets",
+                    "ios_banner" : "",
+                    "name" : "Coffee Table Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-dining-table-chair-sets",
+                    "product_count" : 56,
+                    "hidden_nav_node" : false,
+                    "id" : 8713,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/1952726f-bde6-4741-ab10-c33234fc7209/new-dining-table-chair-sets.jpeg?fit=clamp&w=90&h=90&auto=format&s=7598a63b1bc3221fbeb6c18f2129eb9f",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-dining-table-chair-sets",
+                    "ios_banner" : "",
+                    "name" : "Dining Table & Chair Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-dining-chair-sets",
+                    "product_count" : 110,
+                    "hidden_nav_node" : false,
+                    "id" : 8721,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/39e92f80-7145-4266-a948-2a808a803354/dining-table-chair-set.jpeg?fit=clamp&w=90&h=90&auto=format&s=74235e257d71eb15b41911c02e982c3d",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-dining-chair-sets",
+                    "ios_banner" : "",
+                    "name" : "Dining Chair Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-bed-sets",
+                    "product_count" : 52,
+                    "hidden_nav_node" : false,
+                    "id" : 8709,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/4d0b4624-401c-42e6-af3d-0924e1eec31d/new-bed-set.png?fit=clamp&w=90&h=90&auto=format&s=1fcc77d58d443acbe4992de2454f1bfb",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-bed-sets",
+                    "ios_banner" : "",
+                    "name" : "Bed & Bedside Table Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-bed-mattress-sets",
+                    "product_count" : 50,
+                    "hidden_nav_node" : false,
+                    "id" : 8719,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/41957b80-a831-4b57-9fd6-ad9be4822625/new-bedmattress-set.png?fit=clamp&w=90&h=90&auto=format&s=801789e24d86b0d6530d93fe6baf7173",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-bed-mattress-sets",
+                    "ios_banner" : "",
+                    "name" : "Bed & Mattress Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-outdoor-sets",
+                    "product_count" : 61,
+                    "hidden_nav_node" : false,
+                    "id" : 8725,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/eb6964e6-31a4-468b-84f2-a1bcfa3b4983/new-outdoor-set.png?fit=clamp&w=90&h=90&auto=format&s=91c1dbe0ccbb4051e9189b9c6230965b",
+                    "canonical_url" : "https://staging.hipvan.com/new/new-outdoor-sets",
+                    "ios_banner" : "",
+                    "name" : "Outdoor Sets",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/97ede6b5-d907-4318-ac88-35139ab4912c/sets.jpeg?fit=clamp&w=90&h=90&auto=format&s=b0b3903600d02bec03b31ab0fa547c93",
+                "canonical_url" : "https://staging.hipvan.com/new/furniture-sets",
+                "ios_banner" : "",
+                "name" : "Furniture Sets",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "solid-wood",
+                "product_count" : 189,
+                "hidden_nav_node" : false,
+                "id" : 4773,
+                "categories" : [
+                  {
+                    "handle" : "dakota-by-hipvan",
+                    "product_count" : 20,
+                    "hidden_nav_node" : false,
+                    "id" : 5380,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a48ffeab-472a-422c-b982-73b4a0094f6c/Collection_Featured_Image-Dakota.png?fit=clamp&w=90&h=90&auto=format&s=e020bda8acbca7f1d594e250cb23d11e",
+                    "canonical_url" : "https://staging.hipvan.com/new/dakota-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Dakota by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "tilda-by-hipvan",
+                    "product_count" : 22,
+                    "hidden_nav_node" : false,
+                    "id" : 5723,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/13045797-3576-4dee-a89b-2e2dcb074a2d/Collection_Featured_Image-Tilda.png?fit=clamp&w=90&h=90&auto=format&s=b2b51bcf13133a6d20ef394991c15751",
+                    "canonical_url" : "https://staging.hipvan.com/new/tilda-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Tilda by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "cadencia-by-hipvan",
+                    "product_count" : 28,
+                    "hidden_nav_node" : false,
+                    "id" : 5252,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/74322090-7ee0-4c7a-aa16-e08a96a6d97c/cadencia.png?fit=clamp&w=90&h=90&auto=format&s=b4d4a61a85b740b7b037a90144cbe108",
+                    "canonical_url" : "https://staging.hipvan.com/new/cadencia-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Cadencia by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "starck-by-hipvan",
+                    "product_count" : 26,
+                    "hidden_nav_node" : false,
+                    "id" : 6008,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/1469e23d-25ca-48e4-8bfc-2d6cd20786bb/Collection_Featured_Image-Starck.png?fit=clamp&w=90&h=90&auto=format&s=1c18a685771987cb7062007e1112f78d",
+                    "canonical_url" : "https://staging.hipvan.com/new/starck-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Starck by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "hendrix-by-hipvan",
+                    "product_count" : 32,
+                    "hidden_nav_node" : false,
+                    "id" : 5594,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/0f67fcad-2456-4fff-91d2-665b57dd75aa/Collection_Featured_Image-Hendrix.png?fit=clamp&w=90&h=90&auto=format&s=406c4e1f37b5636c5618ebd15880a749",
+                    "canonical_url" : "https://staging.hipvan.com/new/hendrix-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Hendrix by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "leland-by-hipvan",
+                    "product_count" : 38,
+                    "hidden_nav_node" : false,
+                    "id" : 5452,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/208f9966-f3a1-4bb3-b5df-a05cf196e574/Collection_Featured_Image-Leland.png?fit=clamp&w=90&h=90&auto=format&s=f214764a6f12d67753df18b08ebb7aec",
+                    "canonical_url" : "https://staging.hipvan.com/new/leland-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Leland by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "xavier-by-hipvan",
+                    "product_count" : 24,
+                    "hidden_nav_node" : false,
+                    "id" : 7601,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b5875894-2ec3-46e9-a401-ec0a4d51bf6b/xavier.png?fit=clamp&w=90&h=90&auto=format&s=17d5a3d10faedad375a8d8a4bb3733eb",
+                    "canonical_url" : "https://staging.hipvan.com/new/xavier-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Xavier by HipVan",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/932c9786-01c2-4499-a9ea-501078e409e5/solid%2520wood.png?fit=clamp&w=90&h=90&auto=format&s=f5a9df1da3315c8e4b6b6801ac0dd3ff",
+                "canonical_url" : "https://staging.hipvan.com/new/solid-wood",
+                "ios_banner" : "",
+                "name" : "Solid Wood Collections",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "shop-by-style",
+                "product_count" : 1099,
+                "hidden_nav_node" : false,
+                "id" : 8553,
+                "categories" : [
+                  {
+                    "handle" : "adapted-scandinavian",
+                    "product_count" : 247,
+                    "hidden_nav_node" : false,
+                    "id" : 8637,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ab898fe8-2abb-4d37-a71d-8290a5173766/adaptscandi.png?fit=clamp&w=90&h=90&auto=format&s=54f667e312a9645bbf66ce5f34e479ce",
+                    "canonical_url" : "https://staging.hipvan.com/new/adapted-scandinavian",
+                    "ios_banner" : "",
+                    "name" : "Adapted Scandinavian",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "japanese-minimalist",
+                    "product_count" : 181,
+                    "hidden_nav_node" : false,
+                    "id" : 8555,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/055dbbcc-0dab-4f0f-af63-71dc6b370ce2/japaneseminimalist.jpeg?fit=clamp&w=90&h=90&auto=format&s=c23b1d6ad25ae7272c43556080a22b78",
+                    "canonical_url" : "https://staging.hipvan.com/new/japanese-minimalist",
+                    "ios_banner" : "",
+                    "name" : "Japanese Minimalist",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "modern-contemporary",
+                    "product_count" : 230,
+                    "hidden_nav_node" : false,
+                    "id" : 8639,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ce604164-5b7f-4346-b152-847296c0bf17/modern-contemporary.png?fit=clamp&w=90&h=90&auto=format&s=e878980f6a11936a4ee9e928c983040f",
+                    "canonical_url" : "https://staging.hipvan.com/new/modern-contemporary",
+                    "ios_banner" : "",
+                    "name" : "Modern Contemporary",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "industrial",
+                    "product_count" : 216,
+                    "hidden_nav_node" : false,
+                    "id" : 4676,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b069f399-54f8-4167-b7c4-80c1c994a309/044573f915a1472a9c863a2c9d6c5204.jpg?fit=clamp&w=90&h=90&auto=format&s=b09f3750718f475037c71a371be3c340",
+                    "canonical_url" : "https://staging.hipvan.com/new/industrial",
+                    "ios_banner" : "",
+                    "name" : "Loft & Industrial Chic ",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "bohemian-resort-living",
+                    "product_count" : 211,
+                    "hidden_nav_node" : false,
+                    "id" : 8641,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7a579d61-22cf-47c5-89c5-44dc9029c29e/bohemian-resort.jpg?fit=clamp&w=90&h=90&auto=format&s=3d16ec061eeb60e14614aca7c07fbc05",
+                    "canonical_url" : "https://staging.hipvan.com/new/bohemian-resort-living",
+                    "ios_banner" : "",
+                    "name" : "Bohemian Resort Living",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "botanical-accents",
+                    "product_count" : 70,
+                    "hidden_nav_node" : false,
+                    "id" : 4745,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d6139781-b190-4a64-b8fe-892b45db891f/180225%2520-%2520Plant%2520Prints.png?fit=clamp&w=90&h=90&auto=format&s=cd3eda68f0ef9710bb2757754ccc8f2e",
+                    "canonical_url" : "https://staging.hipvan.com/new/botanical-accents",
+                    "ios_banner" : "",
+                    "name" : "Botanical Accents",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "rose-gold-champagne",
+                    "product_count" : 94,
+                    "hidden_nav_node" : false,
+                    "id" : 4644,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/57c025f0-05b6-4aa5-86f3-93000a8a68a0/180517%2520-%2520Madison%2520Table%2520Lamp.jpg?fit=clamp&w=90&h=90&auto=format&s=84e8c2dd32760df31775b3288388b503",
+                    "canonical_url" : "https://staging.hipvan.com/new/rose-gold-champagne",
+                    "ios_banner" : "",
+                    "name" : "Rose Gold & Champagne",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/8ab4a540-c2de-4df5-9e23-0b4685cd8851/shopbystyle.jpeg?fit=clamp&w=90&h=90&auto=format&s=9956abf690c4cc934139b6f45093162d",
+                "canonical_url" : "https://staging.hipvan.com/new/shop-by-style",
+                "ios_banner" : "",
+                "name" : "Shop by Styles",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "popular-brands",
+                "product_count" : 431,
+                "hidden_nav_node" : false,
+                "id" : 8575,
+                "categories" : [
+                  {
+                    "handle" : "all-mattresses-by-hipvan",
+                    "product_count" : 7,
+                    "hidden_nav_node" : false,
+                    "id" : 4680,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/eb48e1a8-97bb-4b5f-b507-b38f8f5bfbec/mattresses.jpg?fit=clamp&w=90&h=90&auto=format&s=b5d0da0f9c93a382028364499d7a58ec",
+                    "canonical_url" : "https://staging.hipvan.com/new/all-mattresses-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Mattresses by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "concrete-furniture-by-hipvan",
+                    "product_count" : 13,
+                    "hidden_nav_node" : false,
+                    "id" : 7513,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/652db682-2003-4cb7-a963-12963c2bde99/Concrete_new.jpg?fit=clamp&w=90&h=90&auto=format&s=839b0367dae22212b5e90f127846d796",
+                    "canonical_url" : "https://staging.hipvan.com/new/concrete-furniture-by-hipvan",
+                    "ios_banner" : "",
+                    "name" : "Concrete Furniture by HipVan",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "umbra",
+                    "product_count" : 245,
+                    "hidden_nav_node" : false,
+                    "id" : 5304,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f3c45df9-459e-4129-afa7-348057f2482d/Umbra%2520Lifestyle%25203.jpg?fit=clamp&w=90&h=90&auto=format&s=c03f9d79313a11a14dfbb441a23dc718",
+                    "canonical_url" : "https://staging.hipvan.com/new/umbra",
+                    "ios_banner" : "",
+                    "name" : "Umbra",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "smeg",
+                    "product_count" : 80,
+                    "hidden_nav_node" : false,
+                    "id" : 5862,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/e5c81eba-31a9-4bda-8de5-1fcbaee8281a/GROUP_2_6ffa0775-3cd6-4f8d-943c-3b5e1f3a0b8d.png?fit=clamp&w=90&h=90&auto=format&s=33ea6499b9dbd9bd84d894c8d865c8b6",
+                    "canonical_url" : "https://staging.hipvan.com/new/smeg",
+                    "ios_banner" : "",
+                    "name" : "SMEG",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "keter",
+                    "product_count" : 37,
+                    "hidden_nav_node" : false,
+                    "id" : 6560,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/98a20fc9-8348-41fd-8e5e-0c77d0d71708/Keter.png?fit=clamp&w=90&h=90&auto=format&s=c68257fc66b5e66fda4293e935c781f2",
+                    "canonical_url" : "https://staging.hipvan.com/new/keter",
+                    "ios_banner" : "",
+                    "name" : "Keter",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "curver",
+                    "product_count" : 49,
+                    "hidden_nav_node" : false,
+                    "id" : 6026,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/8c9afed0-baa7-4138-8262-22525d5f2512/Curver.png?fit=clamp&w=90&h=90&auto=format&s=bc7feaa2b7a13b0d8d8bfe77ba558674",
+                    "canonical_url" : "https://staging.hipvan.com/new/curver",
+                    "ios_banner" : "",
+                    "name" : "Curver",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/391bd107-086e-4ee3-a7d8-4ff7951d0bf5/Popularbrands.png?fit=clamp&w=90&h=90&auto=format&s=692b983e44ef244734a368571721cb1a",
+                "canonical_url" : "https://staging.hipvan.com/new/popular-brands",
+                "ios_banner" : "",
+                "name" : "Popular Brands",
+                "banner_url" : ""
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2c764453-18c6-407a-8928-340e596c1fbb/rexton.png?fit=clamp&w=90&h=90&auto=format&s=257d1fb50d4da5dac70d5f79ba4ef81d",
+            "canonical_url" : "https://staging.hipvan.com/new",
+            "ios_banner" : "",
+            "name" : "New",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "mattresses",
+            "product_count" : 7,
+            "hidden_nav_node" : false,
+            "id" : 305,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/79ec329e-cde3-4ac0-93cf-68d732dd53e5/levitate-mattress.png?fit=clamp&w=90&h=90&auto=format&s=8f51e21e464d93444d7df42f517b3fc6",
+            "canonical_url" : "https://staging.hipvan.com/mattresses",
+            "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/65e8d175-3004-41d3-bb17-6bf09047157d/Beds-&-Mattresses.jpg",
+            "name" : "Mattresses",
+            "banner_url" : "https://hiptruck-files.imgix.net/cms-files/65e8d175-3004-41d3-bb17-6bf09047157d/Beds-&-Mattresses.jpg"
+          },
+          {
+            "handle" : "chest-of-drawers-1",
+            "product_count" : 20,
+            "hidden_nav_node" : false,
+            "id" : 9160,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fc0f16de-749d-4634-9b03-5d7fa696a9b6/chestofdrawer.png?fit=clamp&w=90&h=90&auto=format&s=68da0774021f336c7a4ff0aa25293a18",
+            "canonical_url" : "https://staging.hipvan.com/chest-of-drawers-1",
+            "ios_banner" : null,
+            "name" : "Chest of Drawers",
+            "banner_url" : null
+          },
+          {
+            "handle" : "sofas",
+            "product_count" : 502,
+            "hidden_nav_node" : false,
+            "id" : 8490,
+            "icon_classname" : "ic-cats-2ssofas",
+            "categories" : [
+              {
+                "handle" : "chest-of-drawers-3",
+                "product_count" : 20,
+                "hidden_nav_node" : false,
+                "id" : 9161,
+                "categories" : [
+
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fc0f16de-749d-4634-9b03-5d7fa696a9b6/chestofdrawer.png?fit=clamp&w=90&h=90&auto=format&s=68da0774021f336c7a4ff0aa25293a18",
+                "canonical_url" : "https://staging.hipvan.com/sofas/chest-of-drawers-3",
+                "ios_banner" : null,
+                "name" : "Chest of Drawers",
+                "banner_url" : null
+              },
+              {
+                "handle" : "sofas-by-size",
+                "product_count" : 355,
+                "hidden_nav_node" : false,
+                "id" : 8487,
+                "categories" : [
+                  {
+                    "handle" : "chest-of-drawers-4",
+                    "product_count" : 20,
+                    "hidden_nav_node" : false,
+                    "id" : 9162,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fc0f16de-749d-4634-9b03-5d7fa696a9b6/chestofdrawer.png?fit=clamp&w=90&h=90&auto=format&s=68da0774021f336c7a4ff0aa25293a18",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/chest-of-drawers-4",
+                    "ios_banner" : null,
+                    "name" : "Chest of Drawers",
+                    "banner_url" : null
+                  },
+                  {
+                    "handle" : "l-shaped-sofas",
+                    "product_count" : 38,
+                    "hidden_nav_node" : false,
+                    "id" : 40,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/df8fa49b-9b9f-4420-8e58-b5061b1abd1c-1726826582764/L-Shaped-Sofas-feature.png?fit=clamp&w=90&h=90&auto=format&s=ba8dfe99f54bd2a65efcba62e30ca633",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/l-shaped-sofas",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg",
+                    "name" : "L-Shaped Sofas",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg"
+                  },
+                  {
+                    "handle" : "all-4-seater-sofas",
+                    "product_count" : 5,
+                    "hidden_nav_node" : false,
+                    "id" : 8482,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/dbc10dad-65ec-4002-89c4-9ca34a12f6fe-1726826578838/All-4-Seater-Sofas-feature.png?fit=clamp&w=90&h=90&auto=format&s=2e754e06348aac66569c6466efc0e5fc",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/all-4-seater-sofas",
+                    "ios_banner" : "",
+                    "name" : "All 4 Seater Sofas",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "3-seater-sofas",
+                    "product_count" : 117,
+                    "hidden_nav_node" : false,
+                    "id" : 41,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/72f7adbc-ad94-47b2-9094-63c1d61f631e-1726827184380/3-Seater-Sofas-feature.png?fit=clamp&w=90&h=90&auto=format&s=be7642fe8dc386e69276700c68ba589f",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/3-seater-sofas",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg",
+                    "name" : "3 Seater Sofas",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg"
+                  },
+                  {
+                    "handle" : "2-seater-sofas",
+                    "product_count" : 67,
+                    "hidden_nav_node" : false,
+                    "id" : 42,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ee35717e-4d12-453e-b660-3c94eb04d881-1726826571388/2-Seater-Sofas-feature.png?fit=clamp&w=90&h=90&auto=format&s=610f9dc2f4826b3a3a803274d8b8f397",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/2-seater-sofas",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg",
+                    "name" : "2 Seater Sofas",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg"
+                  },
+                  {
+                    "handle" : "armchairs-ottomans",
+                    "product_count" : 114,
+                    "hidden_nav_node" : false,
+                    "id" : 4507,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7f7c9636-4e50-43b6-b060-838baf5bf8bb-1726826567554/Armchairs---Ottomans-feature.png?fit=clamp&w=90&h=90&auto=format&s=7268ab43b21fbc1f09fc0a173d2cf27e",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/armchairs-ottomans",
+                    "ios_banner" : "",
+                    "name" : "Armchairs & Ottomans",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "all-sofas-loveseats",
+                    "product_count" : 297,
+                    "hidden_nav_node" : false,
+                    "id" : 3797,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f82b079c-e842-434d-be31-da5d4a4b5796-1726826558183/All-Sofas---Loveseats-feature.png?fit=clamp&w=90&h=90&auto=format&s=1a50a0d4c71fbc5cfadc8f0288e2f0fa",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/all-sofas-loveseats",
+                    "ios_banner" : "",
+                    "name" : "All Sofas & Loveseats",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d5b0c818-748c-4297-a8e4-f527122688c6/sofa%2520by%2520size%2520new%2520update%25202.png?fit=clamp&w=90&h=90&auto=format&s=1df5c1f39b3e69aa251537c6459747aa",
+                "canonical_url" : "https://staging.hipvan.com/sofas/sofas-by-size",
+                "ios_banner" : "",
+                "name" : "Sofas by Size ",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "sofas-by-type",
+                "product_count" : 304,
+                "hidden_nav_node" : false,
+                "id" : 8488,
+                "categories" : [
+                  {
+                    "handle" : "apartment-sofas",
+                    "product_count" : 211,
+                    "hidden_nav_node" : false,
+                    "id" : 4660,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/0ec2ac2f-800b-4e8a-9669-a6d4ce2cc7a8/Apartment%2520Sofa%2520copy.png?fit=clamp&w=90&h=90&auto=format&s=fb9e6003b1c3f128a4c5a19d3deb05d3",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/apartment-sofas",
+                    "ios_banner" : "",
+                    "name" : "Apartment Sofas",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "premium-sofas",
+                    "product_count" : 86,
+                    "hidden_nav_node" : false,
+                    "id" : 4659,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/513feba4-07d7-4d5d-853f-19f15d24ca09/PremiumSofa%2520copy.png?fit=clamp&w=90&h=90&auto=format&s=4625b7df082fef97528accb483ebef6c",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/premium-sofas",
+                    "ios_banner" : "",
+                    "name" : "Premium Sofas",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "sofa-beds",
+                    "product_count" : 68,
+                    "hidden_nav_node" : false,
+                    "id" : 45,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7741bb78-475a-435c-aa84-c27763fc9d26/sofa%2520bed%2520new%2520update%25203.png?fit=clamp&w=90&h=90&auto=format&s=1322b9a371f8387c024675719a4f05b3",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/sofa-beds",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg",
+                    "name" : "Sofa Beds",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg"
+                  },
+                  {
+                    "handle" : "modular-sofas",
+                    "product_count" : 25,
+                    "hidden_nav_node" : false,
+                    "id" : 8477,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/166d0a40-3e1e-4cb2-bab4-1038579c607b/Modular%2520sofa%2520final.png?fit=clamp&w=90&h=90&auto=format&s=b534675df8a59e8203c16d1f878f207b",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/modular-sofas",
+                    "ios_banner" : "",
+                    "name" : "Modular Sofas",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "sofa-designer-replicas",
+                    "product_count" : 7,
+                    "hidden_nav_node" : false,
+                    "id" : 8471,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/bdf69c0f-9bb2-40f7-8765-51666a3b833b/Designer%2520sofas.jpeg?fit=clamp&w=90&h=90&auto=format&s=2a7a037d57d7677e63b173c75145c3f8",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/sofa-designer-replicas",
+                    "ios_banner" : "",
+                    "name" : "Designer Replica - Sofas",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/16af729f-d482-42ef-9506-3686ebb2f0d9/sofasbytype.jpeg?fit=clamp&w=90&h=90&auto=format&s=15c8bf227d21c68006716d59d71bd67a",
+                "canonical_url" : "https://staging.hipvan.com/sofas/sofas-by-type",
+                "ios_banner" : "",
+                "name" : "Sofas by Type",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "sofas-by-material",
+                "product_count" : 295,
+                "hidden_nav_node" : false,
+                "id" : 8489,
+                "categories" : [
+                  {
+                    "handle" : "leather-sofas",
+                    "product_count" : 38,
+                    "hidden_nav_node" : false,
+                    "id" : 4806,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/216a2202-9c61-45d8-9f64-8ccd6aba2a84/Leather.png?fit=clamp&w=90&h=90&auto=format&s=67b0b8ae1e1fac6782a7cfe214e2e48f",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/leather-sofas",
+                    "ios_banner" : "",
+                    "name" : "Leather Sofas",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "fabric-sofas",
+                    "product_count" : 249,
+                    "hidden_nav_node" : false,
+                    "id" : 8470,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c724d60d-094e-4d20-a6fd-730349bbc4d9/fabricsofas.jpeg?fit=clamp&w=90&h=90&auto=format&s=06736a57140017086f65eaab4a773644",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/fabric-sofas",
+                    "ios_banner" : "",
+                    "name" : "Fabric Sofas",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "velvet-sofas",
+                    "product_count" : 8,
+                    "hidden_nav_node" : false,
+                    "id" : 8476,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/3a692ee7-9c53-4da9-90e5-7d5d7515f2a6/Velvet%2520Sofa.png?fit=clamp&w=90&h=90&auto=format&s=8087d87169c27a902aae877a6effb8de",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/velvet-sofas",
+                    "ios_banner" : "",
+                    "name" : "Velvet Sofas",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/5054d8ba-bacc-4573-adb2-d095442c25ec/sofabymaterial.jpeg?fit=clamp&w=90&h=90&auto=format&s=938251c1e84d6e3b01ee443dfe158c87",
+                "canonical_url" : "https://staging.hipvan.com/sofas/sofas-by-material",
+                "ios_banner" : "",
+                "name" : "Sofas by Material",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "sofa-sets",
+                "product_count" : 143,
+                "hidden_nav_node" : false,
+                "id" : 8613,
+                "categories" : [
+                  {
+                    "handle" : "3-2-seater-sofa-sets",
+                    "product_count" : 38,
+                    "hidden_nav_node" : false,
+                    "id" : 8623,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/11f9349b-7ddb-489f-af62-e2c55fd7798b/template.png?fit=clamp&w=90&h=90&auto=format&s=6f8ffc3dd9fdf04d5d2e7d4de0c436f8",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/3-2-seater-sofa-sets",
+                    "ios_banner" : "",
+                    "name" : "3 + 2 Seater Sofa Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "3-1-seater-sofa-sets",
+                    "product_count" : 46,
+                    "hidden_nav_node" : false,
+                    "id" : 8625,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a24bb0e4-a0bb-4609-8fd9-9fffd85bb28c/3%25201%2520seater%2520set.png?fit=clamp&w=90&h=90&auto=format&s=4661072c4f34b6b139fdc28ae5eb3e79",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/3-1-seater-sofa-sets",
+                    "ios_banner" : "",
+                    "name" : "3 + 1 Seater Sofa Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "2-1-seater-sofa-sets",
+                    "product_count" : 43,
+                    "hidden_nav_node" : false,
+                    "id" : 8627,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/67c3fcc7-8150-4b2c-9525-0970fb47a5fe/2%25201%2520seater.jpeg?fit=clamp&w=90&h=90&auto=format&s=3810c83d07620e6b699a52816f38831d",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/2-1-seater-sofa-sets",
+                    "ios_banner" : "",
+                    "name" : "2 + 1 Seater Sofa Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "armchair-ottoman-sets",
+                    "product_count" : 16,
+                    "hidden_nav_node" : false,
+                    "id" : 8633,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2fd5a878-72e9-45a9-af06-7639b8c379fe/HipVan-Bundles--Alero-Armchair-with-Alero-Ottoman-in-Dark-Green-%2528Velvet%2529-6-1559566758.png?fit=clamp&w=90&h=90&auto=format&s=5db1ba1ae4ae4e0f435f7d49a631db01",
+                    "canonical_url" : "https://staging.hipvan.com/sofas/armchair-ottoman-sets",
+                    "ios_banner" : "",
+                    "name" : "Armchair + Ottoman Sets",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/54d860d3-9967-4ee6-a4e2-7861d5447f9c/Sofa-Sets-New.png?fit=clamp&w=90&h=90&auto=format&s=dc5cce6f27da4db0f1eba59df332fdef",
+                "canonical_url" : "https://staging.hipvan.com/sofas/sofa-sets",
+                "ios_banner" : "",
+                "name" : "Sofa Sets",
+                "banner_url" : ""
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2d825f6a-91db-47a3-bad3-54a350760b65/sofa-new-update.png?fit=clamp&w=90&h=90&auto=format&s=7a22ee30954e2006a783512674b75e47",
+            "canonical_url" : "https://staging.hipvan.com/sofas",
+            "ios_banner" : "",
+            "name" : "Sofas",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "armchairs",
+            "product_count" : 33,
+            "hidden_nav_node" : false,
+            "id" : 43,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/aa9d404d-cb5d-4ea4-8a89-cc613195ba76/Armchairs.jpg?fit=clamp&w=90&h=90&auto=format&s=a5cfde4eaa45239a346bb7429f44be30",
+            "canonical_url" : "https://staging.hipvan.com/armchairs",
+            "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg",
+            "name" : "Armchairs ",
+            "banner_url" : "https://hiptruck-files.imgix.net/cms-files/6c109a38-2f7c-4ff5-b43f-2e29b2b1f7ee/CategoryBanner-SG-Sofa.jpg"
+          },
+          {
+            "handle" : "all-dining",
+            "product_count" : 138,
+            "hidden_nav_node" : false,
+            "id" : 1092,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2b718dbe-f718-48af-a3b5-864f2e8a1295-1700141378032/All-Dining-feature.png?fit=clamp&w=90&h=90&auto=format&s=cfa193228826f3aa1a230a019996be56",
+            "canonical_url" : "https://staging.hipvan.com/all-dining",
+            "ios_banner" : null,
+            "name" : "All Dining",
+            "banner_url" : null
+          },
+          {
+            "handle" : "tables",
+            "product_count" : 451,
+            "hidden_nav_node" : false,
+            "id" : 8514,
+            "icon_classname" : "",
+            "categories" : [
+              {
+                "handle" : "dining-room-tables",
+                "product_count" : 127,
+                "hidden_nav_node" : false,
+                "id" : 8494,
+                "categories" : [
+                  {
+                    "handle" : "8-seater-dining-tables",
+                    "product_count" : 33,
+                    "hidden_nav_node" : false,
+                    "id" : 4284,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/333a2e8b-d6f0-4b41-83fb-8a7fcffce4b5/8seaterdining.jpg?fit=clamp&w=90&h=90&auto=format&s=a2d604a1d9ac0f5aca600f59767b4c1b",
+                    "canonical_url" : "https://staging.hipvan.com/tables/8-seater-dining-tables",
+                    "ios_banner" : "",
+                    "name" : "8 Seater Dining Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "6-seater-dining-tables",
+                    "product_count" : 30,
+                    "hidden_nav_node" : false,
+                    "id" : 4282,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/e9a47eec-482d-406b-beb6-ca4ca4fe6c54/6seaterdiningtable.jpeg?fit=clamp&w=90&h=90&auto=format&s=8fb611b0ac809de876bb85f16b52d34c",
+                    "canonical_url" : "https://staging.hipvan.com/tables/6-seater-dining-tables",
+                    "ios_banner" : "",
+                    "name" : "6 Seater Dining Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "4-seater-dining-tables",
+                    "product_count" : 13,
+                    "hidden_nav_node" : false,
+                    "id" : 4285,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/773915e5-5f3a-46c2-acf2-6e31e097e871/4%2520seater.png?fit=clamp&w=90&h=90&auto=format&s=08afd5a0a1ee1fa8588b91164fb21164",
+                    "canonical_url" : "https://staging.hipvan.com/tables/4-seater-dining-tables",
+                    "ios_banner" : "",
+                    "name" : "4 Seater Dining Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "extendable-dining-tables",
+                    "product_count" : 11,
+                    "hidden_nav_node" : false,
+                    "id" : 3147,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7259eb0e-ed41-4790-a59b-2471c9bc4e6c/extendabledining.jpeg?fit=clamp&w=90&h=90&auto=format&s=c5f36c6ab1920ceb8b5fc95da39074a3",
+                    "canonical_url" : "https://staging.hipvan.com/tables/extendable-dining-tables",
+                    "ios_banner" : "",
+                    "name" : "Extendable Dining Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "round-dining-tables",
+                    "product_count" : 6,
+                    "hidden_nav_node" : false,
+                    "id" : 4286,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/97174eaf-342a-4bb0-95fc-3a8a6022d887/rounddiningtable.jpeg?fit=clamp&w=90&h=90&auto=format&s=38a80cb3dd93a6c5169d1848c326b15a",
+                    "canonical_url" : "https://staging.hipvan.com/tables/round-dining-tables",
+                    "ios_banner" : "",
+                    "name" : "Round Dining Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-table-sets",
+                    "product_count" : 56,
+                    "hidden_nav_node" : false,
+                    "id" : 4657,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/6516a3dc-7660-46a1-9ce6-83dd250a450b/diningtableset.jpeg?fit=clamp&w=90&h=90&auto=format&s=504b24923eb778af007284aa8ad68de6",
+                    "canonical_url" : "https://staging.hipvan.com/tables/dining-table-sets",
+                    "ios_banner" : "",
+                    "name" : "Dining Table & Chair Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-tables",
+                    "product_count" : 71,
+                    "hidden_nav_node" : false,
+                    "id" : 3807,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c3731f1f-d37f-4029-958d-511a2db3a8fe/alldiningtables.png?fit=clamp&w=90&h=90&auto=format&s=7645fb5460cc7b60ac4e9289954651a3",
+                    "canonical_url" : "https://staging.hipvan.com/tables/dining-tables",
+                    "ios_banner" : "",
+                    "name" : "All Dining Tables",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f476a83a-32b1-46e4-a596-ae4fd9bb904f/DiningRoomTable.jpeg?fit=clamp&w=90&h=90&auto=format&s=41cf97ed3778e3349a9539b0989a0051",
+                "canonical_url" : "https://staging.hipvan.com/tables/dining-room-tables",
+                "ios_banner" : "",
+                "name" : "Dining Tables",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "occasional-tables",
+                "product_count" : 188,
+                "hidden_nav_node" : false,
+                "id" : 8495,
+                "categories" : [
+                  {
+                    "handle" : "side-tables",
+                    "product_count" : 79,
+                    "hidden_nav_node" : false,
+                    "id" : 3801,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/e37b603a-602e-4fb9-97a3-c5a4dca96c41/side%2520table.png?fit=clamp&w=90&h=90&auto=format&s=0ec594c9fd060cb4cf7c301637767f3d",
+                    "canonical_url" : "https://staging.hipvan.com/tables/side-tables",
+                    "ios_banner" : "",
+                    "name" : "Side Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "console-tables",
+                    "product_count" : 24,
+                    "hidden_nav_node" : false,
+                    "id" : 4643,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d2844971-e908-49f6-8b66-c1bb61d91794/consoletable.png?fit=clamp&w=90&h=90&auto=format&s=4c00412ef8bf9ba84b6a2893a94c16c4",
+                    "canonical_url" : "https://staging.hipvan.com/tables/console-tables",
+                    "ios_banner" : "",
+                    "name" : "Console Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "coffee-table-sets",
+                    "product_count" : 24,
+                    "hidden_nav_node" : false,
+                    "id" : 8475,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/403ff22c-0eca-4942-b022-21f76a40d540/coffeetablesets.jpg?fit=clamp&w=90&h=90&auto=format&s=a80f78c46c108627016c6de6b199c539",
+                    "canonical_url" : "https://staging.hipvan.com/tables/coffee-table-sets",
+                    "ios_banner" : "",
+                    "name" : "Coffee Table Sets",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/554e4b5b-67fb-4d2a-86b2-41e77a35153d/occasional-table-resize-new-3.png?fit=clamp&w=90&h=90&auto=format&s=be4a07c3b89318ac25b5207bf9c08e86",
+                "canonical_url" : "https://staging.hipvan.com/tables/occasional-tables",
+                "ios_banner" : "",
+                "name" : "Occasional Tables",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "outdoor-tables-main",
+                "product_count" : 71,
+                "hidden_nav_node" : false,
+                "id" : 8512,
+                "categories" : [
+                  {
+                    "handle" : "outdoor-tables",
+                    "product_count" : 64,
+                    "hidden_nav_node" : false,
+                    "id" : 3827,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f54cbf7e-09bd-4119-afe7-915c50954b33/outdoortables.jpg?fit=clamp&w=90&h=90&auto=format&s=8b372b249344526af8a9968ab44c7c3d",
+                    "canonical_url" : "https://staging.hipvan.com/tables/outdoor-tables",
+                    "ios_banner" : "",
+                    "name" : "Outdoor Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "outdoor-sets",
+                    "product_count" : 61,
+                    "hidden_nav_node" : false,
+                    "id" : 3491,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7b13cec0-5699-457d-9c5b-18f124f43479/Category-Outdoor-outdoorset.png?fit=clamp&w=90&h=90&auto=format&s=a587aa0d59ac1583e3fdbd531510dbca",
+                    "canonical_url" : "https://staging.hipvan.com/tables/outdoor-sets",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/6afd8dc0-3a56-4eb4-8f06-37a6c7c1059a/Outdoor-sets.jpg",
+                    "name" : "Outdoor Sets",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/6afd8dc0-3a56-4eb4-8f06-37a6c7c1059a/Outdoor-sets.jpg"
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/548b3198-8c90-4dbe-8f14-64beea5a3e40/Outdoor-Table-Updated-Version-3png?fit=clamp&w=90&h=90&auto=format&s=e2d3ffb369402b1050c8b371951e5201",
+                "canonical_url" : "https://staging.hipvan.com/tables/outdoor-tables-main",
+                "ios_banner" : "",
+                "name" : "Outdoor Tables",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "other-tables",
+                "product_count" : 121,
+                "hidden_nav_node" : false,
+                "id" : 8497,
+                "categories" : [
+                  {
+                    "handle" : "study-tables",
+                    "product_count" : 23,
+                    "hidden_nav_node" : false,
+                    "id" : 50,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/cc6b1a74-7205-4b1d-9f6a-2216ce8e0051/Study-Desks-New.png?fit=clamp&w=90&h=90&auto=format&s=62561d847cef54857aff6014c62e8781",
+                    "canonical_url" : "https://staging.hipvan.com/tables/study-tables",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/1ec0c502-1da0-4c56-82e7-3bb47f5cb198/CategoryBanner-SG-Tables.jpg",
+                    "name" : "Study Tables",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/1ec0c502-1da0-4c56-82e7-3bb47f5cb198/CategoryBanner-SG-Tables.jpg"
+                  },
+                  {
+                    "handle" : "dressing-tables",
+                    "product_count" : 28,
+                    "hidden_nav_node" : false,
+                    "id" : 3438,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/3de52597-0f3f-46d5-8549-95638aea316d/Dressing-Table-New.png?fit=clamp&w=90&h=90&auto=format&s=3e1b56ab0cd9ea212d7740559f0b2746",
+                    "canonical_url" : "https://staging.hipvan.com/tables/dressing-tables",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/bf6dfeb8-0435-4028-9f3f-75f9c41beee0/Dressing-tables.jpg",
+                    "name" : "Dressing Tables",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/bf6dfeb8-0435-4028-9f3f-75f9c41beee0/Dressing-tables.jpg"
+                  },
+                  {
+                    "handle" : "bedside-tables",
+                    "product_count" : 64,
+                    "hidden_nav_node" : false,
+                    "id" : 3821,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/28fee56b-0aa4-49f5-b32b-04485ac84159/bedsidetables.png?fit=clamp&w=90&h=90&auto=format&s=b1499eea7d1f56145ec71507a280e44e",
+                    "canonical_url" : "https://staging.hipvan.com/tables/bedside-tables",
+                    "ios_banner" : "",
+                    "name" : "Bedside Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "kids-tables-chairs",
+                    "product_count" : 7,
+                    "hidden_nav_node" : false,
+                    "id" : 3163,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/9106449d-a1f6-499b-a61f-80b347d01634/Kids-Tables-New-2.jpg?fit=clamp&w=90&h=90&auto=format&s=0519030b38b7c3da4977a621af7df2a0",
+                    "canonical_url" : "https://staging.hipvan.com/tables/kids-tables-chairs",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/9ebbdfa5-326b-4b47-a7d7-5a7ed97faaba/Children-Furniture.jpg",
+                    "name" : "Kids' Tables ",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/9ebbdfa5-326b-4b47-a7d7-5a7ed97faaba/Children-Furniture.jpg"
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/510704a3-8cfd-4f0a-a885-e955bcef2f4b/Other-Table-New-2.png?fit=clamp&w=90&h=90&auto=format&s=f66042e3a36271571e8ff1e9cdb1413d",
+                "canonical_url" : "https://staging.hipvan.com/tables/other-tables",
+                "ios_banner" : "",
+                "name" : "Other Tables",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "tables-services",
+                "product_count" : 2,
+                "hidden_nav_node" : false,
+                "id" : 8523,
+                "categories" : [
+                  {
+                    "handle" : "tables-furniture-disposal",
+                    "product_count" : 2,
+                    "hidden_nav_node" : false,
+                    "id" : 8521,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/479787de-9cec-4935-b7a6-fa6af058b508/furnituredisposal.jpg?fit=clamp&w=90&h=90&auto=format&s=5cc0ae6c8bc24c79214ffb7252f0a03c",
+                    "canonical_url" : "https://staging.hipvan.com/tables/tables-furniture-disposal",
+                    "ios_banner" : "",
+                    "name" : "Furniture Disposal",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/9ae3573c-f81d-4bc1-b7c6-1e296b4319a6/furnituredisposal.jpg?fit=clamp&w=90&h=90&auto=format&s=6ebbb1e8694902d28adae4fb8290e77f",
+                "canonical_url" : "https://staging.hipvan.com/tables/tables-services",
+                "ios_banner" : "",
+                "name" : "Services ",
+                "banner_url" : ""
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/744130ab-353a-43c7-9d08-8e503a097fbc/table-new-update.png?fit=clamp&w=90&h=90&auto=format&s=ac5498545165e2f449b5a9420598a28e",
+            "canonical_url" : "https://staging.hipvan.com/tables",
+            "ios_banner" : "",
+            "name" : "Tables",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "dining-chairs-2",
+            "product_count" : 9,
+            "hidden_nav_node" : false,
+            "id" : 59,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/3256/dining_chairs_b5fdcd22-74c9-4c8d-9e45-d52182b39777.png?fit=clamp&w=90&h=90&auto=format&s=7c7c49f488ac39d53ca3d20a3f1a1060",
+            "canonical_url" : "https://staging.hipvan.com/dining-chairs-2",
+            "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/aab99334-d912-491a-b633-e50dff983e1e/CategoryBanner-SG-DiningChair.jpg",
+            "name" : "Dining Chairs",
+            "banner_url" : "https://hiptruck-files.imgix.net/cms-files/aab99334-d912-491a-b633-e50dff983e1e/CategoryBanner-SG-DiningChair.jpg"
+          },
+          {
+            "handle" : "chairs",
+            "product_count" : 703,
+            "hidden_nav_node" : false,
+            "id" : 8510,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+              {
+                "handle" : "dining",
+                "product_count" : 312,
+                "hidden_nav_node" : false,
+                "id" : 8501,
+                "categories" : [
+                  {
+                    "handle" : "dining-chairs",
+                    "product_count" : 116,
+                    "hidden_nav_node" : false,
+                    "id" : 3808,
+                    "categories" : [
+                      {
+                        "handle" : "arm-chairs",
+                        "product_count" : 33,
+                        "hidden_nav_node" : false,
+                        "id" : 4308,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/be2c8fc9-e980-40db-8333-4a28a6b201f6/arm.jpeg?fit=clamp&w=90&h=90&auto=format&s=7924138170f22c3de2de310a80b81e88",
+                        "canonical_url" : "https://staging.hipvan.com/chairs/dining-chairs/arm-chairs",
+                        "ios_banner" : "",
+                        "name" : "Dining Arm Chairs",
+                        "banner_url" : ""
+                      },
+                      {
+                        "handle" : "dining-side-chairs",
+                        "product_count" : 83,
+                        "hidden_nav_node" : false,
+                        "id" : 4307,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f0129fdd-4db2-424d-a1b3-a899151c62d0/diningsidechairs.jpg?fit=clamp&w=90&h=90&auto=format&s=8c9df38c22b4cb3c0e09e49f0d121b8a",
+                        "canonical_url" : "https://staging.hipvan.com/chairs/dining-chairs/dining-side-chairs",
+                        "ios_banner" : "",
+                        "name" : "Dining Side Chairs",
+                        "banner_url" : ""
+                      }
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b0104af8-465d-49c4-82aa-d996258bda46/diningchairs.jpg?fit=clamp&w=90&h=90&auto=format&s=019827eed766b1e91edc1af7a4bb40ec",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/dining-chairs",
+                    "ios_banner" : "",
+                    "name" : "Dining Chairs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-benches",
+                    "product_count" : 30,
+                    "hidden_nav_node" : false,
+                    "id" : 3810,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/1263fd56-852e-4fef-91ad-8fcbc6280748/diningbenches.jpg?fit=clamp&w=90&h=90&auto=format&s=a0cdf85fc4f60705874b5a41019eb1ee",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/dining-benches",
+                    "ios_banner" : "",
+                    "name" : "Dining Benches",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-chair-sets",
+                    "product_count" : 110,
+                    "hidden_nav_node" : false,
+                    "id" : 8693,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/da3dfbcb-1f65-40ac-88b9-a8e4f7666042/diningchairset.png?fit=clamp&w=90&h=90&auto=format&s=8fd45e0ab90b6ca169f20cfe6927ce2a",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/dining-chair-sets",
+                    "ios_banner" : "",
+                    "name" : "Dining Chair Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-sets",
+                    "product_count" : 56,
+                    "hidden_nav_node" : false,
+                    "id" : 4664,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b7b419ac-6c5c-497c-9a46-81349f2f39c6/diningchairsets.jpeg?fit=clamp&w=90&h=90&auto=format&s=4ca638ef2380c9a20d82a54766cb7f1f",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/dining-sets",
+                    "ios_banner" : "",
+                    "name" : "Dining Table & Chair Sets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "all-dining-chairs",
+                    "product_count" : 146,
+                    "hidden_nav_node" : false,
+                    "id" : 8484,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/9c9f295a-4b6f-4a17-81c3-bec64a90cde5/all-dining-chairs-new.png?fit=clamp&w=90&h=90&auto=format&s=8d078435aa7a74e49852bd8022925981",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/all-dining-chairs",
+                    "ios_banner" : "",
+                    "name" : "All Dining Chairs",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b524952b-288a-4836-bda5-55acaaea3f85/dining-chair-resize-2.png?fit=clamp&w=90&h=90&auto=format&s=bd35acf4f98464a6c7635e9a5d092cee",
+                "canonical_url" : "https://staging.hipvan.com/chairs/dining",
+                "ios_banner" : "",
+                "name" : "Dining Chairs & Benches",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "dining-bar-stools",
+                "product_count" : 87,
+                "hidden_nav_node" : false,
+                "id" : 63,
+                "categories" : [
+                  {
+                    "handle" : "bar-chairs-stools",
+                    "product_count" : 19,
+                    "hidden_nav_node" : false,
+                    "id" : 8617,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/0316da79-f6b2-4bbe-8a54-e55479a38195/Bar-Chairs-Stools-Update-New-3.png?fit=clamp&w=90&h=90&auto=format&s=7da48a605204c3b37ab5c0e9785c6879",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/bar-chairs-stools",
+                    "ios_banner" : "",
+                    "name" : "Bar Chairs & Stools",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "counter-stools",
+                    "product_count" : 25,
+                    "hidden_nav_node" : false,
+                    "id" : 4283,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/1d49c7d4-83de-4669-8dc3-f5f08eef809e/stools-new-updat.png?fit=clamp&w=90&h=90&auto=format&s=5792830bb7cd838edac00a26dd1f74de",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/counter-stools",
+                    "ios_banner" : "",
+                    "name" : "Counter Stools",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-stools",
+                    "product_count" : 33,
+                    "hidden_nav_node" : false,
+                    "id" : 4377,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/5243482b-57a1-4c22-86d3-17149dd9087b/Dining-Stool-Final.jpg?fit=clamp&w=90&h=90&auto=format&s=41144a6ea7b93af8ef16ca27068a26be",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/dining-stools",
+                    "ios_banner" : "",
+                    "name" : "Dining Stools",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "accent-step-stools",
+                    "product_count" : 41,
+                    "hidden_nav_node" : false,
+                    "id" : 64,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/bcabe5eb-6064-42d9-9618-a5277296fc5e/Accent-Stool-resize.png?fit=clamp&w=90&h=90&auto=format&s=8bec48eb4330a2eea0514001b35bc195",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/accent-step-stools",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/aab99334-d912-491a-b633-e50dff983e1e/CategoryBanner-SG-DiningChair.jpg",
+                    "name" : "Accent & Step Stools",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/aab99334-d912-491a-b633-e50dff983e1e/CategoryBanner-SG-DiningChair.jpg"
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c6426610-ceff-4b6a-88e0-8accb244f4cf/diningbarstools-resize.png?fit=clamp&w=90&h=90&auto=format&s=8bc94c27d8f9a9354cb71592f979afbf",
+                "canonical_url" : "https://staging.hipvan.com/chairs/dining-bar-stools",
+                "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/aab99334-d912-491a-b633-e50dff983e1e/CategoryBanner-SG-DiningChair.jpg",
+                "name" : "Stools & Bar Stools",
+                "banner_url" : "https://hiptruck-files.imgix.net/cms-files/aab99334-d912-491a-b633-e50dff983e1e/CategoryBanner-SG-DiningChair.jpg"
+              },
+              {
+                "handle" : "accent-chairs",
+                "product_count" : 233,
+                "hidden_nav_node" : false,
+                "id" : 8492,
+                "categories" : [
+                  {
+                    "handle" : "lounge-chairs",
+                    "product_count" : 103,
+                    "hidden_nav_node" : false,
+                    "id" : 62,
+                    "categories" : [
+                      {
+                        "handle" : "rocking-chairs",
+                        "product_count" : 6,
+                        "hidden_nav_node" : false,
+                        "id" : 67,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/eb25936e-a1f5-4930-bb51-f6c15d6f9b7f/Coffee-Tables-by-HipVan--Amelia-Marble-Coffee-Table--Grey-Chrome-8.png?fit=clamp&w=90&h=90&auto=format&s=68a6ab937c503bc19df54d67a438db96",
+                        "canonical_url" : "https://staging.hipvan.com/chairs/lounge-chairs/rocking-chairs",
+                        "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/250128d1-6bd2-42df-814e-2de088c66893/CategoryBanner-SG-RockingChair.jpg",
+                        "name" : "Rocking Chairs",
+                        "banner_url" : "https://hiptruck-files.imgix.net/cms-files/250128d1-6bd2-42df-814e-2de088c66893/CategoryBanner-SG-RockingChair.jpg"
+                      }
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/17804d38-915f-48bd-baa0-1097cec2cb97/LoungeChair.png?fit=clamp&w=90&h=90&auto=format&s=4355af5752d6f9abac999d92baf1473d",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/lounge-chairs",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/a12528b9-77d1-4871-ac14-13239eef55e6/CategoryBanner-SG-Pouf.jpg",
+                    "name" : "Lounge Chairs",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/a12528b9-77d1-4871-ac14-13239eef55e6/CategoryBanner-SG-Pouf.jpg"
+                  },
+                  {
+                    "handle" : "bean-bags-poufs",
+                    "product_count" : 71,
+                    "hidden_nav_node" : false,
+                    "id" : 66,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/4eb04cf6-8c3f-4e9a-8383-04a693c5f394/pouffe.png?fit=clamp&w=90&h=90&auto=format&s=143b89d2782f49dc2c583bdf5e2a1d41",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/bean-bags-poufs",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/a12528b9-77d1-4871-ac14-13239eef55e6/CategoryBanner-SG-Pouf.jpg",
+                    "name" : "Bean Bags & Poufs",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/a12528b9-77d1-4871-ac14-13239eef55e6/CategoryBanner-SG-Pouf.jpg"
+                  },
+                  {
+                    "handle" : "ottomans-benches",
+                    "product_count" : 55,
+                    "hidden_nav_node" : false,
+                    "id" : 65,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/28ba1e83-7d5b-49de-b605-8a73b6cd2eb9/ottomansbenches.jpeg?fit=clamp&w=90&h=90&auto=format&s=db29cd77560f26f978056aaa387b116a",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/ottomans-benches",
+                    "ios_banner" : "",
+                    "name" : "Ottomans & Benches",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "designer-replicas",
+                    "product_count" : 24,
+                    "hidden_nav_node" : false,
+                    "id" : 4379,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/307c653a-458e-456c-a7cd-20760e258685/designerreplicas.jpg?fit=clamp&w=90&h=90&auto=format&s=f9522c3c69a3d56bc6a0e5dcfc578be6",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/designer-replicas",
+                    "ios_banner" : "",
+                    "name" : "Designer Replica - Chairs",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/e2f68d06-b46a-40e6-ab35-123ec4313a49/Accentchairs-resize.png?fit=clamp&w=90&h=90&auto=format&s=20cd543c558a218702a585cbcc981b6c",
+                "canonical_url" : "https://staging.hipvan.com/chairs/accent-chairs",
+                "ios_banner" : "",
+                "name" : "Accent Chairs",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "other-chairs",
+                "product_count" : 204,
+                "hidden_nav_node" : false,
+                "id" : 8493,
+                "categories" : [
+                  {
+                    "handle" : "outdoor-chairs",
+                    "product_count" : 104,
+                    "hidden_nav_node" : false,
+                    "id" : 3828,
+                    "categories" : [
+                      {
+                        "handle" : "swings-chairs",
+                        "product_count" : 11,
+                        "hidden_nav_node" : false,
+                        "id" : 3830,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/5ceb0a23-3398-460a-baa7-bc5eeaf6f57f/outdoorswings.jpg?fit=clamp&w=90&h=90&auto=format&s=c6d11cddae8f464e2c536d1f518d8556",
+                        "canonical_url" : "https://staging.hipvan.com/chairs/outdoor-chairs/swings-chairs",
+                        "ios_banner" : "",
+                        "name" : "Swing Chairs",
+                        "banner_url" : ""
+                      }
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/1a3d1b0d-35d5-4c21-b9d0-f9defdea9eb9/Outdoor-Chairs-New-2.png?fit=clamp&w=90&h=90&auto=format&s=0d25cdbc91a661d2d68ac3d787ff2e6e",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/outdoor-chairs",
+                    "ios_banner" : "",
+                    "name" : "Outdoor Chairs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "office-chairs",
+                    "product_count" : 49,
+                    "hidden_nav_node" : false,
+                    "id" : 69,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2cb6405b-2f22-4db9-aed7-28cd77cdd0cc/Office-Chairs-New.png?fit=clamp&w=90&h=90&auto=format&s=bbaf31bb5121fb04b97c1e5df2cce6f5",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/office-chairs",
+                    "ios_banner" : "",
+                    "name" : "Office Chairs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "kids-chairs",
+                    "product_count" : 16,
+                    "hidden_nav_node" : false,
+                    "id" : 3162,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fa381c22-f18f-4803-9158-dc237abae121/Kids%2520Chair.jpeg?fit=clamp&w=90&h=90&auto=format&s=ce51fc0a03b7daf612458752f478b21e",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/kids-chairs",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/9ebbdfa5-326b-4b47-a7d7-5a7ed97faaba/Children-Furniture.jpg",
+                    "name" : "Kids' Chairs",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/9ebbdfa5-326b-4b47-a7d7-5a7ed97faaba/Children-Furniture.jpg"
+                  },
+                  {
+                    "handle" : "entryway-benches",
+                    "product_count" : 35,
+                    "hidden_nav_node" : false,
+                    "id" : 4342,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/9fe209ae-1a75-498b-b261-2227b9f84a4f/entryway%2520benches.jpeg?fit=clamp&w=90&h=90&auto=format&s=bb799dce6c9b5b8d6f9feff04eb5184c",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/entryway-benches",
+                    "ios_banner" : "",
+                    "name" : "Entryway Benches",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7cdb65ad-fca3-47b9-9430-606c0fe6aab9/Outdoor-Chairs_new.png?fit=clamp&w=90&h=90&auto=format&s=6ec34b7235f781981f777b513b83e8df",
+                "canonical_url" : "https://staging.hipvan.com/chairs/other-chairs",
+                "ios_banner" : "",
+                "name" : "Other Chairs",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "chairs-services",
+                "product_count" : 2,
+                "hidden_nav_node" : false,
+                "id" : 8525,
+                "categories" : [
+                  {
+                    "handle" : "chairs-furniture-disposal",
+                    "product_count" : 2,
+                    "hidden_nav_node" : false,
+                    "id" : 8529,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/809b3b67-812b-4819-b06c-8f1ed0398ffa/furnituredisposal.jpg?fit=clamp&w=90&h=90&auto=format&s=eb5ec1ab55967250e7467dc1fff20e1e",
+                    "canonical_url" : "https://staging.hipvan.com/chairs/chairs-furniture-disposal",
+                    "ios_banner" : "",
+                    "name" : "Furniture Disposal",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d5afbd58-4182-43ad-aa82-9cd61a2b5fab/furnituredisposal.jpg?fit=clamp&w=90&h=90&auto=format&s=a211375a84215347186a8c5acabe80cc",
+                "canonical_url" : "https://staging.hipvan.com/chairs/chairs-services",
+                "ios_banner" : "",
+                "name" : "Services",
+                "banner_url" : ""
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d1824333-e76d-4d13-a1aa-2c14eecfecf4/chair-resize.png?fit=clamp&w=90&h=90&auto=format&s=e6a41cdd0395a5020f0dafed8fa44c64",
+            "canonical_url" : "https://staging.hipvan.com/chairs",
+            "ios_banner" : "",
+            "name" : "Chairs",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "storage",
+            "product_count" : 826,
+            "hidden_nav_node" : false,
+            "id" : 8518,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+              {
+                "handle" : "living-room-storage",
+                "product_count" : 181,
+                "hidden_nav_node" : false,
+                "id" : 8505,
+                "categories" : [
+                  {
+                    "handle" : "tv-consoles-3",
+                    "product_count" : 40,
+                    "hidden_nav_node" : false,
+                    "id" : 53,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/8f69101f-f8dc-413e-86e5-fe9d876fe127/tv-console-update.jpg?fit=clamp&w=90&h=90&auto=format&s=c4e718c4837998bf4934e0ad1ece0768",
+                    "canonical_url" : "https://staging.hipvan.com/storage/tv-consoles-3",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/76ef3a93-d9d3-4ca3-b5c9-d0dc976d090d/CategoryBanner-SG-TVConsole.jpg",
+                    "name" : "TV Consoles",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/76ef3a93-d9d3-4ca3-b5c9-d0dc976d090d/CategoryBanner-SG-TVConsole.jpg"
+                  },
+                  {
+                    "handle" : "sideboards-credenzas",
+                    "product_count" : 40,
+                    "hidden_nav_node" : false,
+                    "id" : 3143,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7121ee54-7405-409b-b700-43146ab03f26/Sideboard.png?fit=clamp&w=90&h=90&auto=format&s=2e40c2f396b582c4a1f0cd3774179cb4",
+                    "canonical_url" : "https://staging.hipvan.com/storage/sideboards-credenzas",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/76ef3a93-d9d3-4ca3-b5c9-d0dc976d090d/CategoryBanner-SG-TVConsole.jpg",
+                    "name" : "Sideboards & Credenzas",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/76ef3a93-d9d3-4ca3-b5c9-d0dc976d090d/CategoryBanner-SG-TVConsole.jpg"
+                  },
+                  {
+                    "handle" : "bookcases-shelves",
+                    "product_count" : 64,
+                    "hidden_nav_node" : false,
+                    "id" : 54,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a4b7a7ab-0e18-4548-b0e8-0e1d8186013e/bookcasesshelves.png?fit=clamp&w=90&h=90&auto=format&s=72e883406152457bae35699c8f9f0cb2",
+                    "canonical_url" : "https://staging.hipvan.com/storage/bookcases-shelves",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/a45baa2a-2ffe-4479-8125-f8c073322968/Storage-Furniture.jpg",
+                    "name" : "Bookcases & Shelves",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/a45baa2a-2ffe-4479-8125-f8c073322968/Storage-Furniture.jpg"
+                  },
+                  {
+                    "handle" : "wall-shelves",
+                    "product_count" : 16,
+                    "hidden_nav_node" : false,
+                    "id" : 3854,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/119b642d-125b-4cba-b710-02ea1f81e387/Wallshelf.png?fit=clamp&w=90&h=90&auto=format&s=c252166dde033dbfec9d28c4c4912cdf",
+                    "canonical_url" : "https://staging.hipvan.com/storage/wall-shelves",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/a45baa2a-2ffe-4479-8125-f8c073322968/Storage-Furniture.jpg",
+                    "name" : "Wall Shelves",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/a45baa2a-2ffe-4479-8125-f8c073322968/Storage-Furniture.jpg"
+                  },
+                  {
+                    "handle" : "tv-console-sets",
+                    "product_count" : 24,
+                    "hidden_nav_node" : false,
+                    "id" : 8474,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/16b6a2bd-3555-431f-b648-28a1bbd9b67b/console.jpeg?fit=clamp&w=90&h=90&auto=format&s=47ab286704ca1f93ae78d6004bb0ccd2",
+                    "canonical_url" : "https://staging.hipvan.com/storage/tv-console-sets",
+                    "ios_banner" : "",
+                    "name" : "TV Console Sets",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/850eafcf-c3ef-4ffe-a213-cda0b5a0a906/living-room-storage-new.png?fit=clamp&w=90&h=90&auto=format&s=07e146da3e99d1f3a150ce49e58b985d",
+                "canonical_url" : "https://staging.hipvan.com/storage/living-room-storage",
+                "ios_banner" : "",
+                "name" : "Living Room Storage",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "bedroom-storage-main",
+                "product_count" : 264,
+                "hidden_nav_node" : false,
+                "id" : 8513,
+                "categories" : [
+                  {
+                    "handle" : "storage-bedside-tables",
+                    "product_count" : 64,
+                    "hidden_nav_node" : false,
+                    "id" : 3437,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/98daba46-9c4b-495d-85d6-9f4b80203777/bedsidetables.png?fit=clamp&w=90&h=90&auto=format&s=2a6b9c58134ff0b0d0e625c9a620be52",
+                    "canonical_url" : "https://staging.hipvan.com/storage/storage-bedside-tables",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/00ebe96e-8b9c-4354-984a-257c3ea92418/Bedroom-furniture.jpg",
+                    "name" : "Bedside Tables",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/00ebe96e-8b9c-4354-984a-257c3ea92418/Bedroom-furniture.jpg"
+                  },
+                  {
+                    "handle" : "chest-of-drawers",
+                    "product_count" : 20,
+                    "hidden_nav_node" : false,
+                    "id" : 3820,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fc0f16de-749d-4634-9b03-5d7fa696a9b6/chestofdrawer.png?fit=clamp&w=90&h=90&auto=format&s=68da0774021f336c7a4ff0aa25293a18",
+                    "canonical_url" : "https://staging.hipvan.com/storage/chest-of-drawers",
+                    "ios_banner" : "",
+                    "name" : "Chest of Drawers",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "clothes-stands-racks",
+                    "product_count" : 19,
+                    "hidden_nav_node" : false,
+                    "id" : 309,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/edc918eb-2dff-47d5-89be-5f71180b2126/clothesstandsracks.jpg?fit=clamp&w=90&h=90&auto=format&s=d9ba68325a832ed3ab904f1d8f621e8d",
+                    "canonical_url" : "https://staging.hipvan.com/storage/clothes-stands-racks",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/7ebdc5e7-c65f-4114-a220-a60a86d8fd0a/Clothes-rack.jpg",
+                    "name" : "Clothes Stands & Racks",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/7ebdc5e7-c65f-4114-a220-a60a86d8fd0a/Clothes-rack.jpg"
+                  },
+                  {
+                    "handle" : "wardrobe-organisers",
+                    "product_count" : 157,
+                    "hidden_nav_node" : false,
+                    "id" : 311,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/79095e5c-0ea8-4570-8f2f-f44175ac30e8/Wardrobe-Organiser-Final-Update-2.png?fit=clamp&w=90&h=90&auto=format&s=cc7da9e144eb09d0ce995f070e28010f",
+                    "canonical_url" : "https://staging.hipvan.com/storage/wardrobe-organisers",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/b1da2d7b-7f60-4742-bc99-55c48a26dc35/CategoryBanner-SG-Wardrobe.jpg",
+                    "name" : "Wardrobe Organisers",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/b1da2d7b-7f60-4742-bc99-55c48a26dc35/CategoryBanner-SG-Wardrobe.jpg"
+                  },
+                  {
+                    "handle" : "modular-storage",
+                    "product_count" : 7,
+                    "hidden_nav_node" : false,
+                    "id" : 4401,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b06fd543-d52e-44b9-baa3-c3c72f49df9a/modularstoarage.jpeg?fit=clamp&w=90&h=90&auto=format&s=ab61e00ffb8ee4159e2278f72b5c7895",
+                    "canonical_url" : "https://staging.hipvan.com/storage/modular-storage",
+                    "ios_banner" : "",
+                    "name" : "Modular Storage ",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d23b3c78-3473-43f5-8ca2-aa430d487b48/bedroom-storage-new-2.png?fit=clamp&w=90&h=90&auto=format&s=e6f6e8df22b00e18bbb55441500f24a8",
+                "canonical_url" : "https://staging.hipvan.com/storage/bedroom-storage-main",
+                "ios_banner" : "",
+                "name" : "Bedroom Storage",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "other-storage",
+                "product_count" : 317,
+                "hidden_nav_node" : false,
+                "id" : 8508,
+                "categories" : [
+                  {
+                    "handle" : "study-storage",
+                    "product_count" : 130,
+                    "hidden_nav_node" : false,
+                    "id" : 4324,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c895053b-28e1-4689-bca3-5811ca738cfc/study-storage-new.jpeg?fit=clamp&w=90&h=90&auto=format&s=0929533e13ddff24bd71d35e214514dc",
+                    "canonical_url" : "https://staging.hipvan.com/storage/study-storage",
+                    "ios_banner" : "",
+                    "name" : "Study Storage",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "trolleys-storage-boxes",
+                    "product_count" : 89,
+                    "hidden_nav_node" : false,
+                    "id" : 56,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/119aa967-8b3f-47df-9a54-c403f4a64536/trolleysstorage.jpeg?fit=clamp&w=90&h=90&auto=format&s=91ac071336aff6b3897a3839a3ba303c",
+                    "canonical_url" : "https://staging.hipvan.com/storage/trolleys-storage-boxes",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/373c4a44-996f-4f24-8a6c-c42afc3c1eee/Step-stool.jpg",
+                    "name" : "Trolleys & Storage",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/373c4a44-996f-4f24-8a6c-c42afc3c1eee/Step-stool.jpg"
+                  },
+                  {
+                    "handle" : "kids-drawers-storage",
+                    "product_count" : 155,
+                    "hidden_nav_node" : false,
+                    "id" : 3161,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/9b48ef8e-8c85-4ec8-83e3-a25ba124cb69/kidsdrawers.jpg?fit=clamp&w=90&h=90&auto=format&s=900adf55c8439528fb1afae627ea8d54",
+                    "canonical_url" : "https://staging.hipvan.com/storage/kids-drawers-storage",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/1d05cbae-f4c6-4816-82db-51728ef1f142/Trollies.jpg",
+                    "name" : "Kids' Drawers & Storage",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/1d05cbae-f4c6-4816-82db-51728ef1f142/Trollies.jpg"
+                  },
+                  {
+                    "handle" : "outdoor-storage",
+                    "product_count" : 71,
+                    "hidden_nav_node" : false,
+                    "id" : 4325,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f68b7a60-fd53-4729-9c3d-d38900baf74f/outdoor-storage-new-2.png?fit=clamp&w=90&h=90&auto=format&s=8fbe01784a60b89f85465cdfc8b74f3a",
+                    "canonical_url" : "https://staging.hipvan.com/storage/outdoor-storage",
+                    "ios_banner" : "",
+                    "name" : "Outdoor Storage",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "shoe-racks-entryway-storage",
+                    "product_count" : 72,
+                    "hidden_nav_node" : false,
+                    "id" : 55,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/071a80a8-dd99-4987-9dd3-73ce4d33b318/shoe-rack-new.jpeg?fit=clamp&w=90&h=90&auto=format&s=f45d2b6238ed462bdabe523f25341f78",
+                    "canonical_url" : "https://staging.hipvan.com/storage/shoe-racks-entryway-storage",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/2d4bd457-89f9-48e3-8e07-c50a995e58cb/Shoe-rack.jpg",
+                    "name" : "Shoe Racks & Storage",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/2d4bd457-89f9-48e3-8e07-c50a995e58cb/Shoe-rack.jpg"
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c30a7538-8c1b-4ad3-8a86-20c039cd230c/otherstorage.jpeg?fit=clamp&w=90&h=90&auto=format&s=ab5d5c5a691d5ad17180b6b7a9555650",
+                "canonical_url" : "https://staging.hipvan.com/storage/other-storage",
+                "ios_banner" : "",
+                "name" : "Other Storage",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "home-organisation",
+                "product_count" : 294,
+                "hidden_nav_node" : false,
+                "id" : 4341,
+                "categories" : [
+                  {
+                    "handle" : "trays-baskets-boxes",
+                    "product_count" : 209,
+                    "hidden_nav_node" : false,
+                    "id" : 346,
+                    "categories" : [
+                      {
+                        "handle" : "decorative-baskets",
+                        "product_count" : 53,
+                        "hidden_nav_node" : false,
+                        "id" : 3401,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/40229200-f207-4ccf-9c85-b49cbab105bd/decorativebaskets.png?fit=clamp&w=90&h=90&auto=format&s=1235de166f4150689e94c7e9d806d24b",
+                        "canonical_url" : "https://staging.hipvan.com/storage/trays-baskets-boxes/decorative-baskets",
+                        "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg",
+                        "name" : "Decorative Baskets",
+                        "banner_url" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg"
+                      },
+                      {
+                        "handle" : "decorative-trays",
+                        "product_count" : 18,
+                        "hidden_nav_node" : false,
+                        "id" : 3400,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/5eb45737-7ea5-4fc2-980b-f93433ae63c2/decorativetray.png?fit=clamp&w=90&h=90&auto=format&s=d3c74dff3c72cee963a09e7621eccb12",
+                        "canonical_url" : "https://staging.hipvan.com/storage/trays-baskets-boxes/decorative-trays",
+                        "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg",
+                        "name" : "Decorative Trays",
+                        "banner_url" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg"
+                      },
+                      {
+                        "handle" : "storage-boxes",
+                        "product_count" : 147,
+                        "hidden_nav_node" : false,
+                        "id" : 3318,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/4ff3be66-e022-41fe-921c-682ecd6a6548/storageboxes.png?fit=clamp&w=90&h=90&auto=format&s=172edba61f6003deacb23140bc59c644",
+                        "canonical_url" : "https://staging.hipvan.com/storage/trays-baskets-boxes/storage-boxes",
+                        "ios_banner" : "",
+                        "name" : "Storage Boxes",
+                        "banner_url" : ""
+                      }
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/aa1003cf-bf05-4e60-ac52-94b62fd7ac48/trays.png?fit=clamp&w=90&h=90&auto=format&s=48b6c5cc9d4d98578b4cb78ba79f9a55",
+                    "canonical_url" : "https://staging.hipvan.com/storage/trays-baskets-boxes",
+                    "ios_banner" : "",
+                    "name" : "Trays, Baskets & Boxes",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "magazine-racks",
+                    "product_count" : 39,
+                    "hidden_nav_node" : false,
+                    "id" : 3173,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/401b4b57-a6cb-495e-a344-932b42f221e6/magazine%2520rack%2520update%2520new%25203.png?fit=clamp&w=90&h=90&auto=format&s=2dd98af2aa553813bc111eddb679525d",
+                    "canonical_url" : "https://staging.hipvan.com/storage/magazine-racks",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg",
+                    "name" : "Magazine Racks",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg"
+                  },
+                  {
+                    "handle" : "tissue-boxes",
+                    "product_count" : 5,
+                    "hidden_nav_node" : false,
+                    "id" : 357,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ff06668e-82dd-46b9-b771-8e665a1eb68b/mirrorclocks.png?fit=clamp&w=90&h=90&auto=format&s=ad34131c924fda5d25ceecb5c865a855",
+                    "canonical_url" : "https://staging.hipvan.com/storage/tissue-boxes",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg",
+                    "name" : "Tissue Boxes",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/c4da3c8f-7a18-4968-86d6-6c482c38743c/CategoryBanner-SG-Storage.jpg"
+                  },
+                  {
+                    "handle" : "waste-bins",
+                    "product_count" : 19,
+                    "hidden_nav_node" : false,
+                    "id" : 3333,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/0a500ff9-f7b7-4409-b058-f4938dc9b4f8/Umbra--Woodrow-Can--Natural-Black-10.jpeg?fit=clamp&w=90&h=90&auto=format&s=156269b096dbcae8f145b6cc9baac522",
+                    "canonical_url" : "https://staging.hipvan.com/storage/waste-bins",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/ee3899c7-48f2-4cfc-b133-69997740f02a/CategoryBanner-SG-Bins.jpg",
+                    "name" : "Waste Bins",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/ee3899c7-48f2-4cfc-b133-69997740f02a/CategoryBanner-SG-Bins.jpg"
+                  },
+                  {
+                    "handle" : "wall-hooks-holders",
+                    "product_count" : 49,
+                    "hidden_nav_node" : false,
+                    "id" : 3477,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/770d3a46-16a8-4db0-8c73-2f957ee11c20/318190-040_SKYLINE_MULTI_HOOK_BLACK_PROP_01%2520copy.png?fit=clamp&w=90&h=90&auto=format&s=5004716721be03067727290389a4b661",
+                    "canonical_url" : "https://staging.hipvan.com/storage/wall-hooks-holders",
+                    "ios_banner" : "",
+                    "name" : "Wall Hooks & Holders",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/98b11ca0-1f0b-4144-8303-fe156cd72041/homeorganization.png?fit=clamp&w=90&h=90&auto=format&s=c17803bd054183cf6626e9c64bba8d2d",
+                "canonical_url" : "https://staging.hipvan.com/storage/home-organisation",
+                "ios_banner" : "",
+                "name" : "Home Organisation",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "bathroom-wardrobe-storage",
+                "product_count" : 219,
+                "hidden_nav_node" : false,
+                "id" : 8507,
+                "categories" : [
+                  {
+                    "handle" : "bathroom-accessories",
+                    "product_count" : 78,
+                    "hidden_nav_node" : false,
+                    "id" : 3892,
+                    "categories" : [
+                      {
+                        "handle" : "toothbrush-holders",
+                        "product_count" : 9,
+                        "hidden_nav_node" : false,
+                        "id" : 4807,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/0eae060f-7b24-4d4e-98c8-ced6bd64327e/89988_4_umbra-corsa-white-ceramic-toothbrush-holder.png?fit=clamp&w=90&h=90&auto=format&s=8f7413cc09ebb221c9859c24b4e89209",
+                        "canonical_url" : "https://staging.hipvan.com/storage/bathroom-accessories/toothbrush-holders",
+                        "ios_banner" : "",
+                        "name" : "Toothbrush Holders",
+                        "banner_url" : ""
+                      }
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a32391cd-d78b-4df0-9ee9-a1d0ac183dca/89991_3_umbra-corsa-white-toilet-brush.png?fit=clamp&w=90&h=90&auto=format&s=7f016fcd9163ee62f446bc65b12e79c5",
+                    "canonical_url" : "https://staging.hipvan.com/storage/bathroom-accessories",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/d11a0356-8c3b-4bb6-a6ae-4c596f204196/bathroom.jpg",
+                    "name" : "Bathroom Accessories",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/d11a0356-8c3b-4bb6-a6ae-4c596f204196/bathroom.jpg"
+                  },
+                  {
+                    "handle" : "vanity-organisers",
+                    "product_count" : 82,
+                    "hidden_nav_node" : false,
+                    "id" : 312,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d9d60bd2-9dd5-4681-bbbe-65052f29e35e/vanityorganiser.jpg?fit=clamp&w=90&h=90&auto=format&s=f0761a68dd5e52c4b029c930c3f4d059",
+                    "canonical_url" : "https://staging.hipvan.com/storage/vanity-organisers",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/b1da2d7b-7f60-4742-bc99-55c48a26dc35/CategoryBanner-SG-Wardrobe.jpg",
+                    "name" : "Vanity Organisers",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/b1da2d7b-7f60-4742-bc99-55c48a26dc35/CategoryBanner-SG-Wardrobe.jpg"
+                  },
+                  {
+                    "handle" : "bathroom-laundry-baskets-racks",
+                    "product_count" : 67,
+                    "hidden_nav_node" : false,
+                    "id" : 4486,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/0b2550ec-d663-4670-a2d9-36e8d3884a1a/decorativetray.png?fit=clamp&w=90&h=90&auto=format&s=60fa0113e1d2bbcfbc78cce1debe91bc",
+                    "canonical_url" : "https://staging.hipvan.com/storage/bathroom-laundry-baskets-racks",
+                    "ios_banner" : "",
+                    "name" : "Laundry Baskets & Racks",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/6cc89416-cb08-4bca-b248-58fccca635d6/Bathroomstorage.png?fit=clamp&w=90&h=90&auto=format&s=c54c757fc929c9c6c285d854e0c2e606",
+                "canonical_url" : "https://staging.hipvan.com/storage/bathroom-wardrobe-storage",
+                "ios_banner" : "",
+                "name" : "Bathroom & Vanity",
+                "banner_url" : ""
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b6192b9c-2f48-4f52-b2a0-7dc05033d658/storage-resize-2.png?fit=clamp&w=90&h=90&auto=format&s=f445a6d45e3d9abe39ce51c0b1ac0179",
+            "canonical_url" : "https://staging.hipvan.com/storage",
+            "ios_banner" : "",
+            "name" : "Storage",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "beds",
+            "product_count" : 308,
+            "hidden_nav_node" : false,
+            "id" : 8515,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+              {
+                "handle" : "beds-by-size",
+                "product_count" : 196,
+                "hidden_nav_node" : false,
+                "id" : 8498,
+                "categories" : [
+                  {
+                    "handle" : "king-size-bed-frames",
+                    "product_count" : 60,
+                    "hidden_nav_node" : false,
+                    "id" : 4567,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/6873f166-e831-4357-86cb-ae7ecd2092ab/Isabelle_Fabric_Bedframe_Lifestyle.png?fit=clamp&w=90&h=90&auto=format&s=9bfd60a8824dc6822d8aa9d6ca669bab",
+                    "canonical_url" : "https://staging.hipvan.com/beds/king-size-bed-frames",
+                    "ios_banner" : "",
+                    "name" : "King Bed Frames ",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "queen-size-bed-frames",
+                    "product_count" : 62,
+                    "hidden_nav_node" : false,
+                    "id" : 4569,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d02a609d-4e19-4ed4-93f2-00735a9db70f/queenbedframe.png?fit=clamp&w=90&h=90&auto=format&s=4c5bfc231cfaeebf63db462c4e415846",
+                    "canonical_url" : "https://staging.hipvan.com/beds/queen-size-bed-frames",
+                    "ios_banner" : "",
+                    "name" : "Queen Bed Frames",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "super-single-size-bed-frames",
+                    "product_count" : 39,
+                    "hidden_nav_node" : false,
+                    "id" : 4571,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f2e21ecd-3c56-468e-a65d-8c4f312b97ff/singlebed.jpeg?fit=clamp&w=90&h=90&auto=format&s=9dcf954cd247ddcd15c64085646ba93c",
+                    "canonical_url" : "https://staging.hipvan.com/beds/super-single-size-bed-frames",
+                    "ios_banner" : "",
+                    "name" : "Super Single Bed Frames",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "single-size-bed-frames",
+                    "product_count" : 38,
+                    "hidden_nav_node" : false,
+                    "id" : 4570,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b9b400d9-b7d4-4fe4-bdc3-8bb0cf56ec3c/single-bed-new-2.png?fit=clamp&w=90&h=90&auto=format&s=8699f573f48ef68a0c2d863b839f8ae9",
+                    "canonical_url" : "https://staging.hipvan.com/beds/single-size-bed-frames",
+                    "ios_banner" : "",
+                    "name" : "Single Bed Frames",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "bed-frames",
+                    "product_count" : 196,
+                    "hidden_nav_node" : false,
+                    "id" : 306,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/55388307-30f9-413f-894f-82d84f18371b/Beds.jpeg?fit=clamp&w=90&h=90&auto=format&s=d2fc94207b2fbba32bc9803f0ec10e06",
+                    "canonical_url" : "https://staging.hipvan.com/beds/bed-frames",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/65e8d175-3004-41d3-bb17-6bf09047157d/Beds-&-Mattresses.jpg",
+                    "name" : "All Bed Frames",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/65e8d175-3004-41d3-bb17-6bf09047157d/Beds-&-Mattresses.jpg"
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/6553fc24-8127-4d45-a297-86882c87fbd9/Test%2520BBS.png?fit=clamp&w=90&h=90&auto=format&s=0ba9032dff180cf86d7f2426189ebf5c",
+                "canonical_url" : "https://staging.hipvan.com/beds/beds-by-size",
+                "ios_banner" : "",
+                "name" : "Beds by Size",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "beds-by-type",
+                "product_count" : 204,
+                "hidden_nav_node" : false,
+                "id" : 8503,
+                "categories" : [
+                  {
+                    "handle" : "storage-beds",
+                    "product_count" : 40,
+                    "hidden_nav_node" : false,
+                    "id" : 3640,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7dae6f6e-f152-4dde-aac4-65d40738225e/storagebed.jpeg?fit=clamp&w=90&h=90&auto=format&s=786e8fee47e7532b8d9f05b99cb593b4",
+                    "canonical_url" : "https://staging.hipvan.com/beds/storage-beds",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/65e8d175-3004-41d3-bb17-6bf09047157d/Beds-&-Mattresses.jpg",
+                    "name" : "Storage Beds",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/65e8d175-3004-41d3-bb17-6bf09047157d/Beds-&-Mattresses.jpg"
+                  },
+                  {
+                    "handle" : "headboard-beds",
+                    "product_count" : 144,
+                    "hidden_nav_node" : false,
+                    "id" : 4310,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/60f2a940-3723-4d4c-8019-c5b5ccd6e359/headboardbeds.jpeg?fit=clamp&w=90&h=90&auto=format&s=df91b8b578fdc7f3557876546076b61c",
+                    "canonical_url" : "https://staging.hipvan.com/beds/headboard-beds",
+                    "ios_banner" : "",
+                    "name" : "Headboard Beds",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "divan-beds",
+                    "product_count" : 56,
+                    "hidden_nav_node" : false,
+                    "id" : 4306,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c47e6a64-96c1-4b1b-a796-46ae4d5b772f/divanbeds.jpg?fit=clamp&w=90&h=90&auto=format&s=3998f18b3703c36645f8f691abc63464",
+                    "canonical_url" : "https://staging.hipvan.com/beds/divan-beds",
+                    "ios_banner" : "",
+                    "name" : "Divan Beds",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "pull-out-beds",
+                    "product_count" : 7,
+                    "hidden_nav_node" : false,
+                    "id" : 4309,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/0ec438bf-0f98-44a3-8a32-e6a1bc958d20/trundlebeds.jpeg?fit=clamp&w=90&h=90&auto=format&s=af7986f4b7094e0d5f7b6abea070876b",
+                    "canonical_url" : "https://staging.hipvan.com/beds/pull-out-beds",
+                    "ios_banner" : "",
+                    "name" : "Pull Out Beds",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "kids-bedroom",
+                    "product_count" : 15,
+                    "hidden_nav_node" : false,
+                    "id" : 3160,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/720cb9f3-ba95-4384-ba9a-ed2c7a81d8e1/kidsbeds.jpeg?fit=clamp&w=90&h=90&auto=format&s=97b2a8c531b83a984dbdce560edf3f82",
+                    "canonical_url" : "https://staging.hipvan.com/beds/kids-bedroom",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/9b446ee8-db7e-4527-be25-41df81929d51/kids-beds.jpg",
+                    "name" : "Kids' Beds",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/9b446ee8-db7e-4527-be25-41df81929d51/kids-beds.jpg"
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fd9bc0c2-f0aa-4946-aecd-64a3072cf5b7/Beds%2520by%2520Type.png?fit=clamp&w=90&h=90&auto=format&s=2904a2203d26e2f00ee926987e46648d",
+                "canonical_url" : "https://staging.hipvan.com/beds/beds-by-type",
+                "ios_banner" : "",
+                "name" : "Beds by Type",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "bedroom-nav",
+                "product_count" : 102,
+                "hidden_nav_node" : false,
+                "id" : 8615,
+                "categories" : [
+                  {
+                    "handle" : "bedroom-sets",
+                    "product_count" : 52,
+                    "hidden_nav_node" : false,
+                    "id" : 16,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/4fbca2f2-d9cb-4ed0-a1aa-077d0625164c/bedsideset.png?fit=clamp&w=90&h=90&auto=format&s=6190ff44d42e24b1323e03bfff5abd3c",
+                    "canonical_url" : "https://staging.hipvan.com/beds/bedroom-sets",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/00ebe96e-8b9c-4354-984a-257c3ea92418/Bedroom-furniture.jpg",
+                    "name" : "Bed & Bedside Table Sets",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/00ebe96e-8b9c-4354-984a-257c3ea92418/Bedroom-furniture.jpg"
+                  },
+                  {
+                    "handle" : "bed-mattress-sets",
+                    "product_count" : 50,
+                    "hidden_nav_node" : false,
+                    "id" : 8619,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/bc9a8564-fce4-42b6-b91d-bf323ba0a04e/bedmattressset.png?fit=clamp&w=90&h=90&auto=format&s=1046a3ea955bbfb21a202280476c382b",
+                    "canonical_url" : "https://staging.hipvan.com/beds/bed-mattress-sets",
+                    "ios_banner" : "",
+                    "name" : "Bed & Mattress Sets",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/56d61406-4202-4295-8584-5fdbe8e97303/Bedroom%2520Sets.png?fit=clamp&w=90&h=90&auto=format&s=ef43a6e5a01f00485f68159abfc17b8b",
+                "canonical_url" : "https://staging.hipvan.com/beds/bedroom-nav",
+                "ios_banner" : "",
+                "name" : "Bedroom Sets",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "beds-services",
+                "product_count" : 2,
+                "hidden_nav_node" : false,
+                "id" : 8531,
+                "categories" : [
+                  {
+                    "handle" : "beds-furniture-disposal",
+                    "product_count" : 2,
+                    "hidden_nav_node" : false,
+                    "id" : 8533,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/71ca45b7-07df-4a10-979d-901e095092be/furnituredisposal.jpg?fit=clamp&w=90&h=90&auto=format&s=2ec48e5484281ce99acd7254f7955dba",
+                    "canonical_url" : "https://staging.hipvan.com/beds/beds-furniture-disposal",
+                    "ios_banner" : "",
+                    "name" : "Furniture Disposal",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b71ec3b7-70eb-4970-8d41-ff70953089ac/Beds%2520Services.png?fit=clamp&w=90&h=90&auto=format&s=67d6bd05b0facd4fea8e4d8c6d8aa9bd",
+                "canonical_url" : "https://staging.hipvan.com/beds/beds-services",
+                "ios_banner" : "",
+                "name" : "Services",
+                "banner_url" : ""
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/618d6c46-aa9e-4e6b-8b26-b4aaac431bb7/Beds-new-update.png?fit=clamp&w=90&h=90&auto=format&s=e1da94358406c4511fac2016e36c9c51",
+            "canonical_url" : "https://staging.hipvan.com/beds",
+            "ios_banner" : "",
+            "name" : "Beds",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "rugs",
+            "product_count" : 272,
+            "hidden_nav_node" : false,
+            "id" : 8537,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+              {
+                "handle" : "all-rugs-mats",
+                "product_count" : 271,
+                "hidden_nav_node" : false,
+                "id" : 8585,
+                "categories" : [
+
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/1609afca-a682-4e5e-bbce-f221d698234d/allrugsmats.png?fit=clamp&w=90&h=90&auto=format&s=13e7420987fda0b4a54044cc2e09bad2",
+                "canonical_url" : "https://staging.hipvan.com/rugs/all-rugs-mats",
+                "ios_banner" : "",
+                "name" : "All Rugs & Mats",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "rugs-by-size",
+                "product_count" : 219,
+                "hidden_nav_node" : false,
+                "id" : 9156,
+                "categories" : [
+                  {
+                    "handle" : "3m-by-2m-rugs",
+                    "product_count" : 92,
+                    "hidden_nav_node" : false,
+                    "id" : 8561,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a5a1c37d-f2ef-40fd-9fad-fccfbbdcb138/3x2.jpeg?fit=clamp&w=90&h=90&auto=format&s=bea0aba9cb4f33920fc6926f5d141ff4",
+                    "canonical_url" : "https://staging.hipvan.com/rugs/3m-by-2m-rugs",
+                    "ios_banner" : "",
+                    "name" : "3m x 2m Rugs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "2-4m-x-1-7m-rugs",
+                    "product_count" : 118,
+                    "hidden_nav_node" : false,
+                    "id" : 8563,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/865fc5c3-7a25-4b12-993b-e01cf4c6280a/2.4x1.7.jpg?fit=clamp&w=90&h=90&auto=format&s=fe13c8aaf74c9d94b938d1142c90b1d9",
+                    "canonical_url" : "https://staging.hipvan.com/rugs/2-4m-x-1-7m-rugs",
+                    "ios_banner" : "",
+                    "name" : "2.4m x 1.7m Rugs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "1-7m-x-1-2m-rugs",
+                    "product_count" : 66,
+                    "hidden_nav_node" : false,
+                    "id" : 8565,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/af44f9fc-512e-4975-ad3f-e9e53bd5578f/1.7-rug-new.png?fit=clamp&w=90&h=90&auto=format&s=cfdb077878cd21c738e569bb9f50a0a7",
+                    "canonical_url" : "https://staging.hipvan.com/rugs/1-7m-x-1-2m-rugs",
+                    "ios_banner" : "",
+                    "name" : "1.7m x 1.2m Rugs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "round-rugs",
+                    "product_count" : 10,
+                    "hidden_nav_node" : false,
+                    "id" : 8567,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f50a5963-6249-4114-a23a-97a5843182c4/roundrugs.jpeg?fit=clamp&w=90&h=90&auto=format&s=469467e48fb6166548e8ea10f43b6efb",
+                    "canonical_url" : "https://staging.hipvan.com/rugs/round-rugs",
+                    "ios_banner" : "",
+                    "name" : "Round Rugs",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/11e3b1e8-10b9-442b-ad33-c1b6f4242ef7-1726210392780/Rugs-By-Size-feature.png?fit=clamp&w=90&h=90&auto=format&s=ef352fdce6bf4df63e8d8629440b09ec",
+                "canonical_url" : "https://staging.hipvan.com/rugs-by-size",
+                "ios_banner" : null,
+                "name" : "Rugs by Size",
+                "banner_url" : null
+              },
+              {
+                "handle" : "floor-mats-door-mats",
+                "product_count" : 46,
+                "hidden_nav_node" : false,
+                "id" : 4679,
+                "categories" : [
+
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b2ad3b83-ea1c-4f14-9e89-51b4f463ad71/Windsor-Home-100-Cotton-Trellis-Bathroom-Runner-24x60-inches-6dbe7a63-a539-4712-ae3d-f2c0318a4cf7_600.jpg?fit=clamp&w=90&h=90&auto=format&s=ea456e8fc7f70b88dab57b178ea3ce14",
+                "canonical_url" : "https://staging.hipvan.com/rugs/floor-mats-door-mats",
+                "ios_banner" : "",
+                "name" : "Floor Mats & Door Mats",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "outdoor-rugs",
+                "product_count" : 87,
+                "hidden_nav_node" : false,
+                "id" : 3170,
+                "categories" : [
+
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c1935f0e-919b-476b-9c9e-14a8f18c7e79/Outdoorrug.png?fit=clamp&w=90&h=90&auto=format&s=c23fd53feb8e3813ce58e60add350fd0",
+                "canonical_url" : "https://staging.hipvan.com/rugs/outdoor-rugs",
+                "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/be860980-7496-4df4-9a81-54f576e15692/CategoryBanner-SG-Rugs.jpg",
+                "name" : "Outdoor Rugs",
+                "banner_url" : "https://hiptruck-files.imgix.net/cms-files/be860980-7496-4df4-9a81-54f576e15692/CategoryBanner-SG-Rugs.jpg"
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/23cd312c-2804-4cd8-9fd0-d5da127ec08d/rug-mat-update.png?fit=clamp&w=90&h=90&auto=format&s=a1b725f88dca83a2089013c4ec72aba7",
+            "canonical_url" : "https://staging.hipvan.com/rugs",
+            "ios_banner" : "",
+            "name" : "Rugs",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "soft-furnishings",
+            "product_count" : 380,
+            "hidden_nav_node" : false,
+            "id" : 8516,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+              {
+                "handle" : "rugs-cushions-throws",
+                "product_count" : 157,
+                "hidden_nav_node" : false,
+                "id" : 4496,
+                "categories" : [
+                  {
+                    "handle" : "cushions",
+                    "product_count" : 64,
+                    "hidden_nav_node" : false,
+                    "id" : 3167,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2da8b1f8-6938-4757-beb0-3c471b82a570/cushion.png?fit=clamp&w=90&h=90&auto=format&s=ab753db5b2f3b35f3f8abe65eea352a9",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/cushions",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/411a729b-f42d-4a5f-8532-dd0d35b942e9/CategoryBanner-SG-Sofa.jpg",
+                    "name" : "Cushions & Cushion Covers",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/411a729b-f42d-4a5f-8532-dd0d35b942e9/CategoryBanner-SG-Sofa.jpg"
+                  },
+                  {
+                    "handle" : "cushion-inserts",
+                    "product_count" : 2,
+                    "hidden_nav_node" : false,
+                    "id" : 8629,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/074c0c9e-5a75-4f61-b65d-7e7bd618d15f/cushions.png?fit=clamp&w=90&h=90&auto=format&s=a44147b66c946b64bd33959e4d277c21",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/cushion-inserts",
+                    "ios_banner" : "",
+                    "name" : "Cushion Inserts",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "throws",
+                    "product_count" : 14,
+                    "hidden_nav_node" : false,
+                    "id" : 3168,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f449647c-f1c7-4b33-a1d7-d8a992c98083/throwsblankets.jpg?fit=clamp&w=90&h=90&auto=format&s=876860ebeae751390c154d0f2a5e3667",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/throws",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/411a729b-f42d-4a5f-8532-dd0d35b942e9/CategoryBanner-SG-Sofa.jpg",
+                    "name" : "Throws & Blankets",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/411a729b-f42d-4a5f-8532-dd0d35b942e9/CategoryBanner-SG-Sofa.jpg"
+                  },
+                  {
+                    "handle" : "curated-company-stuff",
+                    "product_count" : 5,
+                    "hidden_nav_node" : false,
+                    "id" : 9112,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ec7c78b0-2e1c-46da-94c3-06f9ee5c79e7-1686670805839/Curated-Company-Stuff-feature.png?fit=clamp&w=90&h=90&auto=format&s=4c7a2466be6b2bab38051c447ddd39b1",
+                    "canonical_url" : "https://staging.hipvan.com/curated-company-stuff",
+                    "ios_banner" : null,
+                    "name" : "Curated Company Stuff",
+                    "banner_url" : null
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/3a0979d0-369d-49ca-a3c9-a10bc51eb5f3/rugscushion.png?fit=clamp&w=90&h=90&auto=format&s=76f95c2c6019a18ed96f19c89394240a",
+                "canonical_url" : "https://staging.hipvan.com/soft-furnishings/rugs-cushions-throws",
+                "ios_banner" : "",
+                "name" : "Cushions & Throws",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "bedding-essentials",
+                "product_count" : 15,
+                "hidden_nav_node" : false,
+                "id" : 4318,
+                "categories" : [
+                  {
+                    "handle" : "pillows-bolsters",
+                    "product_count" : 3,
+                    "hidden_nav_node" : false,
+                    "id" : 4312,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/499de2da-0d09-4e79-b556-2948aec97712/pillow.jpeg?fit=clamp&w=90&h=90&auto=format&s=3e52747c92e9d4ddadf6c6b46abcb706",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/pillows-bolsters",
+                    "ios_banner" : "",
+                    "name" : "Pillows & Bolsters",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "duvets",
+                    "product_count" : 7,
+                    "hidden_nav_node" : false,
+                    "id" : 4313,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fdbb5d7e-0e1a-49ac-9e11-d5731b05bd2b/duvet.jpg?fit=clamp&w=90&h=90&auto=format&s=9a1c07897b43359db8fb1951de574b87",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/duvets",
+                    "ios_banner" : "",
+                    "name" : "Duvets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "mattress-pillow-protectors",
+                    "product_count" : 5,
+                    "hidden_nav_node" : false,
+                    "id" : 4315,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/065fc87d-1632-47dc-a694-9a5b5a2e11b1/mattress.png?fit=clamp&w=90&h=90&auto=format&s=386e1c227f2055aeebcebd4c09246d30",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/mattress-pillow-protectors",
+                    "ios_banner" : "",
+                    "name" : "Mattress & Pillow Protectors",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ff68b83f-3cdb-4819-adc5-40375e4b59e6/beddingessentials.png?fit=clamp&w=90&h=90&auto=format&s=7ed4d1780d9e195d5d109c264bcf510f",
+                "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bedding-essentials",
+                "ios_banner" : "",
+                "name" : "Bedding Essentials",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "bed-linen",
+                "product_count" : 185,
+                "hidden_nav_node" : false,
+                "id" : 8535,
+                "categories" : [
+                  {
+                    "handle" : "king-size-beddings",
+                    "product_count" : 65,
+                    "hidden_nav_node" : false,
+                    "id" : 4499,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/e40f2dcb-5705-483d-ad74-16644091aa47/king-size-bedding-new.png?fit=clamp&w=90&h=90&auto=format&s=18cc467be175514c3b473a264239705f",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/king-size-beddings",
+                    "ios_banner" : "",
+                    "name" : "King Size Beddings",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "queen-size-beddings",
+                    "product_count" : 64,
+                    "hidden_nav_node" : false,
+                    "id" : 4500,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b48e1c74-e32f-4679-9306-1e78541d4a06/Queen.png?fit=clamp&w=90&h=90&auto=format&s=ca086f37b0b08145a073407f3631f486",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/queen-size-beddings",
+                    "ios_banner" : "",
+                    "name" : "Queen Size Beddings",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "super-single-size-beddings",
+                    "product_count" : 56,
+                    "hidden_nav_node" : false,
+                    "id" : 4501,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/5a2b2223-e352-4655-a924-e42c135b9a1e/Super%2520Single.png?fit=clamp&w=90&h=90&auto=format&s=ff42e9d73ba9c078342a0b68b4970956",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/super-single-size-beddings",
+                    "ios_banner" : "",
+                    "name" : "Super Single Size Beddings",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "single-size-beddings",
+                    "product_count" : 47,
+                    "hidden_nav_node" : false,
+                    "id" : 4502,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f5db3c64-b5d7-4cca-919d-e2abc472c9a9/Single.png?fit=clamp&w=90&h=90&auto=format&s=671b4879954665c5e20cec6698320242",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/single-size-beddings",
+                    "ios_banner" : "",
+                    "name" : "Single Size Beddings ",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "kids-beddings",
+                    "product_count" : 10,
+                    "hidden_nav_node" : false,
+                    "id" : 8569,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/aeeeacfa-786b-48f1-bfe1-b8f5d3de0fa0/kidsbedding.jpeg?fit=clamp&w=90&h=90&auto=format&s=787f5284b2cc8876b38d4a4ab848e62c",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/kids-beddings",
+                    "ios_banner" : "",
+                    "name" : "Kids' Beddings",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "bedsheets-duvet-covers",
+                    "product_count" : 184,
+                    "hidden_nav_node" : false,
+                    "id" : 4330,
+                    "categories" : [
+                      {
+                        "handle" : "full-bedding-sets",
+                        "product_count" : 101,
+                        "hidden_nav_node" : false,
+                        "id" : 3941,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/052c7f06-e305-4370-94d4-6cce5ba0126f/Bedding%2520Sets.jpg?fit=clamp&w=90&h=90&auto=format&s=8313a59125d5cd99cb98f03d53eca25b",
+                        "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bedsheets-duvet-covers/full-bedding-sets",
+                        "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg",
+                        "name" : "Full Bedding Sets",
+                        "banner_url" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg"
+                      },
+                      {
+                        "handle" : "bedsheets",
+                        "product_count" : 43,
+                        "hidden_nav_node" : false,
+                        "id" : 3943,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/19fdb966-30af-4c72-8be9-ab8e763bc36d/Bedsheets.jpg?fit=clamp&w=90&h=90&auto=format&s=0032370d1c2fd5a031b1e24542c379ca",
+                        "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bedsheets-duvet-covers/bedsheets",
+                        "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg",
+                        "name" : "Bedsheets",
+                        "banner_url" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg"
+                      },
+                      {
+                        "handle" : "duvet-covers",
+                        "product_count" : 32,
+                        "hidden_nav_node" : false,
+                        "id" : 3942,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2bba57d6-b1c2-46e9-869f-ddb29d8cf500/Duvet%2520covers.jpg?fit=clamp&w=90&h=90&auto=format&s=4758512b0a5528daa1f197c128323618",
+                        "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bedsheets-duvet-covers/duvet-covers",
+                        "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg",
+                        "name" : "Duvet Covers",
+                        "banner_url" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg"
+                      },
+                      {
+                        "handle" : "pillow-bolster-covers",
+                        "product_count" : 8,
+                        "hidden_nav_node" : false,
+                        "id" : 3944,
+                        "categories" : [
+
+                        ],
+                        "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/19516b50-9018-4786-8509-321f44787a1e/Pillowcases.jpg?fit=clamp&w=90&h=90&auto=format&s=007b154551665abbcd68113473e063d3",
+                        "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bedsheets-duvet-covers/pillow-bolster-covers",
+                        "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg",
+                        "name" : "Pillow & Bolster Covers",
+                        "banner_url" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg"
+                      }
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/fdc2f84d-650e-4ec4-b18e-b60033c0a882/allbedsheetsduvet.jpeg?fit=clamp&w=90&h=90&auto=format&s=c865c9392610065e30bedaabb94c8b62",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bedsheets-duvet-covers",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg",
+                    "name" : "All Bedsheets & Duvet Covers",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/97776df3-4b8f-4202-9b12-56f9a039042d/CategoryBanner-SG-Bedding.jpg"
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a237dade-23ca-4504-9cde-32a820028ed4/bedlinen.png?fit=clamp&w=90&h=90&auto=format&s=ab317ab22aad52d0c3095829303b27c5",
+                "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bed-linen",
+                "ios_banner" : "",
+                "name" : "Bed Linen",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "towels-bath-mats",
+                "product_count" : 36,
+                "hidden_nav_node" : false,
+                "id" : 4336,
+                "categories" : [
+                  {
+                    "handle" : "towel-sets",
+                    "product_count" : 3,
+                    "hidden_nav_node" : false,
+                    "id" : 3324,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/386b57d0-3e93-4b7b-8e5a-c51d798ba78e/towelset.png?fit=clamp&w=90&h=90&auto=format&s=73dbd9ae160600a22265feb70b187128",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/towel-sets",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg",
+                    "name" : "Towel Sets",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg"
+                  },
+                  {
+                    "handle" : "bath-towels",
+                    "product_count" : 4,
+                    "hidden_nav_node" : false,
+                    "id" : 3325,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/e030da9c-fbcb-46f6-b795-412cb1ce10ec/bathtowel.png?fit=clamp&w=90&h=90&auto=format&s=f7d61f71403fb52e310e702f9cf9a627",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bath-towels",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg",
+                    "name" : "Bath Towels",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg"
+                  },
+                  {
+                    "handle" : "bath-sheets",
+                    "product_count" : 2,
+                    "hidden_nav_node" : false,
+                    "id" : 4321,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2614571b-3cb3-4ae8-89b6-ecf3c4760d2c/bathsheet.png?fit=clamp&w=90&h=90&auto=format&s=6df24cf22472c83c7772125cdb552114",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bath-sheets",
+                    "ios_banner" : "",
+                    "name" : "Bath Sheets",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "bath-mats",
+                    "product_count" : 27,
+                    "hidden_nav_node" : false,
+                    "id" : 441,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/1754d24e-1e34-4ce3-b110-f4ba57799fe3/bathmats.jpg?fit=clamp&w=90&h=90&auto=format&s=ee0a8793668ef7f706e932b77a261b06",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/bath-mats",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg",
+                    "name" : "Bath Mats",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg"
+                  },
+                  {
+                    "handle" : "hand-towels",
+                    "product_count" : 2,
+                    "hidden_nav_node" : false,
+                    "id" : 3326,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f3593198-b325-4c0b-bdf8-148eae416904/handtowel.png?fit=clamp&w=90&h=90&auto=format&s=22b2f3ab5a1c95734748179bfb185d77",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/hand-towels",
+                    "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg",
+                    "name" : "Hand Towels",
+                    "banner_url" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg"
+                  },
+                  {
+                    "handle" : "face-towels",
+                    "product_count" : 1,
+                    "hidden_nav_node" : false,
+                    "id" : 8571,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/02cf7325-c361-4430-922e-5de4db809a47/FaceTowel_White.jpeg?fit=clamp&w=90&h=90&auto=format&s=4898b10828738eecd4b05268ba1546b6",
+                    "canonical_url" : "https://staging.hipvan.com/soft-furnishings/face-towels",
+                    "ios_banner" : "",
+                    "name" : "Face Towels",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f6b2d6bf-1db4-4300-8bf3-851bde256907/towel.png?fit=clamp&w=90&h=90&auto=format&s=7856307928577bd4a1196bcbbf77c2b7",
+                "canonical_url" : "https://staging.hipvan.com/soft-furnishings/towels-bath-mats",
+                "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg",
+                "name" : "Towels & Bath Mats",
+                "banner_url" : "https://hiptruck-files.imgix.net/cms-files/4d4b5e47-5718-4925-9024-17d94abfe207/CategoryBanner-SG-BathLinen.jpg"
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a68d3edb-c674-4150-a2e2-9e4903344baf/softfurnishings.jpeg?fit=clamp&w=90&h=90&auto=format&s=555fa00a12c7bc9568a0136179fea536",
+            "canonical_url" : "https://staging.hipvan.com/soft-furnishings",
+            "ios_banner" : "",
+            "name" : "Soft Furnishings",
+            "banner_url" : ""
+          },
+          {
+            "handle" : "sale",
+            "product_count" : 1048,
+            "hidden_nav_node" : false,
+            "id" : 3106,
+            "icon_classname" : "ic-shop-parcel",
+            "categories" : [
+              {
+                "handle" : "gss-redux-25-off",
+                "product_count" : 469,
+                "hidden_nav_node" : false,
+                "id" : 8687,
+                "categories" : [
+                  {
+                    "handle" : "gss-sofas-sofa-beds",
+                    "product_count" : 152,
+                    "hidden_nav_node" : false,
+                    "id" : 8675,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/672af6c7-8df3-4ab0-a9ae-dfacbcb6e13d/sofa.png?fit=clamp&w=90&h=90&auto=format&s=63b98dc046bee106b0aec558b7bb245d",
+                    "canonical_url" : "https://staging.hipvan.com/sale/gss-sofas-sofa-beds",
+                    "ios_banner" : "",
+                    "name" : "GSS Sofas & Sofa Beds",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "gss-console-coffee-tables",
+                    "product_count" : 72,
+                    "hidden_nav_node" : false,
+                    "id" : 8677,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ee6c3974-97fb-4de3-a254-24af92f855e0/coffeetable_new.png?fit=clamp&w=90&h=90&auto=format&s=996e5f2b7cad5b35982ad8c94e087e20",
+                    "canonical_url" : "https://staging.hipvan.com/sale/gss-console-coffee-tables",
+                    "ios_banner" : "",
+                    "name" : "GSS Coffee Tables & More",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "gss-dining-tables-chairs",
+                    "product_count" : 139,
+                    "hidden_nav_node" : false,
+                    "id" : 8679,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/3bab27e2-b60a-48cf-92e5-345d91fb6766/diningtable%2526chair.png?fit=clamp&w=90&h=90&auto=format&s=f22eb64316ff2226efc788b12ce2530d",
+                    "canonical_url" : "https://staging.hipvan.com/sale/gss-dining-tables-chairs",
+                    "ios_banner" : "",
+                    "name" : "GSS Dining Tables & Chairs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "gss-beds-bedside-tables",
+                    "product_count" : 53,
+                    "hidden_nav_node" : false,
+                    "id" : 8681,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/6c0b0ccb-033a-47d7-82e2-75f705d03d5c/bedroom.png?fit=clamp&w=90&h=90&auto=format&s=d9820d1591df1d8adaa9b784e49eb372",
+                    "canonical_url" : "https://staging.hipvan.com/sale/gss-beds-bedside-tables",
+                    "ios_banner" : "",
+                    "name" : "GSS Beds & Bedside Tables",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "gss-floor-table-lamps",
+                    "product_count" : 69,
+                    "hidden_nav_node" : false,
+                    "id" : 8683,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f44943f1-7d91-4ac7-b858-e1476409306a/tablelamp.png?fit=clamp&w=90&h=90&auto=format&s=2f4f0f94c5a4a56612186a23f881e556",
+                    "canonical_url" : "https://staging.hipvan.com/sale/gss-floor-table-lamps",
+                    "ios_banner" : "",
+                    "name" : "GSS Floor & Table Lamps",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "gss-office-tables-chairs",
+                    "product_count" : 34,
+                    "hidden_nav_node" : false,
+                    "id" : 8685,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/ccabead8-1816-4c92-8304-6dcc67c46c10/officetable%2526chair.png?fit=clamp&w=90&h=90&auto=format&s=579dd550623df5c81069a3d10ad826c3",
+                    "canonical_url" : "https://staging.hipvan.com/sale/gss-office-tables-chairs",
+                    "ios_banner" : "",
+                    "name" : "GSS Office Tables & Chairs",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/5c59d31f-cdf0-4154-acb3-a8b16a15d849/Sofa%2520beds.png?fit=clamp&w=90&h=90&auto=format&s=ae4b98cc4c894963d27572d8c20168ae",
+                "canonical_url" : "https://staging.hipvan.com/sale/gss-redux-25-off",
+                "ios_banner" : "",
+                "name" : "GSS Sale (25% Off)",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "last-chance",
+                "product_count" : 472,
+                "hidden_nav_node" : false,
+                "id" : 4652,
+                "categories" : [
+                  {
+                    "handle" : "sofa-clearance",
+                    "product_count" : 123,
+                    "hidden_nav_node" : false,
+                    "id" : 8581,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d7483198-eb69-40a0-ab14-c15f6a94df8a/sofaclearance.png?fit=clamp&w=90&h=90&auto=format&s=64912c15b14331a32006ff62cf8c6512",
+                    "canonical_url" : "https://staging.hipvan.com/sale/sofa-clearance",
+                    "ios_banner" : "",
+                    "name" : "Clearance Sofas & Sofa Beds",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-tables-chairs-clearance",
+                    "product_count" : 107,
+                    "hidden_nav_node" : false,
+                    "id" : 8587,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/c6fdc01e-cf04-4a03-9d8f-d47bd370ef95/diningclearance.png?fit=clamp&w=90&h=90&auto=format&s=b37acf282bd6eb7301135d0c966619cc",
+                    "canonical_url" : "https://staging.hipvan.com/sale/dining-tables-chairs-clearance",
+                    "ios_banner" : "",
+                    "name" : "Clearance Dining Room",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "office-chair-clearance",
+                    "product_count" : 17,
+                    "hidden_nav_node" : false,
+                    "id" : 8583,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b0ad0a11-3805-44db-8fbd-8cae20d39432/officechairclearance.png?fit=clamp&w=90&h=90&auto=format&s=9ef81d6e65004206bd76ed3014cee6d8",
+                    "canonical_url" : "https://staging.hipvan.com/sale/office-chair-clearance",
+                    "ios_banner" : "",
+                    "name" : "Clearance Office Chairs",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "furniture-clearance",
+                    "product_count" : 102,
+                    "hidden_nav_node" : false,
+                    "id" : 4572,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/436b2bd7-1961-432e-aa12-e1f5ce142dc7/furnitureoffers.jpg?fit=clamp&w=90&h=90&auto=format&s=efbf5fd1581ede8e78c2bc7104fe7580",
+                    "canonical_url" : "https://staging.hipvan.com/sale/furniture-clearance",
+                    "ios_banner" : "",
+                    "name" : "Clearance Furniture",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "lighting-clearance",
+                    "product_count" : 66,
+                    "hidden_nav_node" : false,
+                    "id" : 3131,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/09fea322-812b-4f73-b4de-bc9b1ddf62ad/FurnishingSale-Lighting.png?fit=clamp&w=90&h=90&auto=format&s=d5c62d3e1a4018e7ab24e6b65ac606d5",
+                    "canonical_url" : "https://staging.hipvan.com/sale/lighting-clearance",
+                    "ios_banner" : "",
+                    "name" : "Clearance Lightings",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "homeware-clearance",
+                    "product_count" : 71,
+                    "hidden_nav_node" : false,
+                    "id" : 4568,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/22aff58f-3487-4757-8334-01eabb4c0bf3/furnishingoffers.jpg?fit=clamp&w=90&h=90&auto=format&s=a68316c03a8bf51db66873502d474253",
+                    "canonical_url" : "https://staging.hipvan.com/sale/homeware-clearance",
+                    "ios_banner" : "",
+                    "name" : "Clearance Homeware",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "lifestyle-clearance",
+                    "product_count" : 1,
+                    "hidden_nav_node" : false,
+                    "id" : 3104,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b21f35f7-96d7-4b0d-8369-7a6eee7d1d5a/lifestylesale.jpg?fit=clamp&w=90&h=90&auto=format&s=37a3a4231e763227a0dd373ed9810e5e",
+                    "canonical_url" : "https://staging.hipvan.com/sale/lifestyle-clearance",
+                    "ios_banner" : "",
+                    "name" : "Clearance Lifestyle",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7eb8cbed-5e8b-457c-ade8-507d3565bf3e/Zola_preview.jpeg?fit=clamp&w=90&h=90&auto=format&s=923bc43e9346d2c11613a256d837c118",
+                "canonical_url" : "https://staging.hipvan.com/sale/last-chance",
+                "ios_banner" : "",
+                "name" : "Post CNY Sale (30% off)",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "display-piece-up-to-80-off",
+                "product_count" : 244,
+                "hidden_nav_node" : false,
+                "id" : 3538,
+                "categories" : [
+                  {
+                    "handle" : "clearance-living-room",
+                    "product_count" : 244,
+                    "hidden_nav_node" : false,
+                    "id" : 8543,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/528d8458-a0c8-40a8-ba4b-43b434a945b2/prelovedliving.jpeg?fit=clamp&w=90&h=90&auto=format&s=ab984aca9231c6832a31365226584452",
+                    "canonical_url" : "https://staging.hipvan.com/sale/clearance-living-room",
+                    "ios_banner" : "",
+                    "name" : "(As-is) Living Room Sale",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "clearance-dining-room",
+                    "product_count" : 152,
+                    "hidden_nav_node" : false,
+                    "id" : 8545,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/b7bac9ba-57ea-4674-aeae-6ea80a561fa9/preloveddining.png?fit=clamp&w=90&h=90&auto=format&s=e1b10e8a165a80804269316a6996243f",
+                    "canonical_url" : "https://staging.hipvan.com/sale/clearance-dining-room",
+                    "ios_banner" : "",
+                    "name" : "(As-is) Dining Room Sale",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "clearance-bedroom",
+                    "product_count" : 8,
+                    "hidden_nav_node" : false,
+                    "id" : 8547,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/d3640240-5e04-4e2b-be0f-973004a3526f/prelovedbred.jpeg?fit=clamp&w=90&h=90&auto=format&s=e36e6fb33736fb2300d1c21c4a9dd24d",
+                    "canonical_url" : "https://staging.hipvan.com/sale/clearance-bedroom",
+                    "ios_banner" : "",
+                    "name" : "(As-is) Bedroom Sale",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "clearance-others",
+                    "product_count" : 27,
+                    "hidden_nav_node" : false,
+                    "id" : 8549,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/2c0a5cd3-5608-493f-9f93-3a0b9591697d/clearanceothers.png?fit=clamp&w=90&h=90&auto=format&s=e99093236daa70109547f3605b81b6d9",
+                    "canonical_url" : "https://staging.hipvan.com/sale/clearance-others",
+                    "ios_banner" : "",
+                    "name" : "(As-is) Others Sale",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/a3dc5b76-760d-4b17-b4e6-4acf4ac45a44/displaypieces_upd.png?fit=clamp&w=90&h=90&auto=format&s=9750fba4904e00eb5406c058d1ed0b6e",
+                "canonical_url" : "https://staging.hipvan.com/sale/display-piece-up-to-80-off",
+                "ios_banner" : "",
+                "name" : "Display Piece (Up to 80% Off)",
+                "banner_url" : ""
+              },
+              {
+                "handle" : "value-for-money",
+                "product_count" : 346,
+                "hidden_nav_node" : false,
+                "id" : 4756,
+                "categories" : [
+                  {
+                    "handle" : "living-room-1",
+                    "product_count" : 124,
+                    "hidden_nav_node" : false,
+                    "id" : 4760,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f10e73da-a054-47d9-a940-0f4c95d75c6d/tucson.jpg?fit=clamp&w=90&h=90&auto=format&s=ea5ec43f6d16c856c683603320b6739d",
+                    "canonical_url" : "https://staging.hipvan.com/sale/living-room-1",
+                    "ios_banner" : "",
+                    "name" : "Budget Living Room",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "dining-room-1",
+                    "product_count" : 100,
+                    "hidden_nav_node" : false,
+                    "id" : 4761,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/432c9c50-8adb-446e-975b-cfc73ecd4141/kendalldining.png?fit=clamp&w=90&h=90&auto=format&s=d2e408267378cd00c9703e442dc5a4a6",
+                    "canonical_url" : "https://staging.hipvan.com/sale/dining-room-1",
+                    "ios_banner" : "",
+                    "name" : "Budget Dining Room",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "bedroom-1",
+                    "product_count" : 57,
+                    "hidden_nav_node" : false,
+                    "id" : 4763,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/9590c31b-cdd3-4b28-b2e9-2266674f9931/parkerbedroom2.jpg?fit=clamp&w=90&h=90&auto=format&s=3ce4f45a65cc7024f375240a00b4d37c",
+                    "canonical_url" : "https://staging.hipvan.com/sale/bedroom-1",
+                    "ios_banner" : "",
+                    "name" : "Budget Bedroom",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "lighting-1",
+                    "product_count" : 59,
+                    "hidden_nav_node" : false,
+                    "id" : 4764,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f6b40f0a-3470-42ae-b5dc-9a74b2422ed1/grasshopperlighting2.jpg?fit=clamp&w=90&h=90&auto=format&s=d21493a065faa7c9e8d1978e451cf1b5",
+                    "canonical_url" : "https://staging.hipvan.com/sale/lighting-1",
+                    "ios_banner" : "",
+                    "name" : "Budget Lightings",
+                    "banner_url" : ""
+                  },
+                  {
+                    "handle" : "new-pendants",
+                    "product_count" : 40,
+                    "hidden_nav_node" : false,
+                    "id" : 8801,
+                    "categories" : [
+
+                    ],
+                    "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/05d793be-4dc3-43e2-b501-b5dc08e766af/lightbulb.png?fit=clamp&w=90&h=90&auto=format&s=ab26b42c3b1e7ebab26a8e66f479dd7e",
+                    "canonical_url" : "https://staging.hipvan.com/sale/new-pendants",
+                    "ios_banner" : "",
+                    "name" : "New Pendants",
+                    "banner_url" : ""
+                  }
+                ],
+                "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/f1a103c1-7bbc-433c-8a8d-608c60a1f7fc/great%2520value%2520for%2520money.png?fit=clamp&w=90&h=90&auto=format&s=ca34e797fa30b8c7924f144bcf507cbf",
+                "canonical_url" : "https://staging.hipvan.com/sale/value-for-money",
+                "ios_banner" : "",
+                "name" : "Budget Friendly",
+                "banner_url" : ""
+              }
+            ],
+            "taxon_image" : "https://hipvan-images-staging-testing.imgix.net/taxon-images/7db1568c-efcf-41ef-beab-7c22160c3f32/clearance.png?fit=clamp&w=90&h=90&auto=format&s=6213d74015a03e79a99704012dce8260",
+            "canonical_url" : "https://staging.hipvan.com/sale",
+            "ios_banner" : "https://hiptruck-files.imgix.net/cms-files/419c5a66-7698-45f7-ac27-129aeb3d673c/salecollection-featureimage.png",
+            "name" : "Sale",
+            "banner_url" : "https://hiptruck-files.imgix.net/cms-files/419c5a66-7698-45f7-ac27-129aeb3d673c/salecollection-featureimage.png"
+          }
+        ]
+      }
+      }

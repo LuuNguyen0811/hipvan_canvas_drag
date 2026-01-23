@@ -9,7 +9,7 @@ export interface HTMLPreviewProps {
   html: string;
   title?: string;
   baseUrl?: string;
-  onElementSelect?: (element: HTMLElement) => void;
+  onElementSelect?: (element: any) => void;
 }
 
 const viewportWidths: Record<ViewportSize, number> = {

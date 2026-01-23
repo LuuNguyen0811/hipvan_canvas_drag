@@ -6,7 +6,7 @@ export function usePreviewResizing(
   updateSection: (sectionId: string, updates: Partial<LayoutSection>) => void,
   updateComponent: (sectionId: string, componentId: string, updates: Partial<Component>, isResizing?: boolean) => void,
   saveToHistory: (action: string) => void,
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
 ) {
   const [resizingSection, setResizingSection] = useState<string | null>(null);
   const [resizingDivider, setResizingDivider] = useState<number | null>(null);

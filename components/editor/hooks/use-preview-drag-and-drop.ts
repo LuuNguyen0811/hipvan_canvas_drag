@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Component, Project, SectionTemplate } from "@/lib/types";
+import type { Component, Project, SectionTemplate, SectionLayoutType } from "@/lib/types";
 import { SECTION_TEMPLATES } from "@/lib/types";
 import { generateId, findComponentInTree } from "@/lib/editor-utils";
 
@@ -8,7 +8,7 @@ export function usePreviewDragAndDrop(
   addComponent: (sectionId: string, component: Component, index?: number) => void,
   addComponentToLayout: (sectionId: string, layoutId: string, component: Component, index?: number) => void,
   moveComponent: (fromSectionId: string, toSectionId: string, componentId: string, targetIndex: number, options?: any) => void,
-  addSection: (layoutType: string, template: SectionTemplate, index: number) => void,
+  addSection: (layoutType: SectionLayoutType, template: SectionTemplate, index: number) => void,
   showOnboarding: boolean,
   setShowOnboarding: (show: boolean) => void
 ) {
