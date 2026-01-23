@@ -11,6 +11,8 @@ export function usePreviewProductList(
   } | null>(null);
   
   const [editingProductListData, setEditingProductListData] = useState<ProductListComponentData | null>(null);
+  const [productSearchQuery, setProductSearchQuery] = useState("");
+  const [productSearchResults, setProductSearchResults] = useState<any[]>([]);
 
   const handleSaveProductList = () => {
     if (editingProductList && editingProductListData) {
@@ -18,14 +20,19 @@ export function usePreviewProductList(
       saveToHistory("Updated product list");
       setEditingProductList(null);
       setEditingProductListData(null);
+      setProductSearchQuery("");
     }
   };
 
   return {
     editingProductList,
     editingProductListData,
+    productSearchQuery,
+    productSearchResults,
     setEditingProductList,
     setEditingProductListData,
+    setProductSearchQuery,
+    setProductSearchResults,
     handleSaveProductList,
   };
 }

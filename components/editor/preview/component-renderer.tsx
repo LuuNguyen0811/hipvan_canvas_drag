@@ -51,6 +51,10 @@ interface ComponentRendererProps {
   getAllCollections: () => any[]
   setEditingProductList: (data: { sectionId: string; component: Component } | null) => void
   setEditingProductListData: (data: ProductListComponentData | null) => void
+  productSearchQuery: string
+  setProductSearchQuery: (query: string) => void
+  productSearchResults: any[]
+  setProductSearchResults: (results: any[]) => void
   removeComponent: (sectionId: string, componentId: string) => void
   setImageUploadTarget: (target: { sectionId: string; componentId: string } | null) => void
 }
@@ -81,6 +85,10 @@ export function ComponentRenderer({
   getAllCollections,
   setEditingProductList,
   setEditingProductListData,
+  productSearchQuery,
+  setProductSearchQuery,
+  productSearchResults,
+  setProductSearchResults,
   removeComponent,
   setImageUploadTarget,
 }: ComponentRendererProps) {
@@ -393,12 +401,16 @@ export function ComponentRenderer({
                   setEditingProductList({ sectionId, component })
                   setEditingProductListData(productListData || {
                     layout: 'horizontal',
+                    sourceType: 'manual',
                     items: [],
                     gap: '1.5rem',
                     itemsPerRow: 4,
                     showHeader: true,
                     headerTitle: 'Recently Viewed Products',
+                    headerAlignment: 'left',
                   })
+                  setProductSearchQuery('')
+                  setProductSearchResults([])
                 }}
               >
                 <Grid2X2 className="mb-2 h-8 w-8 text-muted-foreground" />
@@ -447,12 +459,16 @@ export function ComponentRenderer({
               setEditingProductList({ sectionId, component })
               setEditingProductListData(component.productListData || {
                 layout: 'horizontal',
+                sourceType: 'manual',
                 items: [],
                 gap: '1.5rem',
                 itemsPerRow: 4,
                 showHeader: true,
                 headerTitle: 'Recently Viewed Products',
+                headerAlignment: 'left',
               })
+              setProductSearchQuery('')
+              setProductSearchResults([])
             } else {
               setEditingComponent({ sectionId, component })
             }

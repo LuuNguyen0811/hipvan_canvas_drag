@@ -44,6 +44,8 @@ export interface ProductItemData {
 
 export interface ProductListComponentData {
   layout: "horizontal" | "vertical";
+  sourceType: "api" | "manual";
+  productIds?: string[];
   items: ProductItemData[];
   gap?: string;
   itemsPerRow?: number;

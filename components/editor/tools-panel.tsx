@@ -638,6 +638,7 @@ export function ToolsPanel() {
 
     const defaultProductListData: ProductListComponentData = {
       layout: "vertical",
+      sourceType: "manual",
       items: [],
       gap: "1.5rem",
       itemsPerRow: 4,

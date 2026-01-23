@@ -111,8 +111,12 @@ export function PreviewPanel() {
   const {
     editingProductList,
     editingProductListData,
+    productSearchQuery,
+    productSearchResults,
     setEditingProductList,
     setEditingProductListData,
+    setProductSearchQuery,
+    setProductSearchResults,
     handleSaveProductList,
   } = usePreviewProductList(updateComponent, saveToHistory);
 
@@ -277,6 +281,10 @@ export function PreviewPanel() {
                               getAllCollections={getAllCollections}
                               setEditingProductList={setEditingProductList}
                               setEditingProductListData={setEditingProductListData}
+                              productSearchQuery={productSearchQuery}
+                              setProductSearchQuery={setProductSearchQuery}
+                              productSearchResults={productSearchResults}
+                              setProductSearchResults={setProductSearchResults}
                               removeComponent={removeComponent}
                               setImageUploadTarget={setImageUploadTarget}
                             />
@@ -349,9 +357,14 @@ export function PreviewPanel() {
         onClose={() => {
           setEditingProductList(null);
           setEditingProductListData(null);
+          setProductSearchQuery("");
         }}
         editingProductListData={editingProductListData}
         setEditingProductListData={setEditingProductListData}
+        productSearchQuery={productSearchQuery}
+        setProductSearchQuery={setProductSearchQuery}
+        productSearchResults={productSearchResults}
+        setProductSearchResults={setProductSearchResults}
         handleSaveProductList={handleSaveProductList}
       />
     </div>
