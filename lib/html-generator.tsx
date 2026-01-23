@@ -817,6 +817,146 @@ function generateCSS(layout: LayoutSection[]): string {
       .collection-grid:not(.horizontal) {
         grid-template-columns: repeat(2, 1fr) !important;
       }
+    }
+
+    /* Product List Components */
+    .product-list {
+      width: 100%;
+    }
+    
+    .product-list-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .product-list-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    
+    .product-list-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    
+    .product-list-grid.horizontal {
+      display: flex;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    
+    .product-list-grid.horizontal::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .product-list-grid.horizontal .product-item {
+      flex-shrink: 0;
+      width: 16rem;
+      scroll-snap-align: start;
+    }
+    
+    .product-item {
+      position: relative;
+      background: white;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-item:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .product-item-image {
+      aspect-ratio: 1;
+      width: 100%;
+      position: relative;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+    
+    .product-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    
+    .product-item:hover .product-item-image img {
+      transform: scale(1.05);
+    }
+    
+    .product-item-badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      padding: 0.25rem 0.625rem;
+      background: #ef4444;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 2rem;
+      z-index: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .product-item-content {
+      padding: 1rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-item-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 0.75rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.4;
+      height: 2.625rem;
+    }
+    
+    .product-item-price-container {
+      display: flex;
+      align-items: baseline;
+      gap: 0.625rem;
+      margin-top: auto;
+    }
+    
+    .product-item-price {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+    
+    .product-item-original-price {
+      font-size: 0.875rem;
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+
+    @media (max-width: 640px) {
+      .product-list-grid:not(.horizontal) {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem;
+      }
+      .product-list-grid.horizontal .product-item {
+        width: 14rem;
+      }
     }`;
 }
 
@@ -1235,21 +1375,32 @@ ${tabContentsHtml}
         </div>`;
       }
 
-      const headerHtml =
+      const headerAlignmentMap = {
+        left: "justify-content: flex-start;",
+        center: "justify-content: center; text-align: center;",
+        right: "justify-content: flex-end; text-align: right;",
+      };
+
+      const collectionHeaderStyle = data.headerAlignment
+        ? headerAlignmentMap[data.headerAlignment]
+        : "";
+
+      const collectionHeaderHtml =
         data.showHeader && data.headerTitle
           ? `
-          <div class="collection-header">
+          <div class="collection-header" style="${collectionHeaderStyle}">
             <h3 class="collection-title">${data.headerTitle}</h3>
           </div>`
           : "";
 
-      const gridClass = data.layout === "horizontal" ? "horizontal" : "";
-      const gridStyle =
+      const collectionGridClass =
+        data.layout === "horizontal" ? "horizontal" : "";
+      const collectionGridStyle =
         data.layout === "vertical"
           ? ` style="grid-template-columns: repeat(${data.itemsPerRow || 4}, 1fr); gap: ${data.gap || "1rem"};"`
           : ` style="gap: ${data.gap || "1rem"};"`;
 
-      const itemsHtml = data.items
+      const collectionItemsHtml = data.items
         .map((item) => {
           const badgeHtml = item.badge
             ? `<span class="collection-item-badge">${item.badge}</span>`
@@ -1262,26 +1413,98 @@ ${tabContentsHtml}
             : "";
 
           const ctaText = item.ctaText || data.itemCtaText || "Shop";
-          const ctaStyle =
-            item.ctaBgColor || data.itemCtaBgColor
-              ? ` style="background-color: ${item.ctaBgColor || data.itemCtaBgColor}; color: white;"`
+          const finalCtaBgColor =
+            item.ctaBgColor || data.itemCtaBgColor || "#3b82f6";
+          const finalCtaTextColor =
+            item.ctaTextColor || data.itemCtaTextColor || "white";
+          const ctaStyle = ` style="background-color: ${finalCtaBgColor}; color: ${finalCtaTextColor};"`;
+
+          const itemBgStyle =
+            item.itemBgColor || data.itemBgColor
+              ? ` style="background-color: ${item.itemBgColor || data.itemBgColor};"`
               : "";
 
-          return `            <div class="collection-item">
+          return `            <div class="collection-item"${itemBgStyle}>
               ${badgeHtml}
               <div class="collection-item-image">${imageHtml}</div>
               <div class="collection-item-content">
                 <h4 class="collection-item-title">${item.title}</h4>
                 ${subtitleHtml}
-                <a href="${item.ctaUrl}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
+                <a href="${item.url || "#"}" class="collection-item-cta"${ctaStyle}>${ctaText}</a>
               </div>
             </div>`;
         })
         .join("\n");
 
-      return `        <div class="collection component"${styleAttr}>${headerHtml}
-          <div class="collection-grid ${gridClass}"${gridStyle}>
-${itemsHtml}
+      return `        <div class="collection component"${styleAttr}>${collectionHeaderHtml}
+          <div class="collection-grid ${collectionGridClass}"${collectionGridStyle}>
+${collectionItemsHtml}
+          </div>
+        </div>`;
+
+    case "product-list":
+      const pData = component.productListData;
+      if (!pData || pData.items.length === 0) {
+        return `        <div class="product-list component"${styleAttr}>
+          <p style="text-align: center; color: #64748b;">No products configured</p>
+        </div>`;
+      }
+
+      const pHeaderAlignmentMap = {
+        left: "justify-content: flex-start;",
+        center: "justify-content: center; text-align: center;",
+        right: "justify-content: flex-end; text-align: right;",
+      };
+
+      const pHeaderStyle = pData.headerAlignment
+        ? pHeaderAlignmentMap[pData.headerAlignment]
+        : "";
+
+      const pHeaderHtml =
+        pData.showHeader && pData.headerTitle
+          ? `
+          <div class="product-list-header" style="${pHeaderStyle}">
+            <h3 class="product-list-title">${pData.headerTitle}</h3>
+          </div>`
+          : "";
+
+      const pGridClass = pData.layout === "horizontal" ? "horizontal" : "";
+      const pGridStyle =
+        pData.layout === "vertical"
+          ? ` style="grid-template-columns: repeat(${pData.itemsPerRow || 4}, 1fr); gap: ${pData.gap || "1.5rem"};"`
+          : ` style="gap: ${pData.gap || "1.5rem"};"`;
+
+      const pItemsHtml = pData.items
+        .map((item) => {
+          const badgeHtml = item.badge
+            ? `<span class="product-item-badge">${item.badge}</span>`
+            : "";
+          const imageHtml = item.image
+            ? `<img src="${item.image}" alt="${item.title}" />`
+            : "";
+          const originalPriceHtml = item.originalPrice
+            ? `<span class="product-item-original-price">${item.originalPrice}</span>`
+            : "";
+
+          return `            <a href="${item.url || "#"}" class="product-item">
+              <div class="product-item-image">
+                ${badgeHtml}
+                ${imageHtml}
+              </div>
+              <div class="product-item-content">
+                <h4 class="product-item-title">${item.title}</h4>
+                <div class="product-item-price-container">
+                  <span class="product-item-price">${item.price}</span>
+                  ${originalPriceHtml}
+                </div>
+              </div>
+            </a>`;
+        })
+        .join("\n");
+
+      return `        <div class="product-list component"${styleAttr}>${pHeaderHtml}
+          <div class="product-list-grid ${pGridClass}"${pGridStyle}>
+${pItemsHtml}
           </div>
         </div>`;
     default:
