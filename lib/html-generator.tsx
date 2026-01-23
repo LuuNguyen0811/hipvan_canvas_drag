@@ -164,6 +164,13 @@ function generateCSS(layout: LayoutSection[]): string {
       margin-bottom: 0.75rem;
     }
     
+    .responsive-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.75rem;
+      display: block;
+    }
+    
     .image-placeholder {
       background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
       border-radius: 0.75rem;
@@ -722,6 +729,9 @@ function generateComponent(component: Component): string {
       return `        <p class="component"${styleAttr}>${component.content || "Your paragraph text goes here."}</p>`;
 
     case "image":
+      if (component.src) {
+        return `        <img src="${component.src}" alt="${component.alt || component.content || "Image"}" class="component responsive-image"${styleAttr} />`;
+      }
       return `        <div class="component image-placeholder"${styleAttr}>${component.content || "Image Placeholder"}</div>`;
 
     case "button":

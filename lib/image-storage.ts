@@ -183,3 +183,31 @@ export async function clearAllImages(): Promise<void> {
     console.error('Failed to clear images:', error)
   }
 }
+
+// Get image as base64 data URL for HTML export
+export async function getImageAsBase64(imageId: string): Promise<string | null> {
+  try {
+    const db = await openDB()
+    const transaction = db.transaction([STORE_NAME], 'readonly')
+    const store = transaction.objectStore(STORE_NAME)
+    
+    const blob = await new Promise<Blob | undefined>((resolve, reject) => {
+      const request = store.get(imageId)
+      request.onsuccess = () => resolve(request.result)
+      request.onerror = () => reject(request.error)
+    })
+    
+    if (!blob) return null
+    
+    // Convert blob to base64
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onloadend = () => resolve(reader.result as string)
+      reader.onerror = () => reject(reader.error)
+      reader.readAsDataURL(blob)
+    })
+  } catch (error) {
+    console.error('Failed to get image as base64:', error)
+    return null
+  }
+}
