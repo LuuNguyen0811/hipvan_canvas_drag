@@ -14,8 +14,16 @@ import {
   CollectionHeader,
   CollectionTitle,
 } from '@/components/ui/collection'
-import type { Component, CollectionComponentData } from '@/lib/types'
 import { parseInlineMarkdown } from '@/lib/markdown-parser'
+import {
+  ProductList,
+  ProductItem,
+  ProductItemImage,
+  ProductItemContent,
+  ProductItemTitle,
+  ProductItemPrice,
+} from '@/components/ui/product-list'
+import type { Component, CollectionComponentData, ProductListComponentData } from '@/lib/types'
 
 interface ComponentRendererProps {
   component: Component
@@ -41,6 +49,8 @@ interface ComponentRendererProps {
   setCollectionSearchQuery: (query: string) => void
   setCollectionSearchResults: (results: any[]) => void
   getAllCollections: () => any[]
+  setEditingProductList: (data: { sectionId: string; component: Component } | null) => void
+  setEditingProductListData: (data: ProductListComponentData | null) => void
   removeComponent: (sectionId: string, componentId: string) => void
   setImageUploadTarget: (target: { sectionId: string; componentId: string } | null) => void
 }
@@ -69,6 +79,8 @@ export function ComponentRenderer({
   setCollectionSearchQuery,
   setCollectionSearchResults,
   getAllCollections,
+  setEditingProductList,
+  setEditingProductListData,
   removeComponent,
   setImageUploadTarget,
 }: ComponentRendererProps) {
@@ -332,6 +344,70 @@ export function ComponentRenderer({
             )}
           </div>
         )
+      case 'product-list':
+        const productListData = component.productListData
+        const hasProducts = productListData && productListData.items.length > 0
+        return (
+          <div className="w-full">
+            {productListData?.showHeader && productListData.headerTitle && (
+              <div className={cn(
+                "mb-6 flex items-center",
+                productListData.headerAlignment === 'center' && "justify-center",
+                productListData.headerAlignment === 'right' && "justify-end",
+                (productListData.headerAlignment === 'left' || !productListData.headerAlignment) && "justify-start"
+              )}>
+                <h3 className="text-xl font-bold tracking-tight text-[#1a1a2e]">{productListData.headerTitle}</h3>
+              </div>
+            )}
+            {hasProducts ? (
+              <ProductList
+                layout={productListData.layout}
+                itemsPerRow={productListData.itemsPerRow || 4}
+                gap={productListData.gap || '1.5rem'}
+              >
+                {productListData.items.map((item, itemIndex) => (
+                  <ProductItem 
+                    key={item.id} 
+                    layout={productListData.layout}
+                  >
+                    <ProductItemImage 
+                      src={item.image} 
+                      alt={item.title} 
+                      badge={item.badge}
+                      isPopular={item.isPopular}
+                    />
+                    <ProductItemContent>
+                      <ProductItemTitle>{item.title}</ProductItemTitle>
+                      <ProductItemPrice 
+                        price={item.price} 
+                        originalPrice={item.originalPrice}
+                      />
+                    </ProductItemContent>
+                  </ProductItem>
+                ))}
+              </ProductList>
+            ) : (
+              <div 
+                className="flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30 transition-colors hover:border-primary hover:bg-muted/50"
+                onClick={() => {
+                  setEditingProductList({ sectionId, component })
+                  setEditingProductListData(productListData || {
+                    layout: 'horizontal',
+                    items: [],
+                    gap: '1.5rem',
+                    itemsPerRow: 4,
+                    showHeader: true,
+                    headerTitle: 'Recently Viewed Products',
+                  })
+                }}
+              >
+                <Grid2X2 className="mb-2 h-8 w-8 text-muted-foreground" />
+                <p className="text-sm font-medium text-foreground">Click to configure product list</p>
+                <p className="mt-1 text-xs text-muted-foreground">Add products manually to get started</p>
+              </div>
+            )}
+          </div>
+        )
       default:
         return <div>{component.content}</div>
     }
@@ -367,6 +443,16 @@ export function ComponentRenderer({
               })
               setCollectionSearchQuery('')
               setCollectionSearchResults(getAllCollections())
+            } else if (component.type === 'product-list') {
+              setEditingProductList({ sectionId, component })
+              setEditingProductListData(component.productListData || {
+                layout: 'horizontal',
+                items: [],
+                gap: '1.5rem',
+                itemsPerRow: 4,
+                showHeader: true,
+                headerTitle: 'Recently Viewed Products',
+              })
             } else {
               setEditingComponent({ sectionId, component })
             }

@@ -80,6 +80,13 @@ export const BASIC_COMPONENTS: ComponentTypeDefinition[] = [
     category: "basic",
     description: "Add a product collection",
   },
+  {
+    type: "product-list",
+    label: "Product List",
+    icon: "Layout",
+    category: "basic",
+    description: "Add a list of products",
+  },
 ];
 
 export const FORM_COMPONENTS: ComponentTypeDefinition[] = [

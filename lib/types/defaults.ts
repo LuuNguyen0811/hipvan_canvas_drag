@@ -11,6 +11,7 @@ export const DEFAULT_COMPONENT_CONTENT: Record<ComponentType, string> = {
   card: "Card Title",
   list: "Item 1, Item 2, Item 3",
   collection: "",
+  "product-list": "",
   layout: "",
   // Form
   input: "",

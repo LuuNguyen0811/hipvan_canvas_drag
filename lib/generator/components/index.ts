@@ -6,6 +6,7 @@ import { generateMediaComponent } from "./media";
 import { generateDataDisplayComponent } from "./data-display";
 import { generateLayoutComponent } from "./layout";
 import { generateCollectionComponent } from "./collection";
+import { generateProductListComponent } from "./product-list";
 
 export function generateComponent(component: Component): string {
   // Try each generator until one returns a non-null result
@@ -17,6 +18,7 @@ export function generateComponent(component: Component): string {
     () => generateDataDisplayComponent(component),
     () => generateLayoutComponent(component, generateComponent),
     () => generateCollectionComponent(component),
+    () => generateProductListComponent(component),
   ];
 
   for (const gen of generators) {

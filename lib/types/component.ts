@@ -31,6 +31,27 @@ export interface CollectionComponentData {
   itemBgColor?: string;
 }
 
+export interface ProductItemData {
+  id: string;
+  title: string;
+  price: string;
+  originalPrice?: string;
+  image?: string;
+  url: string;
+  badge?: string;
+  isPopular?: boolean;
+}
+
+export interface ProductListComponentData {
+  layout: "horizontal" | "vertical";
+  items: ProductItemData[];
+  gap?: string;
+  itemsPerRow?: number;
+  showHeader?: boolean;
+  headerTitle?: string;
+  headerAlignment?: "left" | "center" | "right";
+}
+
 // Component type union - all available component types
 export type ComponentType =
   // Basic
@@ -43,6 +64,7 @@ export type ComponentType =
   | "card"
   | "list"
   | "collection"
+  | "product-list"
   | "layout"
   // Form Elements
   | "input"
@@ -94,6 +116,7 @@ export interface Component {
     fontSize?: string;
   };
   collectionData?: CollectionComponentData;
+  productListData?: ProductListComponentData;
   // Form-specific props
   placeholder?: string;
   label?: string;

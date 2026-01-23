@@ -13,11 +13,13 @@ import { ComponentRenderer } from "./preview/component-renderer";
 import { EditComponentDialog } from "./preview/dialogs/edit-component-dialog";
 import { ImageUploadDialog } from "./preview/dialogs/image-upload-dialog";
 import { CollectionEditDialog } from "./preview/dialogs/collection-edit-dialog";
+import { ProductListEditDialog } from "./preview/dialogs/product-list-edit-dialog";
 
 // Hooks
 import { usePreviewImages } from "./hooks/use-preview-images";
 import { usePreviewResizing } from "./hooks/use-preview-resizing";
 import { usePreviewCollection } from "./hooks/use-preview-collection";
+import { usePreviewProductList } from "./hooks/use-preview-product-list";
 import { usePreviewDragAndDrop } from "./hooks/use-preview-drag-and-drop";
 
 // Utils
@@ -105,6 +107,14 @@ export function PreviewPanel() {
     handleCollectionItemDragEnd,
     handleCollectionItemDrop,
   } = usePreviewCollection(updateComponent, reorderCollectionItems, saveToHistory);
+
+  const {
+    editingProductList,
+    editingProductListData,
+    setEditingProductList,
+    setEditingProductListData,
+    handleSaveProductList,
+  } = usePreviewProductList(updateComponent, saveToHistory);
 
   const {
     dragOverSection,
@@ -265,6 +275,8 @@ export function PreviewPanel() {
                               setCollectionSearchQuery={setCollectionSearchQuery}
                               setCollectionSearchResults={setCollectionSearchResults}
                               getAllCollections={getAllCollections}
+                              setEditingProductList={setEditingProductList}
+                              setEditingProductListData={setEditingProductListData}
                               removeComponent={removeComponent}
                               setImageUploadTarget={setImageUploadTarget}
                             />
@@ -330,6 +342,17 @@ export function PreviewPanel() {
         collectionSearchResults={collectionSearchResults}
         setCollectionSearchResults={setCollectionSearchResults}
         handleSaveCollection={handleSaveCollection}
+      />
+
+      <ProductListEditDialog
+        isOpen={!!editingProductList}
+        onClose={() => {
+          setEditingProductList(null);
+          setEditingProductListData(null);
+        }}
+        editingProductListData={editingProductListData}
+        setEditingProductListData={setEditingProductListData}
+        handleSaveProductList={handleSaveProductList}
       />
     </div>
   );
