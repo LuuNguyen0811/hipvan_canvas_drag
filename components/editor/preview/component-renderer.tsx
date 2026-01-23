@@ -247,6 +247,9 @@ export function ComponentRenderer({
                   <CollectionItem 
                     key={item.id} 
                     layout={collectionData.layout}
+                    style={{
+                      backgroundColor: item.itemBgColor || collectionData.itemBgColor
+                    }}
                     draggable
                     onDragStart={(e) => handleCollectionItemDragStart(e, sectionId, component.id, itemIndex)}
                     onDragOver={(e) => handleCollectionItemDragOver(e, sectionId, component.id, itemIndex)}
@@ -265,7 +268,7 @@ export function ComponentRenderer({
                         href={item.ctaUrl}
                         style={{
                           backgroundColor: item.ctaBgColor || collectionData.itemCtaBgColor,
-                          color: (item.ctaBgColor || collectionData.itemCtaBgColor) ? 'white' : undefined
+                          color: item.ctaTextColor || collectionData.itemCtaTextColor || ((item.ctaBgColor || collectionData.itemCtaBgColor) ? 'white' : undefined)
                         }}
                       >
                         {item.ctaText || collectionData.itemCtaText || 'Shop'}

@@ -1,9 +1,12 @@
-import type { LayoutSection, Component } from './types'
+import type { LayoutSection, Component } from "./types";
 
-export function generateHTML(layout: LayoutSection[], projectName: string): string {
-  const css = generateCSS(layout)
-  const body = generateBody(layout)
-  
+export function generateHTML(
+  layout: LayoutSection[],
+  projectName: string,
+): string {
+  const css = generateCSS(layout);
+  const body = generateBody(layout);
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,22 +22,23 @@ ${css}
 ${body}
   </div>
 </body>
-</html>`
+</html>`;
 }
 
 function generateCSS(layout: LayoutSection[]): string {
   // Generate dynamic section CSS based on column widths
-  const sectionStyles = layout.map((section, index) => {
-    const sectionClass = `section-${index + 1}`
-    let gridCols = '1fr'
-    
-    if (section.columnWidths && section.columnWidths.length > 0) {
-      gridCols = section.columnWidths.join(' ')
-    } else if (section.columns > 1) {
-      gridCols = Array(section.columns).fill('1fr').join(' ')
-    }
-    
-    return `
+  const sectionStyles = layout
+    .map((section, index) => {
+      const sectionClass = `section-${index + 1}`;
+      let gridCols = "1fr";
+
+      if (section.columnWidths && section.columnWidths.length > 0) {
+        gridCols = section.columnWidths.join(" ");
+      } else if (section.columns > 1) {
+        gridCols = Array(section.columns).fill("1fr").join(" ");
+      }
+
+      return `
     .${sectionClass} {
       display: grid;
       grid-template-columns: ${gridCols};
@@ -45,8 +49,9 @@ function generateCSS(layout: LayoutSection[]): string {
       .${sectionClass} {
         grid-template-columns: 1fr;
       }
-    }`
-  }).join('\n')
+    }`;
+    })
+    .join("\n");
 
   return `    * {
       margin: 0;
@@ -73,15 +78,6 @@ function generateCSS(layout: LayoutSection[]): string {
       background: white;
       border-radius: 1rem;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
-    
-    .section-hero {
-      min-height: 300px;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
     }
     
     .column {
@@ -313,98 +309,98 @@ function generateCSS(layout: LayoutSection[]): string {
       .collection-grid:not(.horizontal) {
         grid-template-columns: repeat(2, 1fr) !important;
       }
-    }`
+    }`;
 }
 
 function generateBody(layout: LayoutSection[]): string {
   return layout
     .map((section, sectionIndex) => {
-      const sectionClass = `section section-${sectionIndex + 1}`
-      const isHero = section.layoutType === 'hero'
-      const heroClass = isHero ? ' section-hero' : ''
-      
+      const sectionClass = `section section-${sectionIndex + 1}`;
+
       // Group components by column
-      const componentsByColumn: Record<number, Component[]> = {}
+      const componentsByColumn: Record<number, Component[]> = {};
       for (let i = 0; i < section.columns; i++) {
-        componentsByColumn[i] = []
+        componentsByColumn[i] = [];
       }
       section.components.forEach((comp) => {
-        const colIndex = (comp.props?.columnIndex as number) ?? 0
-        const targetCol = Math.min(colIndex, section.columns - 1)
-        if (!componentsByColumn[targetCol]) componentsByColumn[targetCol] = []
-        componentsByColumn[targetCol].push(comp)
-      })
-      
+        const colIndex = (comp.props?.columnIndex as number) ?? 0;
+        const targetCol = Math.min(colIndex, section.columns - 1);
+        if (!componentsByColumn[targetCol]) componentsByColumn[targetCol] = [];
+        componentsByColumn[targetCol].push(comp);
+      });
+
       if (section.columns === 1) {
         const components = section.components
           .map((comp) => generateComponent(comp))
-          .join('\n')
-        
-        return `    <section class="${sectionClass}${heroClass}">
+          .join("\n");
+
+        return `    <section class="${sectionClass}">
       <div class="column">
-${components || '        <!-- Empty section -->'}
+${components || "        <!-- Empty section -->"}
       </div>
-    </section>`
+    </section>`;
       } else {
-        const columns = Array.from({ length: section.columns }).map((_, colIndex) => {
-          const colComponents = componentsByColumn[colIndex] || []
-          const componentsHtml = colComponents
-            .map((comp) => generateComponent(comp))
-            .join('\n')
-          
-          return `      <div class="column">
-${componentsHtml || '        <!-- Empty column -->'}
-      </div>`
-        }).join('\n')
-        
-        return `    <section class="${sectionClass}${heroClass}">
+        const columns = Array.from({ length: section.columns })
+          .map((_, colIndex) => {
+            const colComponents = componentsByColumn[colIndex] || [];
+            const componentsHtml = colComponents
+              .map((comp) => generateComponent(comp))
+              .join("\n");
+
+            return `      <div class="column">
+${componentsHtml || "        <!-- Empty column -->"}
+      </div>`;
+          })
+          .join("\n");
+
+        return `    <section class="${sectionClass}">
 ${columns}
-    </section>`
+    </section>`;
       }
     })
-    .join('\n\n')
+    .join("\n\n");
 }
 
 function generateComponent(component: Component): string {
   const styleAttr = Object.keys(component.styles).length
     ? ` style="${Object.entries(component.styles)
         .map(([k, v]) => `${k}: ${v}`)
-        .join('; ')}"`
-    : ''
-  
+        .join("; ")}"`
+    : "";
+
   switch (component.type) {
-    case 'heading':
-      return `        <h2 class="component"${styleAttr}>${component.content || 'Heading'}</h2>`
-    
-    case 'paragraph':
-      return `        <p class="component"${styleAttr}>${component.content || 'Your paragraph text goes here.'}</p>`
-    
-    case 'image':
-      return `        <div class="component image-placeholder"${styleAttr}>${component.content || 'Image Placeholder'}</div>`
-    
-    case 'button':
-      return `        <div class="component"><a href="#" class="btn"${styleAttr}>${component.content || 'Click me'}</a></div>`
-    
-    case 'divider':
-      return `        <hr class="divider"${styleAttr} />`
-    
-    case 'spacer':
-      return `        <div class="spacer"${styleAttr}></div>`
-    
-    case 'card':
+    case "heading":
+      return `        <h2 class="component"${styleAttr}>${component.content || "Heading"}</h2>`;
+
+    case "paragraph":
+      return `        <p class="component"${styleAttr}>${component.content || "Your paragraph text goes here."}</p>`;
+
+    case "image":
+      return `        <div class="component image-placeholder"${styleAttr}>${component.content || "Image Placeholder"}</div>`;
+
+    case "button":
+      return `        <div class="component"><a href="#" class="btn"${styleAttr}>${component.content || "Click me"}</a></div>`;
+
+    case "divider":
+      return `        <hr class="divider"${styleAttr} />`;
+
+    case "spacer":
+      return `        <div class="spacer"${styleAttr}></div>`;
+
+    case "card":
       return `        <div class="card"${styleAttr}>
-          <h3>${component.content || 'Card Title'}</h3>
+          <h3>${component.content || "Card Title"}</h3>
           <p>Card content goes here.</p>
-        </div>`
-    
-    case 'list':
-      const items = (component.content || 'Item 1, Item 2, Item 3')
-        .split(',')
+        </div>`;
+
+    case "list":
+      const items = (component.content || "Item 1, Item 2, Item 3")
+        .split(",")
         .map((item) => `            <li>${item.trim()}</li>`)
-        .join('\n')
+        .join("\n");
       return `        <ul class="component"${styleAttr}>
 ${items}
-        </ul>`
+        </ul>`;
     
     case 'collection':
       const data = component.collectionData
@@ -452,12 +448,11 @@ ${items}
 ${itemsHtml}
           </div>
         </div>`
-    
     default:
-      return `        <div class="component"${styleAttr}>${component.content}</div>`
+      return `        <div class="component"${styleAttr}>${component.content}</div>`;
   }
 }
 
 export function generateCSSSeparate(layout: LayoutSection[]): string {
-  return generateCSS(layout)
+  return generateCSS(layout);
 }

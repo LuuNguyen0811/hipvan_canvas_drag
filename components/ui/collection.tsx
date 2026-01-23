@@ -109,6 +109,7 @@ interface CollectionItemProps extends React.ComponentProps<"div"> {
 function CollectionItem({
   className,
   layout = "horizontal",
+  style,
   draggable,
   onDragStart,
   onDragOver,
@@ -126,12 +127,16 @@ function CollectionItem({
       onDragEnd={onDragEnd}
       onDrop={onDrop}
       className={cn(
-        "group relative flex-shrink-0 overflow-hidden bg-[#f5f5f5] transition-all duration-300 ease-in-out",
+        "group relative flex-shrink-0 overflow-hidden transition-all duration-300 ease-in-out",
         layout === "horizontal" ? "w-full md:w-[calc(25%-1rem)]" : "w-full",
         isDragging && "z-50 opacity-40 scale-105 shadow-2xl ring-2 ring-primary/20",
         !isDragging && "hover:shadow-lg",
         className,
       )}
+      style={{
+        backgroundColor: "#f5f5f5",
+        ...style,
+      }}
       {...props}
     />
   );
