@@ -75,7 +75,7 @@ export const BASIC_COMPONENTS: ComponentTypeDefinition[] = [
   },
   {
     type: "collection",
-    label: "Collection",
+    label: "Collection List",
     icon: "Grid2X2",
     category: "basic",
     description: "Add a product collection",
