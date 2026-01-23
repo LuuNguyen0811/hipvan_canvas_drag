@@ -9,9 +9,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "WebBuilder - Visual Website Builder",
+  title: "PagesBuilder - Visual Pages Builder",
   description:
-    "Create beautiful websites with drag-and-drop simplicity. Choose layouts, add components, and export clean HTML/CSS.",
+    "Create beautiful pages with drag-and-drop simplicity. Choose layouts, add components, and export clean HTML/CSS.",
   generator: "v0.app",
   icons: {
     icon: [
@@ -38,7 +38,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased`}>
         {children}
         <Analytics />

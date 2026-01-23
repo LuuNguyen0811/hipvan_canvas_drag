@@ -15,11 +15,14 @@ import { deleteImage } from "./image-storage";
 interface ProjectStore {
   projects: Project[];
   currentProject: Project | null;
+  _hasHydrated: boolean;
+
+  // Hydration action
+  setHasHydrated: (state: boolean) => void;
 
   editorTarget: { sectionId: string; componentId: string } | null;
   setEditorTarget: (target: { sectionId: string; componentId: string }) => void;
   clearEditorTarget: () => void;
-
   // Project actions
   createProject: (name: string) => string;
   deleteProject: (id: string) => void;
@@ -83,7 +86,12 @@ interface ProjectStore {
       toLayoutId?: string | null;
     },
   ) => void;
-
+  reorderCollectionItems: (
+    sectionId: string,
+    componentId: string,
+    oldIndex: number,
+    newIndex: number,
+  ) => void;
   // History actions
   saveToHistory: (action: string) => void;
   restoreFromHistory: (historyId: string) => void;
@@ -227,11 +235,14 @@ export const useProjectStore = create<ProjectStore>()(
     (set, get) => ({
       projects: [],
       currentProject: null,
+      _hasHydrated: false,
+      setHasHydrated: (state: boolean) => {
+        set({ _hasHydrated: state });
+      },
 
       editorTarget: null,
       setEditorTarget: (target) => set({ editorTarget: target }),
       clearEditorTarget: () => set({ editorTarget: null }),
-
       createProject: (name: string) => {
         const id = generateId();
         const defaultSection: LayoutSection = {
@@ -788,7 +799,54 @@ export const useProjectStore = create<ProjectStore>()(
         });
         get().saveToHistory("Moved component");
       },
+      reorderCollectionItems: (
+        sectionId: string,
+        componentId: string,
+        oldIndex: number,
+        newIndex: number,
+      ) => {
+        set((state) => {
+          if (!state.currentProject) return state;
 
+          const updatedLayout = state.currentProject.layout.map((section) => {
+            if (section.id !== sectionId) return section;
+
+            return {
+              ...section,
+              components: section.components.map((comp) => {
+                if (comp.id !== componentId || !comp.collectionData)
+                  return comp;
+
+                const newItems = [...comp.collectionData.items];
+                const [movedItem] = newItems.splice(oldIndex, 1);
+                newItems.splice(newIndex, 0, movedItem);
+
+                return {
+                  ...comp,
+                  collectionData: {
+                    ...comp.collectionData,
+                    items: newItems,
+                  },
+                };
+              }),
+            };
+          });
+
+          const updatedProject = {
+            ...state.currentProject,
+            layout: updatedLayout,
+            updatedAt: new Date(),
+          };
+
+          return {
+            currentProject: updatedProject,
+            projects: state.projects.map((p) =>
+              p.id === updatedProject.id ? updatedProject : p,
+            ),
+          };
+        });
+        get().saveToHistory("Reordered collection items");
+      },
       saveToHistory: (action: string) => {
         // Throttle history saves to prevent overwhelming storage
         const now = Date.now();
@@ -921,6 +979,9 @@ export const useProjectStore = create<ProjectStore>()(
     {
       name: "website-builder-storage",
       partialize: (state) => ({ projects: state.projects }),
+      onRehydrateStorage: (state) => {
+        return () => state.setHasHydrated(true);
+      },
     },
   ),
 );

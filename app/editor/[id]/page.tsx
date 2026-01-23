@@ -11,7 +11,8 @@ import { HistoryPanel } from "@/components/editor/history-panel";
 export default function EditorPage() {
   const params = useParams();
   const router = useRouter();
-  const { projects, currentProject, setCurrentProject } = useProjectStore();
+  const { projects, currentProject, setCurrentProject, _hasHydrated } =
+    useProjectStore();
   const [activePanel, setActivePanel] = useState<"tools" | "history">("tools");
   const [panelWidth, setPanelWidth] = useState(400);
   const [isResizingPanel, setIsResizingPanel] = useState(false);
@@ -41,6 +42,8 @@ export default function EditorPage() {
   }, [isResizingPanel]);
 
   useEffect(() => {
+    if (!_hasHydrated) return;
+
     const projectId = params.id as string;
     const project = projects.find((p) => p.id === projectId);
 
@@ -50,7 +53,7 @@ export default function EditorPage() {
     } else {
       router.push("/");
     }
-  }, [params.id, projects, setCurrentProject, router]);
+  }, [params.id, projects, setCurrentProject, router, _hasHydrated]);
 
   if (isLoading || !currentProject) {
     return (

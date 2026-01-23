@@ -17,6 +17,7 @@ import {
   type Component,
   type ComponentCategory,
   type ComponentTypeDefinition,
+  type CollectionComponentData,
 } from "@/lib/types";
 import {
   parseHTML,
@@ -96,6 +97,7 @@ import {
   PanelTopClose,
   LayoutPanelTop,
   Shapes,
+  Grid2X2,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -109,6 +111,7 @@ const iconMap: Record<string, React.ReactNode> = {
   MoveVertical: <MoveVertical className="h-5 w-5" />,
   CreditCard: <CreditCard className="h-5 w-5" />,
   List: <List className="h-5 w-5" />,
+  Grid2X2: <Grid2X2 className="h-5 w-5" />,
   // Form
   FormInput: <FormInput className="h-5 w-5" />,
   CheckSquare: <CheckSquare className="h-5 w-5" />,
@@ -622,11 +625,22 @@ export function ToolsPanel() {
     const componentType = type as Component["type"];
     const defaultProps = DEFAULT_COMPONENT_PROPS[componentType] || {};
 
+    const defaultCollectionData: CollectionComponentData = {
+      layout: "horizontal",
+      sourceType: "api",
+      items: [],
+      gap: "1rem",
+      itemsPerRow: 4,
+      showHeader: true,
+      headerTitle: "Shop Our Bestselling Collections",
+    };
+
     const newComponent: Component = {
       id: generateId(),
       type: componentType,
       content: DEFAULT_COMPONENT_CONTENT[componentType] || "",
       styles: {},
+      ...(type === 'collection' && { collectionData: defaultCollectionData }),
       formatting:
         type === "heading" || type === "paragraph"
           ? { align: "center" }
@@ -1041,9 +1055,9 @@ export function ToolsPanel() {
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="flex flex-1 flex-col"
+          className="flex flex-1 flex-col overflow-hidden"
         >
-          <TabsList className="mx-4 mt-4 grid w-auto grid-cols-3">
+          <TabsList className="mx-4 mt-4 grid w-auto grid-cols-3 shrink-0">
             <TabsTrigger value="sections" className="gap-1.5 text-xs">
               <Layout className="h-3.5 w-3.5" />
               Sections
@@ -1099,7 +1113,7 @@ export function ToolsPanel() {
               </div>
             </TabsContent>
 
-            {/* Components Tab - Drag elements */}
+            {/* Elements Tab */}
             <TabsContent value="components" className="m-0 p-4">
               {!currentProject || currentProject.layout.length === 0 ? (
                 <div className="rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center">
@@ -1108,7 +1122,10 @@ export function ToolsPanel() {
                     No sections yet
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Go to <strong>Sections</strong> tab to add a layout first
+                    <strong>Step 1:</strong> Click any section below to add it to your page
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    <strong>Step 2:</strong> Go to <strong>Elements</strong> tab to add content
                   </p>
                 </div>
               ) : (
@@ -1127,27 +1144,29 @@ export function ToolsPanel() {
                   <div className="mb-4">
                     <label className="mb-2 flex items-center gap-1 text-xs font-medium text-foreground">
                       Target Section
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <div className="cursor-help">
-                            <Info className="h-3 w-3 text-muted-foreground" />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="max-w-xs">
-                          <p className="text-xs">
-                            Click an element below to add it to this section
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="cursor-help">
+                              <Info className="h-3 w-3 text-muted-foreground" />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="right" className="max-w-xs">
+                            <p className="text-xs">
+                              Click an element below to add it to this section
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </label>
                     <select
                       value={
-                        selectedSection || currentProject.layout[0]?.id || ""
+                        selectedSection || currentProject?.layout[0]?.id || ""
                       }
                       onChange={(e) => setSelectedSection(e.target.value)}
                       className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     >
-                      {currentProject.layout.map((section, index) => (
+                      {currentProject?.layout.map((section, index) => (
                         <option key={section.id} value={section.id}>
                           {section.name || `Section ${index + 1}`} (
                           {section.columns} col)
@@ -1201,35 +1220,37 @@ export function ToolsPanel() {
                           <div className="border-t border-border bg-muted/30 p-2">
                             <div className="grid grid-cols-2 gap-1.5">
                               {category.components.map((comp) => (
-                                <Tooltip key={comp.type}>
-                                  <TooltipTrigger asChild>
-                                    <button
-                                      draggable
-                                      onDragStart={(e) =>
-                                        handleDragStart(e, comp.type)
-                                      }
-                                      onClick={() =>
-                                        handleAddComponent(comp.type)
-                                      }
-                                      className="flex items-center gap-2 rounded-md border border-transparent bg-background p-2 text-left transition-all hover:border-primary hover:bg-accent hover:shadow-sm active:scale-95"
-                                    >
-                                      <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded bg-muted text-muted-foreground">
-                                        {iconMap[comp.icon] || (
-                                          <Square className="h-4 w-4" />
-                                        )}
-                                      </div>
-                                      <span className="text-xs font-medium text-foreground truncate">
-                                        {comp.label}
-                                      </span>
-                                    </button>
-                                  </TooltipTrigger>
-                                  <TooltipContent side="right">
-                                    <p className="text-xs">
-                                      {comp.description ||
-                                        `Add a ${comp.label.toLowerCase()}`}
-                                    </p>
-                                  </TooltipContent>
-                                </Tooltip>
+                                <TooltipProvider key={comp.type}>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <button
+                                        draggable
+                                        onDragStart={(e) =>
+                                          handleDragStart(e, comp.type)
+                                        }
+                                        onClick={() =>
+                                          handleAddComponent(comp.type)
+                                        }
+                                        className="flex items-center gap-2 rounded-md border border-transparent bg-background p-2 text-left transition-all hover:border-primary hover:bg-accent hover:shadow-sm active:scale-95"
+                                      >
+                                        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded bg-muted text-muted-foreground">
+                                          {iconMap[comp.icon] || (
+                                            <Square className="h-4 w-4" />
+                                          )}
+                                        </div>
+                                        <span className="text-xs font-medium text-foreground truncate">
+                                          {comp.label}
+                                        </span>
+                                      </button>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right">
+                                      <p className="text-xs">
+                                        {comp.description ||
+                                          `Add a ${comp.label.toLowerCase()}`}
+                                      </p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
                               ))}
                             </div>
                           </div>
@@ -1293,65 +1314,67 @@ export function ToolsPanel() {
                         </button>
 
                         <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-7 w-7"
-                                onClick={() => moveSectionUp(section.id)}
-                                disabled={index === 0}
-                              >
-                                <ChevronUp className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Move up</TooltipContent>
-                          </Tooltip>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7"
+                                  onClick={() => moveSectionUp(section.id)}
+                                  disabled={index === 0}
+                                >
+                                  <ChevronUp className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Move up</TooltipContent>
+                            </Tooltip>
 
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-7 w-7"
-                                onClick={() => moveSectionDown(section.id)}
-                                disabled={
-                                  index === currentProject.layout.length - 1
-                                }
-                              >
-                                <ChevronDown className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Move down</TooltipContent>
-                          </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7"
+                                  onClick={() => moveSectionDown(section.id)}
+                                  disabled={
+                                    index === currentProject.layout.length - 1
+                                  }
+                                >
+                                  <ChevronDown className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Move down</TooltipContent>
+                            </Tooltip>
 
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-7 w-7"
-                                onClick={() => duplicateSection(section.id)}
-                              >
-                                <Copy className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Duplicate</TooltipContent>
-                          </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7"
+                                  onClick={() => duplicateSection(section.id)}
+                                >
+                                  <Copy className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Duplicate</TooltipContent>
+                            </Tooltip>
 
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                onClick={() => removeSection(section.id)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Delete</TooltipContent>
-                          </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                  onClick={() => removeSection(section.id)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Delete</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </div>
                       </div>
 

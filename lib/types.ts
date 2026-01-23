@@ -1,3 +1,34 @@
+export interface CollectionItemData {
+  id: string;
+  title: string;
+  subtitle?: string;
+  image?: string;
+  ctaText: string;
+  ctaUrl: string;
+  ctaBgColor?: string;
+  ctaTextColor?: string;
+  itemBgColor?: string;
+  badge?: string;
+}
+
+export interface CollectionComponentData {
+  layout: "horizontal" | "vertical";
+  sourceType: "api" | "manual";
+  collectionId?: string;
+  collectionIds?: string[];
+  collectionName?: string;
+  items: CollectionItemData[];
+  gap?: string;
+  itemsPerRow?: number;
+  showHeader?: boolean;
+  headerTitle?: string;
+  headerAlignment?: "left" | "center" | "right";
+  itemCtaText?: string;
+  itemCtaBgColor?: string;
+  itemCtaTextColor?: string;
+  itemBgColor?: string;
+}
+
 // Component type union - all available component types
 export type ComponentType =
   // Basic
@@ -9,6 +40,7 @@ export type ComponentType =
   | "spacer"
   | "card"
   | "list"
+  | "collection"
   | "layout"
   // Form Elements
   | "input"
@@ -59,6 +91,7 @@ export interface Component {
     align?: "left" | "center" | "right";
     fontSize?: string;
   };
+  collectionData?: CollectionComponentData;
   // Form-specific props
   placeholder?: string;
   label?: string;
@@ -90,7 +123,17 @@ export interface Component {
   badgeVariant?: "default" | "secondary" | "destructive" | "outline";
 }
 
-export type SectionLayoutType = "full-width" | "two-equal" | "three-equal";
+export type SectionLayoutType =
+  | "full-width"
+  | "two-equal"
+  | "three-equal"
+  | "four-equal"
+  | "sidebar-left"
+  | "sidebar-right"
+  | "two-one"
+  | "one-two"
+  | "hero"
+  | "feature-grid";
 
 export interface LayoutSection {
   id: string;
@@ -135,7 +178,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     id: "full-width",
     name: "Full Width",
     description: "Single column spanning full width",
-    preview: "████████████",
+    preview: "┌──────┐",
     columns: 1,
     columnWidths: ["100%"],
   },
@@ -143,7 +186,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     id: "two-equal",
     name: "2 Equal Columns",
     description: "Two columns of equal width",
-    preview: "████  ████",
+    preview: "┌──┐┌──┐",
     columns: 2,
     columnWidths: ["50%", "50%"],
   },
@@ -151,7 +194,63 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     id: "three-equal",
     name: "3 Equal Columns",
     description: "Three columns of equal width",
-    preview: "███ ███ ███",
+    preview: "┌┐ ┌┐ ┌┐",
+    columns: 3,
+    columnWidths: ["33.33%", "33.33%", "33.34%"],
+  },
+  {
+    id: "four-equal",
+    name: "4 Equal Columns",
+    description: "Four columns of equal width",
+    preview: "┌┐┌┐┌┐┌┐",
+    columns: 4,
+    columnWidths: ["25%", "25%", "25%", "25%"],
+  },
+  {
+    id: "sidebar-left",
+    name: "Sidebar Left",
+    description: "Narrow left column with wide content",
+    preview: "┌┐┌───┐",
+    columns: 2,
+    columnWidths: ["25%", "75%"],
+  },
+  {
+    id: "sidebar-right",
+    name: "Sidebar Right",
+    description: "Wide content with narrow right column",
+    preview: "┌───┐┌┐",
+    columns: 2,
+    columnWidths: ["75%", "25%"],
+  },
+  {
+    id: "two-one",
+    name: "2/3 + 1/3",
+    description: "Wide left, narrow right",
+    preview: "┌───┐┌┐",
+    columns: 2,
+    columnWidths: ["66.66%", "33.34%"],
+  },
+  {
+    id: "one-two",
+    name: "1/3 + 2/3",
+    description: "Narrow left, wide right",
+    preview: "┌┐┌───┐",
+    columns: 2,
+    columnWidths: ["33.34%", "66.66%"],
+  },
+  {
+    id: "hero",
+    name: "Hero Section",
+    description: "Full-width hero with centered content",
+    preview: "┌──✧──┐",
+    columns: 1,
+    columnWidths: ["100%"],
+  },
+  {
+    id: "feature-grid",
+    name: "Feature Grid",
+    description: "Three-column feature showcase",
+    preview: "┌┐┌┐┌┐",
     columns: 3,
     columnWidths: ["33.33%", "33.33%", "33.34%"],
   },
@@ -176,57 +275,250 @@ export type ComponentCategory =
 
 // Basic components (existing)
 export const BASIC_COMPONENTS: ComponentTypeDefinition[] = [
-  { type: "heading", label: "Heading", icon: "Type", category: "basic", description: "Add a title or heading" },
-  { type: "paragraph", label: "Paragraph", icon: "AlignLeft", category: "basic", description: "Add text content" },
-  { type: "image", label: "Image", icon: "Image", category: "basic", description: "Add an image" },
-  { type: "button", label: "Button", icon: "Square", category: "basic", description: "Add a clickable button" },
-  { type: "divider", label: "Divider", icon: "Minus", category: "basic", description: "Add a horizontal line" },
-  { type: "spacer", label: "Spacer", icon: "MoveVertical", category: "basic", description: "Add vertical space" },
-  { type: "card", label: "Card", icon: "CreditCard", category: "basic", description: "Add a card container" },
-  { type: "list", label: "List", icon: "List", category: "basic", description: "Add a bullet list" },
+  {
+    type: "heading",
+    label: "Heading",
+    icon: "Type",
+    category: "basic",
+    description: "Add a title or heading",
+  },
+  {
+    type: "paragraph",
+    label: "Paragraph",
+    icon: "AlignLeft",
+    category: "basic",
+    description: "Add text content",
+  },
+  {
+    type: "image",
+    label: "Image",
+    icon: "Image",
+    category: "basic",
+    description: "Add an image",
+  },
+  {
+    type: "button",
+    label: "Button",
+    icon: "Square",
+    category: "basic",
+    description: "Add a clickable button",
+  },
+  {
+    type: "divider",
+    label: "Divider",
+    icon: "Minus",
+    category: "basic",
+    description: "Add a horizontal line",
+  },
+  {
+    type: "spacer",
+    label: "Spacer",
+    icon: "MoveVertical",
+    category: "basic",
+    description: "Add vertical space",
+  },
+  {
+    type: "card",
+    label: "Card",
+    icon: "CreditCard",
+    category: "basic",
+    description: "Add a card container",
+  },
+  {
+    type: "list",
+    label: "List",
+    icon: "List",
+    category: "basic",
+    description: "Add a bullet list",
+  },
+  {
+    type: "collection",
+    label: "Collection",
+    icon: "Grid2X2",
+    category: "basic",
+    description: "Add a product collection",
+  },
 ];
 
 // Form components
 export const FORM_COMPONENTS: ComponentTypeDefinition[] = [
-  { type: "input", label: "Input", icon: "FormInput", category: "form", description: "Text input field" },
-  { type: "textareaField", label: "Textarea", icon: "AlignLeft", category: "form", description: "Multi-line text input" },
-  { type: "select", label: "Select", icon: "ChevronDown", category: "form", description: "Dropdown selection" },
-  { type: "checkbox", label: "Checkbox", icon: "CheckSquare", category: "form", description: "Checkbox input" },
-  { type: "radio", label: "Radio", icon: "Circle", category: "form", description: "Radio button group" },
-  { type: "form", label: "Form", icon: "FileInput", category: "form", description: "Form container" },
+  {
+    type: "input",
+    label: "Input",
+    icon: "FormInput",
+    category: "form",
+    description: "Text input field",
+  },
+  {
+    type: "textareaField",
+    label: "Textarea",
+    icon: "AlignLeft",
+    category: "form",
+    description: "Multi-line text input",
+  },
+  {
+    type: "select",
+    label: "Select",
+    icon: "ChevronDown",
+    category: "form",
+    description: "Dropdown selection",
+  },
+  {
+    type: "checkbox",
+    label: "Checkbox",
+    icon: "CheckSquare",
+    category: "form",
+    description: "Checkbox input",
+  },
+  {
+    type: "radio",
+    label: "Radio",
+    icon: "Circle",
+    category: "form",
+    description: "Radio button group",
+  },
+  {
+    type: "form",
+    label: "Form",
+    icon: "FileInput",
+    category: "form",
+    description: "Form container",
+  },
 ];
 
 // Navigation components
 export const NAVIGATION_COMPONENTS: ComponentTypeDefinition[] = [
-  { type: "navbar", label: "Navbar", icon: "Menu", category: "navigation", description: "Navigation bar" },
-  { type: "menu", label: "Menu", icon: "MoreHorizontal", category: "navigation", description: "Menu list" },
-  { type: "breadcrumb", label: "Breadcrumb", icon: "ChevronRight", category: "navigation", description: "Breadcrumb navigation" },
-  { type: "footer", label: "Footer", icon: "PanelBottom", category: "navigation", description: "Page footer" },
-  { type: "link", label: "Link", icon: "Link", category: "navigation", description: "Hyperlink" },
+  {
+    type: "navbar",
+    label: "Navbar",
+    icon: "Menu",
+    category: "navigation",
+    description: "Navigation bar",
+  },
+  {
+    type: "menu",
+    label: "Menu",
+    icon: "MoreHorizontal",
+    category: "navigation",
+    description: "Menu list",
+  },
+  {
+    type: "breadcrumb",
+    label: "Breadcrumb",
+    icon: "ChevronRight",
+    category: "navigation",
+    description: "Breadcrumb navigation",
+  },
+  {
+    type: "footer",
+    label: "Footer",
+    icon: "PanelBottom",
+    category: "navigation",
+    description: "Page footer",
+  },
+  {
+    type: "link",
+    label: "Link",
+    icon: "Link",
+    category: "navigation",
+    description: "Hyperlink",
+  },
 ];
 
 // Media components
 export const MEDIA_COMPONENTS: ComponentTypeDefinition[] = [
-  { type: "video", label: "Video", icon: "Video", category: "media", description: "Video player" },
-  { type: "audio", label: "Audio", icon: "Music", category: "media", description: "Audio player" },
-  { type: "embed", label: "Embed", icon: "Code", category: "media", description: "Embedded content" },
-  { type: "icon", label: "Icon", icon: "Smile", category: "media", description: "Icon element" },
+  {
+    type: "video",
+    label: "Video",
+    icon: "Video",
+    category: "media",
+    description: "Video player",
+  },
+  {
+    type: "audio",
+    label: "Audio",
+    icon: "Music",
+    category: "media",
+    description: "Audio player",
+  },
+  {
+    type: "embed",
+    label: "Embed",
+    icon: "Code",
+    category: "media",
+    description: "Embedded content",
+  },
+  {
+    type: "icon",
+    label: "Icon",
+    icon: "Smile",
+    category: "media",
+    description: "Icon element",
+  },
 ];
 
 // Data display components
 export const DATA_COMPONENTS: ComponentTypeDefinition[] = [
-  { type: "table", label: "Table", icon: "Table", category: "data", description: "Data table" },
-  { type: "badge", label: "Badge", icon: "Tag", category: "data", description: "Status badge" },
-  { type: "avatar", label: "Avatar", icon: "User", category: "data", description: "User avatar" },
-  { type: "progress", label: "Progress", icon: "BarChart", category: "data", description: "Progress bar" },
+  {
+    type: "table",
+    label: "Table",
+    icon: "Table",
+    category: "data",
+    description: "Data table",
+  },
+  {
+    type: "badge",
+    label: "Badge",
+    icon: "Tag",
+    category: "data",
+    description: "Status badge",
+  },
+  {
+    type: "avatar",
+    label: "Avatar",
+    icon: "User",
+    category: "data",
+    description: "User avatar",
+  },
+  {
+    type: "progress",
+    label: "Progress",
+    icon: "BarChart",
+    category: "data",
+    description: "Progress bar",
+  },
 ];
 
 // Advanced layout components
 export const LAYOUT_COMPONENTS: ComponentTypeDefinition[] = [
-  { type: "grid", label: "Grid", icon: "Grid3x3", category: "layout", description: "Grid layout" },
-  { type: "flex", label: "Flex", icon: "Columns", category: "layout", description: "Flex container" },
-  { type: "accordion", label: "Accordion", icon: "PanelTopClose", category: "layout", description: "Collapsible sections" },
-  { type: "tabs", label: "Tabs", icon: "LayoutPanelTop", category: "layout", description: "Tabbed content" },
+  {
+    type: "grid",
+    label: "Grid",
+    icon: "Grid3x3",
+    category: "layout",
+    description: "Grid layout",
+  },
+  {
+    type: "flex",
+    label: "Flex",
+    icon: "Columns",
+    category: "layout",
+    description: "Flex container",
+  },
+  {
+    type: "accordion",
+    label: "Accordion",
+    icon: "PanelTopClose",
+    category: "layout",
+    description: "Collapsible sections",
+  },
+  {
+    type: "tabs",
+    label: "Tabs",
+    icon: "LayoutPanelTop",
+    category: "layout",
+    description: "Tabbed content",
+  },
 ];
 
 // All components grouped by category
@@ -238,10 +530,20 @@ export const COMPONENT_CATEGORIES: {
 }[] = [
   { id: "basic", label: "Basic", icon: "Shapes", components: BASIC_COMPONENTS },
   { id: "form", label: "Form", icon: "FormInput", components: FORM_COMPONENTS },
-  { id: "navigation", label: "Navigation", icon: "Navigation", components: NAVIGATION_COMPONENTS },
+  {
+    id: "navigation",
+    label: "Navigation",
+    icon: "Navigation",
+    components: NAVIGATION_COMPONENTS,
+  },
   { id: "media", label: "Media", icon: "Play", components: MEDIA_COMPONENTS },
   { id: "data", label: "Data", icon: "Database", components: DATA_COMPONENTS },
-  { id: "layout", label: "Layout", icon: "Layout", components: LAYOUT_COMPONENTS },
+  {
+    id: "layout",
+    label: "Layout",
+    icon: "Layout",
+    components: LAYOUT_COMPONENTS,
+  },
 ];
 
 // All component types (flat array for backward compatibility)
@@ -272,6 +574,7 @@ export const DEFAULT_COMPONENT_CONTENT: Record<ComponentType, string> = {
   spacer: "",
   card: "Card Title",
   list: "Item 1, Item 2, Item 3",
+  collection: "",
   layout: "",
   // Form
   input: "",
