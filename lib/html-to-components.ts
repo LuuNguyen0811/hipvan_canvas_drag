@@ -260,9 +260,10 @@ function createComponent(type: ComponentType, element: Element): Component {
       break;
 
     case "image":
-      component.content = element.getAttribute("alt") || "Image";
       component.src = element.getAttribute("src") || "";
-      component.alt = element.getAttribute("alt") || "";
+      component.alt = element.getAttribute("alt") || "Image";
+      // Don't set content for images - it causes duplicate fields
+      component.content = "";
       break;
 
     case "video":
@@ -438,20 +439,43 @@ function processElement(
       });
     }
 
-    // Special handling for nav
+    // Special handling for nav and header
     if (tagName === "nav" || tagName === "header") {
       const navLinks = Array.from(element.querySelectorAll("a")).map((a) => ({
         title: a.textContent?.trim() || "",
         content: a.getAttribute("href") || "#",
       }));
       if (navLinks.length > 0) {
+        // Get logo/brand text from various common selectors
+        const logoSelectors = ".logo, .brand, [class*='logo'], [class*='brand'], h1, h2, .navbar-brand";
+        const logoText = element.querySelector(logoSelectors)?.textContent?.trim() || 
+                        element.querySelector("*")?.textContent?.trim() || 
+                        "Logo";
         return {
           id: generateId(),
           type: "navbar",
-          content: element.querySelector(".logo, .brand, [class*='logo']")?.textContent?.trim() || "Logo",
+          content: logoText,
           styles: parseStyles(element),
           items: navLinks,
         };
+      }
+      
+      // If no links but has heading content, extract it
+      const heading = element.querySelector("h1, h2, h3, h4, h5, h6");
+      if (heading) {
+        childComponents.unshift(createComponent("heading", heading));
+      } else {
+        // Get all text if no specific heading
+        const headerText = getAllTextContent(element);
+        if (headerText && headerText.length > 0) {
+          childComponents.unshift({
+            id: generateId(),
+            type: "heading",
+            content: headerText,
+            styles: parseStyles(element),
+            formatting: parseFormatting(element),
+          });
+        }
       }
     }
 
@@ -542,39 +566,19 @@ function processElementForSection(
   // If it's a direct component type (not a container)
   if (componentType && !["div", "section", "article", "main", "aside"].includes(tagName)) {
     const comp = createComponent(componentType, element);
-    comp.props = { ...comp.props, columnIndex };
+    comp.props = { ...comp.props, columnIndex, span: "column" };
     components.push(comp);
-    return components;
+    return components; // Return immediately, don't process children
   }
 
   // For container elements, check layout and process children
   const layout = detectLayout(element);
 
-  // If it's a horizontal layout, we should NOT recurse into children here
-  // because the parent section will handle distributing children to columns
+  // If it's a horizontal layout with multiple children,
+  // we should NOT process it here - return empty to let parent handle it properly
   if ((layout.isFlexRow || layout.isGrid) && element.children.length >= 2) {
-    // This element creates horizontal layout - each child goes to a different column
-    // But this should be handled at the section level, not here
-    // So we return the element as a whole
-    const heading = element.querySelector(":scope > h1, :scope > h2, :scope > h3");
-    if (heading) {
-      const headingComp = createComponent("heading", heading);
-      headingComp.props = { ...headingComp.props, columnIndex };
-      components.push(headingComp);
-    }
-
-    // Add a card for this container with its text content
-    const directText = getTextContent(element);
-    if (directText && directText.length > 5) {
-      components.push({
-        id: generateId(),
-        type: "paragraph",
-        content: directText,
-        styles: parseStyles(element),
-        props: { columnIndex },
-      });
-    }
-
+    // This creates a horizontal layout that should be handled at section level
+    // Don't process it here to avoid duplicates
     return components;
   }
 
@@ -584,17 +588,36 @@ function processElementForSection(
     components.push(...childComps);
   });
 
-  // Add direct text content if any
+  // Add direct text content if any (not just when components.length === 0)
   const directText = getTextContent(element);
-  if (directText && directText.length > 5 && components.length === 0) {
-    components.push({
-      id: generateId(),
-      type: "paragraph",
-      content: directText,
-      styles: parseStyles(element),
-      formatting: parseFormatting(element),
-      props: { columnIndex },
-    });
+  if (directText && directText.length > 5) {
+    // Check if we already have a component with this exact text
+    const existingTextComp = components.find(c => c.content === directText);
+    if (!existingTextComp) {
+      components.push({
+        id: generateId(),
+        type: "paragraph",
+        content: directText,
+        styles: parseStyles(element),
+        formatting: parseFormatting(element),
+        props: { columnIndex },
+      });
+    }
+  }
+
+  // If still no components, try to get ALL text content
+  if (components.length === 0) {
+    const allText = getAllTextContent(element);
+    if (allText && allText.length > 5) {
+      components.push({
+        id: generateId(),
+        type: "paragraph",
+        content: allText,
+        styles: parseStyles(element),
+        formatting: parseFormatting(element),
+        props: { columnIndex },
+      });
+    }
   }
 
   return components;
@@ -611,6 +634,7 @@ function createSectionFromElement(element: Element, sectionName: string): Layout
   let columns = 1;
   let layoutType: SectionLayoutType = "full-width";
   const components: Component[] = [];
+  const processedElements = new Set<Element>(); // Track processed elements to avoid duplicates
 
   // Check if this element has horizontal layout
   if ((layout.isFlexRow || layout.isGrid) && children.length >= 2) {
@@ -619,6 +643,9 @@ function createSectionFromElement(element: Element, sectionName: string): Layout
     layoutType = columns === 2 ? "two-equal" : columns === 3 ? "three-equal" : "full-width";
 
     children.forEach((child, index) => {
+      if (processedElements.has(child)) return; // Skip if already processed
+      processedElements.add(child);
+      
       const columnIndex = index % columns;
       const childComponents = processElementForSection(child, columnIndex, 0);
       
@@ -644,6 +671,8 @@ function createSectionFromElement(element: Element, sectionName: string): Layout
     let hasHorizontalChild = false;
 
     children.forEach((child) => {
+      if (processedElements.has(child)) return; // Skip if already processed
+      
       const childLayout = detectLayout(child);
       const grandChildren = Array.from(child.children).filter((gc) => {
         const tag = gc.tagName.toLowerCase();
@@ -652,6 +681,8 @@ function createSectionFromElement(element: Element, sectionName: string): Layout
 
       if ((childLayout.isFlexRow || childLayout.isGrid) && grandChildren.length >= 2) {
         hasHorizontalChild = true;
+        processedElements.add(child); // Mark as processed
+        
         // This child has horizontal layout
         const childColumns = Math.min(grandChildren.length, 3);
         
@@ -662,6 +693,9 @@ function createSectionFromElement(element: Element, sectionName: string): Layout
         }
 
         grandChildren.forEach((grandChild, gcIndex) => {
+          if (processedElements.has(grandChild)) return; // Skip if already processed
+          processedElements.add(grandChild);
+          
           const columnIndex = gcIndex % columns;
           const gcComponents = processElementForSection(grandChild, columnIndex, 0);
           
@@ -682,6 +716,7 @@ function createSectionFromElement(element: Element, sectionName: string): Layout
         });
       } else {
         // Vertical child
+        processedElements.add(child); // Mark as processed
         const childComponents = processElementForSection(child, 0, 0);
         components.push(...childComponents);
       }
@@ -692,12 +727,32 @@ function createSectionFromElement(element: Element, sectionName: string): Layout
     return null;
   }
 
+  // Deduplicate components based on type and content/src
+  const uniqueComponents: Component[] = [];
+  const seen = new Set<string>();
+  
+  components.forEach((comp) => {
+    // Create a unique key based on type and main content
+    let key = `${comp.type}`;
+    if (comp.type === "image" && comp.src) {
+      key += `:${comp.src}`;
+    } else if (comp.content) {
+      key += `:${comp.content.substring(0, 50)}`; // First 50 chars
+    }
+    key += `:${comp.props?.columnIndex || 0}`; // Include column to allow same content in different columns
+    
+    if (!seen.has(key)) {
+      seen.add(key);
+      uniqueComponents.push(comp);
+    }
+  });
+
   return {
     id: generateId(),
     layoutType,
     columns,
     columnWidths: Array(columns).fill(`${(100 / columns).toFixed(2)}%`),
-    components,
+    components: uniqueComponents,
     name: sectionName,
   };
 }
