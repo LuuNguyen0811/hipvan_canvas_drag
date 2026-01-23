@@ -37,6 +37,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   Type,
   AlignLeft,
   ImageIcon,
@@ -581,6 +588,9 @@ export function ToolsPanel() {
   const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // AI Generator modal state
+  const [showAIModal, setShowAIModal] = useState(false);
+
   const orderedSectionTemplates = [...SECTION_TEMPLATES].sort((a, b) => {
     const order: Record<string, number> = {
       "full-width": 0,
@@ -1025,12 +1035,29 @@ export function ToolsPanel() {
           </p>
         </div>
 
+        {/* AI Generator Button */}
+        <div className="border-b border-border p-4">
+          <Button
+            onClick={() => setShowAIModal(true)}
+            className="group relative w-full overflow-hidden bg-gradient-to-r from-primary via-purple-600 to-pink-600 text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+            size="lg"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-pink-600 to-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <Sparkles className="relative mr-2 h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+            <span className="relative font-semibold">AI Generator</span>
+            <div className="absolute inset-0 -z-10 animate-pulse bg-gradient-to-r from-primary/20 via-purple-600/20 to-pink-600/20 blur-xl" />
+          </Button>
+          <p className="mt-2 text-center text-xs text-muted-foreground">
+            Generate layouts from URLs or HTML
+          </p>
+        </div>
+
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
           className="flex flex-1 flex-col overflow-hidden"
         >
-          <TabsList className="mx-4 mt-4 grid w-auto grid-cols-4 shrink-0">
+          <TabsList className="mx-4 mt-4 grid w-auto grid-cols-3 shrink-0">
             <TabsTrigger value="sections" className="gap-1.5 text-xs">
               <Layout className="h-3.5 w-3.5" />
               Sections
@@ -1042,10 +1069,6 @@ export function ToolsPanel() {
             <TabsTrigger value="layers" className="gap-1.5 text-xs">
               <Layers className="h-3.5 w-3.5" />
               Layers
-            </TabsTrigger>
-            <TabsTrigger value="import" className="gap-1.5 text-xs">
-              <Upload className="h-3.5 w-3.5" />
-              Import
             </TabsTrigger>
           </TabsList>
 
@@ -1458,31 +1481,39 @@ export function ToolsPanel() {
               )}
             </TabsContent>
 
-            {/* Import Tab - Import HTML from URL, File, or Code */}
-            <TabsContent value="import" className="m-0 p-4">
-              <div className="mb-4 rounded-lg border border-primary/20 bg-primary/5 p-3">
-                <p className="text-xs font-medium text-foreground">
-                  Import HTML
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Import HTML from URL, file, or paste code directly
-                </p>
-              </div>
+          </ScrollArea>
+        </Tabs>
+      </div>
 
+      {/* AI Generator Modal */}
+      <Dialog open={showAIModal} onOpenChange={setShowAIModal}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              AI Generator
+            </DialogTitle>
+            <DialogDescription>
+              Import and convert HTML from URLs, files, or code
+            </DialogDescription>
+          </DialogHeader>
+
+          <ScrollArea className="flex-1 pr-4">
+            <div className="space-y-4">
               {/* Show preview if we have parsed HTML */}
               {showPreview && parsedHTML ? (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium text-foreground">
+                    <p className="text-sm font-medium text-foreground">
                       {parsedHTML.title}
                     </p>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={handleReset}
-                      className="h-7 gap-1 text-xs"
+                      className="h-8 gap-1.5"
                     >
-                      <X className="h-3 w-3" />
+                      <X className="h-3.5 w-3.5" />
                       Clear
                     </Button>
                   </div>
@@ -1497,9 +1528,12 @@ export function ToolsPanel() {
 
                   <div className="space-y-2">
                     <Button
-                      onClick={handleConvertToComponents}
+                      onClick={() => {
+                        handleConvertToComponents();
+                        setShowAIModal(false);
+                      }}
                       className="w-full"
-                      size="sm"
+                      size="default"
                     >
                       <Layout className="mr-2 h-4 w-4" />
                       Convert to Components
@@ -1509,7 +1543,6 @@ export function ToolsPanel() {
                     </p>
                   </div>
 
-                  {/* Asset info */}
                   {parsedHTML.assets.length > 0 && (
                     <div className="rounded-lg border border-border bg-muted/30 p-3">
                       <p className="text-xs font-medium text-foreground">
@@ -1522,19 +1555,18 @@ export function ToolsPanel() {
                   )}
                 </div>
               ) : layoutData ? (
-                /* Show wireframe if we have layout data (fallback) */
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium text-foreground">
+                    <p className="text-sm font-medium text-foreground">
                       Layout Analysis
                     </p>
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={handleReset}
-                      className="h-7 gap-1 text-xs"
+                      className="h-8 gap-1.5"
                     >
-                      <X className="h-3 w-3" />
+                      <X className="h-3.5 w-3.5" />
                       Clear
                     </Button>
                   </div>
@@ -1545,55 +1577,56 @@ export function ToolsPanel() {
 
                   <div className="space-y-2">
                     <Button
-                      onClick={handleApplyLayout}
+                      onClick={() => {
+                        handleApplyLayout();
+                        setShowAIModal(false);
+                      }}
                       className="w-full"
-                      size="sm"
+                      size="default"
                     >
                       <Layout className="mr-2 h-4 w-4" />
                       Apply Layout to Canvas
                     </Button>
                     <p className="text-center text-xs text-muted-foreground">
-                      This will create sections and components based on the
-                      analyzed structure
+                      This will create sections and components based on the analyzed structure
                     </p>
                   </div>
                 </div>
               ) : (
-                /* Input modes */
                 <div className="space-y-4">
                   {/* Mode selector */}
                   <div className="flex gap-1 rounded-lg bg-muted p-1">
                     <button
                       onClick={() => setImportMode("url")}
-                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                         importMode === "url"
                           ? "bg-background text-foreground shadow-sm"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <Link className="h-3.5 w-3.5" />
+                      <Link className="h-4 w-4" />
                       URL
                     </button>
                     <button
                       onClick={() => setImportMode("file")}
-                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                         importMode === "file"
                           ? "bg-background text-foreground shadow-sm"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <FileCode className="h-3.5 w-3.5" />
+                      <FileCode className="h-4 w-4" />
                       File
                     </button>
                     <button
                       onClick={() => setImportMode("code")}
-                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                      className={`flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
                         importMode === "code"
                           ? "bg-background text-foreground shadow-sm"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
                     >
-                      <Code className="h-3.5 w-3.5" />
+                      <Code className="h-4 w-4" />
                       Code
                     </button>
                   </div>
@@ -1602,7 +1635,7 @@ export function ToolsPanel() {
                   {importMode === "url" && (
                     <div className="space-y-3">
                       <div>
-                        <label className="mb-2 block text-xs font-medium text-foreground">
+                        <label className="mb-2 block text-sm font-medium text-foreground">
                           Website URL
                         </label>
                         <Input
@@ -1615,7 +1648,6 @@ export function ToolsPanel() {
                               handleFetchURL();
                             }
                           }}
-                          className="text-sm"
                           disabled={isLoading}
                         />
                       </div>
@@ -1624,6 +1656,7 @@ export function ToolsPanel() {
                         onClick={handleFetchURL}
                         disabled={isLoading || !crawlUrl.trim()}
                         className="w-full"
+                        size="default"
                       >
                         {isLoading ? (
                           <>
@@ -1652,9 +1685,9 @@ export function ToolsPanel() {
                       />
                       <div
                         onClick={() => fileInputRef.current?.click()}
-                        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30 p-8 transition-colors hover:border-primary hover:bg-muted/50"
+                        className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/30 p-10 transition-colors hover:border-primary hover:bg-muted/50"
                       >
-                        <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
+                        <Upload className="mb-3 h-10 w-10 text-muted-foreground" />
                         <p className="text-sm font-medium text-foreground">
                           Click to upload HTML file
                         </p>
@@ -1665,8 +1698,8 @@ export function ToolsPanel() {
 
                       {isLoading && (
                         <div className="flex items-center justify-center gap-2 py-2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          <span className="text-xs text-muted-foreground">
+                          <Loader2 className="h-5 w-5 animate-spin" />
+                          <span className="text-sm text-muted-foreground">
                             Processing file...
                           </span>
                         </div>
@@ -1678,14 +1711,14 @@ export function ToolsPanel() {
                   {importMode === "code" && (
                     <div className="space-y-3">
                       <div>
-                        <label className="mb-2 block text-xs font-medium text-foreground">
+                        <label className="mb-2 block text-sm font-medium text-foreground">
                           HTML Code
                         </label>
                         <Textarea
                           placeholder="<html>&#10;  <body>&#10;    <h1>Hello World</h1>&#10;  </body>&#10;</html>"
                           value={htmlCode}
                           onChange={(e) => setHtmlCode(e.target.value)}
-                          className="h-[200px] max-h-[200px] resize-none overflow-auto font-mono text-xs"
+                          className="h-[250px] resize-none font-mono text-xs"
                           disabled={isLoading}
                         />
                       </div>
@@ -1694,6 +1727,7 @@ export function ToolsPanel() {
                         onClick={handleParseCode}
                         disabled={isLoading || !htmlCode.trim()}
                         className="w-full"
+                        size="default"
                       >
                         {isLoading ? (
                           <>
@@ -1716,10 +1750,10 @@ export function ToolsPanel() {
                       <div className="flex items-start gap-2">
                         <AlertCircle className="h-4 w-4 flex-shrink-0 text-destructive" />
                         <div className="flex-1">
-                          <p className="text-xs font-medium text-destructive">
+                          <p className="text-sm font-medium text-destructive">
                             Error
                           </p>
-                          <p className="mt-1 text-xs text-destructive/90">
+                          <p className="mt-1 text-sm text-destructive/90">
                             {error}
                           </p>
                         </div>
@@ -1729,10 +1763,10 @@ export function ToolsPanel() {
 
                   {/* Help text */}
                   <div className="rounded-lg border border-dashed border-border bg-muted/20 p-4">
-                    <p className="text-xs font-medium text-foreground">
+                    <p className="text-sm font-medium text-foreground">
                       How it works:
                     </p>
-                    <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
+                    <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
                       {importMode === "url" && (
                         <>
                           <li>• Enter any website URL</li>
@@ -1761,10 +1795,10 @@ export function ToolsPanel() {
                   </div>
                 </div>
               )}
-            </TabsContent>
+            </div>
           </ScrollArea>
-        </Tabs>
-      </div>
+        </DialogContent>
+      </Dialog>
     </TooltipProvider>
   );
 }

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useProjectStore } from '@/lib/store'
 import { generateHTML, generateCSSSeparate } from '@/lib/html-generator'
+import { getImageAsBase64 } from '@/lib/image-storage'
+import type { LayoutSection, Component } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
@@ -36,6 +38,46 @@ const viewportWidths: Record<ViewportSize, string> = {
   mobile: '375px',
 }
 
+// Helper function to recursively process components and load images as base64
+async function processComponentImages(component: Component): Promise<Component> {
+  const processed = { ...component }
+  
+  // If this is an image component with imageId, load it as base64
+  if (component.type === 'image' && component.imageId) {
+    const base64 = await getImageAsBase64(component.imageId)
+    if (base64) {
+      processed.src = base64
+    }
+  }
+  
+  // Process children recursively if they exist
+  if (component.children && component.children.length > 0) {
+    processed.children = await Promise.all(
+      component.children.map(child => processComponentImages(child))
+    )
+  }
+  
+  return processed
+}
+
+// Helper function to prepare layout with all images as base64
+async function prepareLayoutWithImages(layout: LayoutSection[]): Promise<LayoutSection[]> {
+  const processedLayout = await Promise.all(
+    layout.map(async (section) => {
+      const processedComponents = await Promise.all(
+        section.components.map(comp => processComponentImages(comp))
+      )
+      
+      return {
+        ...section,
+        components: processedComponents
+      }
+    })
+  )
+  
+  return processedLayout
+}
+
 export default function PreviewPage() {
   const params = useParams()
   const router = useRouter()
@@ -44,6 +86,9 @@ export default function PreviewPage() {
   const [viewport, setViewport] = useState<ViewportSize>('desktop')
   const [copied, setCopied] = useState<'html' | 'css' | null>(null)
   const [activeTab, setActiveTab] = useState<'preview' | 'html' | 'css'>('preview')
+  const [htmlContent, setHtmlContent] = useState<string>('')
+  const [cssContent, setCssContent] = useState<string>('')
+  const [isProcessingImages, setIsProcessingImages] = useState(false)
 
   useEffect(() => {
     const projectId = params.id as string
@@ -57,10 +102,37 @@ export default function PreviewPage() {
     }
   }, [params.id, projects, setCurrentProject, router])
 
-  const handleDownloadHTML = () => {
+  // Generate HTML and CSS with images when project loads or changes
+  useEffect(() => {
     if (!currentProject) return
-    const html = generateHTML(currentProject.layout, currentProject.name)
-    const blob = new Blob([html], { type: 'text/html' })
+
+    const generateContent = async () => {
+      setIsProcessingImages(true)
+      try {
+        // Prepare layout with images as base64
+        const layoutWithImages = await prepareLayoutWithImages(currentProject.layout)
+        const html = generateHTML(layoutWithImages, currentProject.name)
+        const css = generateCSSSeparate(layoutWithImages)
+        
+        setHtmlContent(html)
+        setCssContent(css)
+      } catch (error) {
+        console.error('Failed to generate content:', error)
+        // Fallback to content without images
+        setHtmlContent(generateHTML(currentProject.layout, currentProject.name))
+        setCssContent(generateCSSSeparate(currentProject.layout))
+      } finally {
+        setIsProcessingImages(false)
+      }
+    }
+
+    generateContent()
+  }, [currentProject])
+
+  const handleDownloadHTML = () => {
+    if (!currentProject || !htmlContent) return
+    
+    const blob = new Blob([htmlContent], { type: 'text/html' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -72,9 +144,9 @@ export default function PreviewPage() {
   }
 
   const handleDownloadCSS = () => {
-    if (!currentProject) return
-    const css = generateCSSSeparate(currentProject.layout)
-    const blob = new Blob([css], { type: 'text/css' })
+    if (!currentProject || !cssContent) return
+    
+    const blob = new Blob([cssContent], { type: 'text/css' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -86,10 +158,8 @@ export default function PreviewPage() {
   }
 
   const handleCopy = async (type: 'html' | 'css') => {
-    if (!currentProject) return
-    const content = type === 'html' 
-      ? generateHTML(currentProject.layout, currentProject.name)
-      : generateCSSSeparate(currentProject.layout)
+    const content = type === 'html' ? htmlContent : cssContent
+    if (!content) return
     
     await navigator.clipboard.writeText(content)
     setCopied(type)
@@ -107,8 +177,16 @@ export default function PreviewPage() {
     )
   }
 
-  const htmlContent = generateHTML(currentProject.layout, currentProject.name)
-  const cssContent = generateCSSSeparate(currentProject.layout)
+  if (isProcessingImages && !htmlContent) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+          <p className="text-muted-foreground">Processing images...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <TooltipProvider>

@@ -47,16 +47,12 @@ interface EditorToolbarProps {
   project: Project;
   activePanel: "tools" | "history";
   onPanelChange: (panel: "tools" | "history") => void;
-  isPanelsSwapped: boolean;
-  onTogglePanelsSwapped: () => void;
 }
 
 export function EditorToolbar({
   project,
   activePanel,
   onPanelChange,
-  isPanelsSwapped,
-  onTogglePanelsSwapped,
 }: EditorToolbarProps) {
   const router = useRouter();
   const { updateProjectName, saveProject, clearHistory } = useProjectStore();
@@ -64,6 +60,7 @@ export function EditorToolbar({
   const [editedName, setEditedName] = useState(project.name);
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [showClearImagesDialog, setShowClearImagesDialog] = useState(false);
+  const [showClearSectionsDialog, setShowClearSectionsDialog] = useState(false);
   const [storageInfo, setStorageInfo] = useState<{
     projectSize: number;
     imageCount: number;
@@ -92,6 +89,12 @@ export function EditorToolbar({
     await clearAllImages();
     setShowClearImagesDialog(false);
     window.location.reload(); // Reload to refresh image states
+  };
+
+  const handleClearSections = () => {
+    // Clear all sections from the current project
+    useProjectStore.getState().clearAllSections();
+    setShowClearSectionsDialog(false);
   };
 
   const loadStorageInfo = async () => {
@@ -150,33 +153,36 @@ export function EditorToolbar({
         </div>
 
         {/* Center Section - Panel Toggle */}
-        <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
+        <div className="flex items-center gap-1 rounded-lg bg-muted p-1 shadow-inner">
           <Button
             variant={activePanel === "tools" ? "secondary" : "ghost"}
             size="sm"
-            className="gap-2"
+            className={`gap-2 transition-all duration-300 ease-out ${
+              activePanel === "tools"
+                ? "bg-background shadow-md scale-105 font-semibold"
+                : "hover:bg-background/50 hover:scale-102 active:scale-95"
+            }`}
             onClick={() => onPanelChange("tools")}
           >
-            <Wrench className="h-4 w-4" />
+            <Wrench className={`h-4 w-4 transition-transform duration-300 ${
+              activePanel === "tools" ? "text-primary rotate-12" : ""
+            }`} />
             Tools
           </Button>
           <Button
             variant={activePanel === "history" ? "secondary" : "ghost"}
             size="sm"
-            className="gap-2"
+            className={`gap-2 transition-all duration-300 ease-out ${
+              activePanel === "history"
+                ? "bg-background shadow-md scale-105 font-semibold"
+                : "hover:bg-background/50 hover:scale-102 active:scale-95"
+            }`}
             onClick={() => onPanelChange("history")}
           >
-            <History className="h-4 w-4" />
+            <History className={`h-4 w-4 transition-transform duration-300 ${
+              activePanel === "history" ? "text-primary -rotate-12" : ""
+            }`} />
             History
-          </Button>
-          <Button
-            variant={isPanelsSwapped ? "secondary" : "ghost"}
-            size="sm"
-            className="gap-2"
-            onClick={onTogglePanelsSwapped}
-          >
-            <ArrowLeftRight className="h-4 w-4" />
-            Swap
           </Button>
         </div>
 
@@ -189,6 +195,11 @@ export function EditorToolbar({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setShowClearSectionsDialog(true)}>
+                <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                <span className="text-destructive">Clear All Sections</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setShowClearDialog(true)}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Clear History
@@ -268,6 +279,33 @@ export function EditorToolbar({
               className="bg-destructive hover:bg-destructive/90"
             >
               Clear All Images
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Clear Sections Dialog */}
+      <AlertDialog
+        open={showClearSectionsDialog}
+        onOpenChange={setShowClearSectionsDialog}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear All Sections?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove all sections and components from your page, giving you a fresh start.
+              <strong className="mt-2 block text-destructive">
+                Warning: This action cannot be undone! Make sure you've saved any work you want to keep.
+              </strong>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleClearSections}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Clear All Sections
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
